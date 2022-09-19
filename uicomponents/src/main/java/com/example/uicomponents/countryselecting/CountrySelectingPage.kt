@@ -9,6 +9,7 @@ import com.example.viewmodels.CountrySelectingViewModel
 fun CountrySelectingPage(
     state: CountrySelectingUIState
 ) {
+    // TODO: Show a progress indicator based on state.state
     CountrySelectingList(list = state.continents)
 }
 
