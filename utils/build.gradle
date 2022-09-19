@@ -1,0 +1,22 @@
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm'
+    id "java-test-fixtures"
+    id 'kotlin'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    testFixturesImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+    testFixturesImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+    testFixturesImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.0'
+    testFixturesImplementation "io.mockk:mockk:1.12.8"
+    testFixturesImplementation 'org.amshove.kluent:kluent:1.68'
+
+    // Koin Test features
+    testFixturesImplementation "io.insert-koin:koin-test:3.2.1"
+}

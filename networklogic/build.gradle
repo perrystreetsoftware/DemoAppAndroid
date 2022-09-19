@@ -1,0 +1,28 @@
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    implementation project(':domainmodels')
+    implementation "io.reactivex.rxjava3:rxjava:3.1.5"
+    implementation project(':interfaces')
+
+    // define a BOM and its version
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
+
+    // define any required OkHttp artifacts without version
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation("com.squareup.okhttp3:logging-interceptor")
+    implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
+
+    // Koin Core features
+    implementation "io.insert-koin:koin-core:3.2.1"
+    // Koin Test features
+    testImplementation "io.insert-koin:koin-test:3.2.1"
+}

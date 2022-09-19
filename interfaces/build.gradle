@@ -1,0 +1,22 @@
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm'
+    id "java-test-fixtures"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    implementation project(':domainmodels')
+    implementation "io.reactivex.rxjava3:rxjava:3.1.5"
+    testFixturesImplementation(project(':domainmodels'))
+    testFixturesImplementation(project(':interfaces'))
+    testFixturesImplementation("io.reactivex.rxjava3:rxjava:3.1.5")
+    testFixturesImplementation("io.reactivex.rxjava3:rxjava:3.1.5")
+
+    testFixturesImplementation "io.insert-koin:koin-core:3.2.1"
+    testFixturesImplementation("io.reactivex.rxjava3:rxjava:3.1.5")
+}
