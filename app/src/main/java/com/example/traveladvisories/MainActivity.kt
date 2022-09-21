@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
         if (didAppearOnce == false) {
             didAppearOnce = true
-            viewModel.onAppear()
+            viewModel.onPageLoaded()
         }
         return super.onCreateView(name, context, attrs)
     }

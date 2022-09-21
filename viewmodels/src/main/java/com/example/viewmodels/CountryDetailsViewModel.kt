@@ -22,7 +22,7 @@ class CountryDetailsViewModel(private val country: CountryUIModel, private val l
     val details: Observable<CountryDetailsUIModel> = _details
     private var disposables = CompositeDisposable()
 
-    fun onAppear() {
+    fun onPageLoaded() {
         disposables.add(
             logic.getDetails(country = country)
                 .doOnSubscribe {

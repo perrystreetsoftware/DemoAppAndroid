@@ -30,7 +30,7 @@ class CountrySelectingViewModelTests: KoinTest {
     val viewModel: CountrySelectingViewModel by inject()
 
     @Nested
-    @DisplayName("#onAppear")
+    @DisplayName("#onPageLoaded")
     inner class OnAppear {
         lateinit var stateTestObserver: TestObserver<CountrySelectingViewModel.State>
         lateinit var continentsTestObserver: TestObserver<List<ContinentUIModel>>
@@ -43,7 +43,7 @@ class CountrySelectingViewModelTests: KoinTest {
 
             stateTestObserver = viewModel.state.test()
             continentsTestObserver = viewModel.continents.test()
-            viewModel.onAppear()
+            viewModel.onPageLoaded()
         }
 
         @AfterEach

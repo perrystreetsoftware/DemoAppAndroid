@@ -18,7 +18,7 @@ class CountrySelectingViewModel(val logic: CountrySelectingLogic) {
     private val disposables = CompositeDisposable()
     val continents: Observable<List<ContinentUIModel>> = logic.continents
 
-    fun onAppear() {
+    fun onPageLoaded() {
         disposables.add(
             continents.take(1)
                 .flatMapCompletable {

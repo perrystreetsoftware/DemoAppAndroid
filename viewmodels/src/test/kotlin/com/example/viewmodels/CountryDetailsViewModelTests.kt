@@ -36,7 +36,7 @@ class CountryDetailsViewModelTests: KoinTest {
     }
 
     @Nested
-    @DisplayName("#onAppear")
+    @DisplayName("#onPageLoaded")
     inner class OnAppear {
         lateinit var stateTestObserver: TestObserver<CountryDetailsViewModel.State>
         lateinit var detailsTestObserver: TestObserver<CountryDetailsUIModel>
@@ -49,7 +49,7 @@ class CountryDetailsViewModelTests: KoinTest {
 
             stateTestObserver = viewModel.state.test()
             detailsTestObserver = viewModel.details.test()
-            viewModel.onAppear()
+            viewModel.onPageLoaded()
         }
 
         @AfterEach
