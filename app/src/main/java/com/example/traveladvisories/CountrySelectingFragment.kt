@@ -1,0 +1,63 @@
+package com.example.traveladvisories
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rxjava3.subscribeAsState
+import androidx.compose.ui.platform.ComposeView
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.uicomponents.countryselecting.CountrySelectingPage
+import com.example.uicomponents.countryselecting.CountrySelectingUIState
+import com.example.utils.filterIsInstance
+import com.example.viewmodels.CountrySelectingViewModel
+import com.example.viewmodels.CountrySelectingViewModel.Event.Navigate
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import org.koin.java.KoinJavaComponent
+
+class CountrySelectingFragment : Fragment() {
+    private val disposables = CompositeDisposable()
+    private val viewModel: CountrySelectingViewModel by KoinJavaComponent.inject(CountrySelectingViewModel::class.java)
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setContent {
+                val state by viewModel.state.subscribeAsState(CountrySelectingViewModel.State.Initial)
+                val continents by viewModel.continents.subscribeAsState(initial = emptyList())
+
+                CountrySelectingPage(
+                    state = CountrySelectingUIState(
+                        continents = continents,
+                        viewModelState = state
+                    ),
+                    onClick = { country -> viewModel.onCountrySelected(country) }
+                )
+            }
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.events
+            .filterIsInstance<Navigate>().thenNavigate()
+            .subscribe().also(disposables::add)
+
+        viewModel.onPageLoaded()
+    }
+
+    private fun Observable<Navigate>.thenNavigate() = doOnNext { event ->
+        findNavController().navigate(CountrySelectingFragmentDirections.navigateToDetails(event.domainModel))
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        disposables.clear()
+    }
+}

@@ -1,0 +1,29 @@
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+test {
+    useJUnitPlatform()
+}
+
+dependencies {
+    implementation libs.koin.core
+    implementation libs.rxjava3
+    implementation project(':domainmodels')
+    implementation project(':interfaces')
+    implementation project(':logic')
+    implementation project(':repositories')
+    implementation project(':utils')
+    testImplementation libs.bundles.junit5
+    testImplementation libs.kluent
+    testImplementation libs.koin.test
+    testImplementation libs.mockk
+    testImplementation(testFixtures(project(":utils")))
+    testImplementation(testFixtures(project(':interfaces')))
+}
