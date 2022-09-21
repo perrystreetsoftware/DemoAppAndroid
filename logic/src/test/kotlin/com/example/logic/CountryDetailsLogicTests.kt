@@ -39,6 +39,7 @@ class CountryDetailsLogicTests: KoinTest {
             @BeforeEach
             fun setup() {
                 testObserver = logic.getDetails(country).test()
+                testObserver.awaitCount(1)
                 value = testObserver.values().first()
             }
 
