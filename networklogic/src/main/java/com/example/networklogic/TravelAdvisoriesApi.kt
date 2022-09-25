@@ -4,6 +4,7 @@ import com.example.domainmodels.CountryListDTO
 import com.example.interfaces.ITravelAdvisoriesApi
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.OkHttpClient
@@ -13,8 +14,28 @@ import okhttp3.Response
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
-
 class TravelAdvisoriesApi(val moshi: Moshi): ITravelAdvisoriesApi {
+    override fun getForbiddenApi(): Completable {
+        val client = OkHttpClient()
+        val url = "https://httpstat.us/403"
+        val request: Request = Builder()
+            .url(url)
+            .build()
+
+        return Completable.defer {
+            try {
+                val response: Response = client.newCall(request).execute()
+                Completable.error(TravelAdvisoryApiError.fromStatusCode(response.code))
+            } catch (e: IOException) {
+                Completable.error(TravelAdvisoryApiError.Other(e))
+            } catch (e: java.lang.IllegalStateException) {
+                Completable.error(TravelAdvisoryApiError.Other(e))
+            }
+        }
+            .delay(1, TimeUnit.SECONDS)
+            .subscribeOn(Schedulers.io())
+    }
+
     override fun getCountryList(): Observable<CountryListDTO> {
         val client = OkHttpClient()
         val url = "https://www.scruff.com/advisories/index.json"
@@ -27,13 +48,17 @@ class TravelAdvisoriesApi(val moshi: Moshi): ITravelAdvisoriesApi {
         return Observable.defer {
             try {
                 val response: Response = client.newCall(request).execute()
-                Observable.just<Response>(response).map {
-                    jsonAdapter.fromJson(it.body?.string()) ?: CountryListDTO.EMPTY
+                if (response.isSuccessful) {
+                    Observable.just<Response>(response).map {
+                        jsonAdapter.fromJson(it.body?.string()) ?: CountryListDTO.EMPTY
+                    }
+                } else {
+                    Observable.error(TravelAdvisoryApiError.fromStatusCode(response.code))
                 }
             } catch (e: IOException) {
-                Observable.error(e)
+                Observable.error(TravelAdvisoryApiError.Other(e))
             } catch (e: java.lang.IllegalStateException) {
-                Observable.error(e)
+                Observable.error(TravelAdvisoryApiError.Other(e))
             }
         }
             .delay(1, TimeUnit.SECONDS)
@@ -42,7 +67,11 @@ class TravelAdvisoriesApi(val moshi: Moshi): ITravelAdvisoriesApi {
 
     override fun getCountryDetails(regionCode: String): Observable<CountryDetailsDTO> {
         val client = OkHttpClient()
-        val url = "https://www.scruff.com/advisories/${regionCode}/index.json"
+        var url: String = if (regionCode == "xx") {
+            "https://httpstat.us/404"
+        } else {
+            "https://www.scruff.com/advisories/${regionCode}/index.json"
+        }
         val request: Request = Builder()
             .url(url)
             .build()
@@ -52,14 +81,19 @@ class TravelAdvisoriesApi(val moshi: Moshi): ITravelAdvisoriesApi {
         return Observable.defer {
             try {
                 val response: Response = client.newCall(request).execute()
-                Observable.just<Response>(response).map {
-                    jsonAdapter.fromJson(it.body?.string()) ?: CountryDetailsDTO.EMPTY
+                if (response.isSuccessful) {
+                    Observable.just<Response>(response).map {
+                        jsonAdapter.fromJson(it.body?.string()) ?: CountryDetailsDTO.EMPTY
+                    }
+                } else {
+                    Observable.error(TravelAdvisoryApiError.fromStatusCode(response.code))
                 }
             } catch (e: IOException) {
-                Observable.error(e)
+                Observable.error(TravelAdvisoryApiError.Other(e))
             }
         }
             .delay(1, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.io())
     }
+
 }

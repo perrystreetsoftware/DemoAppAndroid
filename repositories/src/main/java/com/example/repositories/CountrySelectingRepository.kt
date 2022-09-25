@@ -39,4 +39,7 @@ class CountrySelectingRepository(private val travelAdvisoriesApi: ITravelAdvisor
             .ignoreElements()
     }
 
+    fun getForbiddenApi(): Completable {
+        return travelAdvisoriesApi.getForbiddenApi()
+    }
 }

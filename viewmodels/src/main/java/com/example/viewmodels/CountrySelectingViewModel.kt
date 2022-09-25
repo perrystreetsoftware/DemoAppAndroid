@@ -2,12 +2,28 @@ package com.example.viewmodels
 
 import com.example.domainmodels.Continent
 import com.example.domainmodels.Country
+import com.example.logic.CountryDetailsLogicError
 import com.example.logic.CountrySelectingLogic
+import com.example.logic.CountrySelectingLogicError
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
+
+sealed class CountrySelectingViewModelError(): Throwable() {
+    object Forbidden: CountrySelectingViewModelError()
+    object Unknown: CountrySelectingViewModelError()
+
+    companion object {
+        fun fromThrowable(throwable: Throwable): CountrySelectingViewModelError {
+            return when(throwable) {
+                is CountrySelectingLogicError.Forbidden -> { Forbidden }
+                else -> Unknown
+            }
+        }
+    }
+}
 
 class CountrySelectingViewModel(val logic: CountrySelectingLogic) {
     enum class State {
@@ -24,6 +40,7 @@ class CountrySelectingViewModel(val logic: CountrySelectingLogic) {
     val continents: Observable<List<Continent>> = logic.continents
 
     sealed class Event {
+        data class Error(val error: CountrySelectingViewModelError): Event()
         data class Navigate(val domainModel: Country): Event()
     }
 
@@ -36,7 +53,7 @@ class CountrySelectingViewModel(val logic: CountrySelectingLogic) {
 
     fun onPageLoaded() {
         disposables.add(
-            continents.take(1)
+            continents
                 .flatMapCompletable {
                     if (it.isEmpty()) {
                         logic.reload().doOnSubscribe {
@@ -52,10 +69,18 @@ class CountrySelectingViewModel(val logic: CountrySelectingLogic) {
                         Completable.complete()
                     }
                 }.subscribe({
-
                 }, { error ->
                     print("error: $error")
                 })
+        )
+    }
+
+    fun onButtonTapped() {
+        disposables.add(
+            logic.getForbiddenApi().subscribe({
+            }, { error ->
+                _events.onNext(Event.Error(CountrySelectingViewModelError.fromThrowable(error)))
+            })
         )
     }
 }

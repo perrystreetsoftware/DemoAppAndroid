@@ -25,6 +25,7 @@ mockk = "1.10.2"
 moshi = "1.13.0"
 moshi-sealed = "0.18.3"
 rxjava3 = "3.1.5"
+rxjava3-android = "3.0.0"
 square-okhttp = "4.9.0"
 google-ksp = "1.7.10-1.0.6" # kotlin-1.0.6(ksp).
 
@@ -62,6 +63,7 @@ junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", vers
 kluent = { module = "org.amshove.kluent:kluent-android", version.ref = "kluent" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 kotest = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-koin = { module = "io.kotest.extensions:kotest-extensions-koin", version.ref = "kotest-koin" }
@@ -71,6 +73,7 @@ moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 moshi-adapters = { module = "com.squareup.moshi:moshi-adapters", version.ref = "moshi" }
 moshi-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
 rxjava3 = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava3" }
+rxjava3-android = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxjava3-android" }
 square-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "square-okhttp" }
 androidx-startup-runtime = { module = "androidx.startup:startup-runtime", version.ref = "androidx-startup" }
 

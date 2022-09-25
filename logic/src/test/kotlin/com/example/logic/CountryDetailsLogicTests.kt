@@ -30,7 +30,7 @@ class CountryDetailsLogicTests: KoinTest {
     inner class GetDetails {
         lateinit var testObserver: TestObserver<CountryDetails>
         lateinit var value: CountryDetails
-        val country = Country(countryName = "Uganda", regionCode = "ug")
+        val country = Country(regionCode = "ug")
 
         @Nested
         @DisplayName("when success")
@@ -45,7 +45,7 @@ class CountryDetailsLogicTests: KoinTest {
             @Test
             fun `then it should be valid`() {
                 value.shouldBeEqualTo(CountryDetails(
-                    country = Country(countryName = "Yemen", regionCode = "YE"),
+                    country = Country(regionCode = "YE"),
                     detailsText = "Article 264")
                 )
             }

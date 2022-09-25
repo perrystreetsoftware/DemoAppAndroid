@@ -10,6 +10,7 @@ java {
 
 dependencies {
     implementation libs.koin.core
+    implementation libs.kotlin.reflect
     implementation libs.moshi
     implementation libs.rxjava3
     implementation libs.square.okhttp
