@@ -23,8 +23,8 @@ sealed class CountryDetailsLogicError: Throwable() {
 }
 
 class CountryDetailsLogic(private val repository: CountryDetailsRepository) {
-    fun getDetails(country: Country): Observable<CountryDetails> {
-        return repository.getDetails(country.regionCode).map {
+    fun getDetails(regionCode: String): Observable<CountryDetails> {
+        return repository.getDetails(regionCode).map {
             CountryDetails(it)
         }
     }

@@ -1,6 +1,11 @@
 plugins {
-    id 'java-library'
-    id 'org.jetbrains.kotlin.jvm'
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    compileSdk 33
+    namespace 'com.example.viewmodels'
 }
 
 java {
@@ -8,12 +13,10 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-test {
-    useJUnitPlatform()
-}
-
 dependencies {
     implementation libs.koin.core
+    implementation libs.koin.android
+    implementation libs.androidx.lifecycle.viewmodel
     implementation libs.rxjava3
     implementation project(':domainmodels')
     implementation project(':interfaces')

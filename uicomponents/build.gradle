@@ -40,19 +40,8 @@ android {
 
 dependencies {
     androidTestImplementation libs.bundles.junit5
-    debugImplementation libs.androidx.customview
-    debugImplementation libs.androidx.customview.poolingcontainer
-    debugImplementation libs.androidx.lifecycle.viewmodel
-    implementation libs.androidx.activity
-    implementation libs.androidx.activity.compose
-    implementation libs.androidx.appcompat
     implementation libs.androidx.compose.material
-    implementation libs.androidx.compose.runtime.rxjava3
     implementation libs.androidx.compose.ui.tooling
-    implementation libs.androidx.ktx
-    implementation libs.google.material
-    implementation libs.koin.android
-    implementation libs.koin.core
     implementation project(':domainmodels')
     implementation project(':utils')
     implementation project(':viewmodels')

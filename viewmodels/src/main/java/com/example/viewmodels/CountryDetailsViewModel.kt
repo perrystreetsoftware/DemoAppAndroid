@@ -1,7 +1,7 @@
 package com.example.viewmodels
 
+import androidx.lifecycle.ViewModel
 import com.example.domainmodels.CountryDetails
-import com.example.domainmodels.Country
 import com.example.logic.CountryDetailsLogic
 import com.example.logic.CountryDetailsLogicError
 import io.reactivex.rxjava3.core.Observable
@@ -23,7 +23,7 @@ sealed class CountryDetailsViewModelError: Throwable() {
     }
 }
 
-class CountryDetailsViewModel(private val country: Country, private val logic: CountryDetailsLogic) {
+class CountryDetailsViewModel(private val logic: CountryDetailsLogic): ViewModel() {
     sealed class State() {
         object Initial: State()
         object Loading: State()
@@ -43,9 +43,9 @@ class CountryDetailsViewModel(private val country: Country, private val logic: C
     val details: Observable<CountryDetails> = _details
     private var disposables = CompositeDisposable()
 
-    fun onPageLoaded() {
+    fun onPageLoaded(regionCode: String) {
         disposables.add(
-            logic.getDetails(country = country)
+            logic.getDetails(regionCode = regionCode)
                 .doOnSubscribe {
                     _state.onNext(State.Loading)
                 }
@@ -58,5 +58,10 @@ class CountryDetailsViewModel(private val country: Country, private val logic: C
                     _state.onNext(State.Error(CountryDetailsViewModelError.fromLogicError(error)))
                 })
         )
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposables.dispose()
     }
 }

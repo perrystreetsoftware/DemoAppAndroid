@@ -1,8 +1,8 @@
 package com.example.viewmodels
 
+import androidx.lifecycle.ViewModel
 import com.example.domainmodels.Continent
 import com.example.domainmodels.Country
-import com.example.logic.CountryDetailsLogicError
 import com.example.logic.CountrySelectingLogic
 import com.example.logic.CountrySelectingLogicError
 import io.reactivex.rxjava3.core.Completable
@@ -25,7 +25,7 @@ sealed class CountrySelectingViewModelError(): Throwable() {
     }
 }
 
-class CountrySelectingViewModel(val logic: CountrySelectingLogic) {
+class CountrySelectingViewModel(val logic: CountrySelectingLogic) : ViewModel() {
     enum class State {
         Initial,
         Loading;
@@ -41,6 +41,7 @@ class CountrySelectingViewModel(val logic: CountrySelectingLogic) {
 
     sealed class Event {
         data class Error(val error: CountrySelectingViewModelError): Event()
+        object ErrorDisappear: Event()
         data class Navigate(val domainModel: Country): Event()
     }
 
@@ -82,5 +83,14 @@ class CountrySelectingViewModel(val logic: CountrySelectingLogic) {
                 _events.onNext(Event.Error(CountrySelectingViewModelError.fromThrowable(error)))
             })
         )
+    }
+
+    fun onErrorDismissed() {
+        _events.onNext(Event.ErrorDisappear)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposables.dispose()
     }
 }
