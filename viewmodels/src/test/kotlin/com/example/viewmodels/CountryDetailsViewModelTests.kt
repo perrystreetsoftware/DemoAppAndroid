@@ -23,12 +23,12 @@ import java.util.concurrent.TimeUnit
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 class CountryDetailsViewModelTests: KoinTest {
     @BeforeEach
-    open fun setup() {
+    fun setup() {
         startKoin {
             loadKoinModules(viewModelModule + logicModule + repositoriesModule + networkLogicApiMocks)
         }
     }
-    private val country = Country(countryName = "Uganda", regionCode = "ug")
+    private val country = Country(regionCode = "ug")
     val viewModel: CountryDetailsViewModel by inject() {
         parametersOf(country)
     }
@@ -37,7 +37,6 @@ class CountryDetailsViewModelTests: KoinTest {
     @DisplayName("#onPageLoaded")
     inner class OnAppear {
         lateinit var stateTestObserver: TestObserver<CountryDetailsViewModel.State>
-        lateinit var detailsTestObserver: TestObserver<CountryDetails>
         private lateinit var testScheduler: TestScheduler
 
         @BeforeEach
@@ -46,8 +45,6 @@ class CountryDetailsViewModelTests: KoinTest {
             RxJavaPlugins.setComputationSchedulerHandler { testScheduler }
 
             stateTestObserver = viewModel.state.test()
-            detailsTestObserver = viewModel.details.test()
-            viewModel.onPageLoaded()
         }
 
         @AfterEach
@@ -55,34 +52,52 @@ class CountryDetailsViewModelTests: KoinTest {
             RxJavaPlugins.setComputationSchedulerHandler(null)
         }
 
-
         @Test
-        fun `then it transitions to loading`() {
-            stateTestObserver.values().shouldBeEqualTo(listOf(CountryDetailsViewModel.State.Initial, CountryDetailsViewModel.State.Loading))
-        }
-
-        @Test
-        fun `then it has not loaded`() {
-            detailsTestObserver.values().last().shouldBeEqualTo(CountryDetails.EMPTY)
+        fun `then it starts with init`() {
+            stateTestObserver.values().shouldBeEqualTo(listOf(CountryDetailsViewModel.State.Initial))
         }
 
         @Nested
-        @DisplayName("When I advance")
-        inner class Advance {
+        @DisplayName("onPageLoaded")
+        inner class OnPageLoaded {
             @BeforeEach
             fun `setup`() {
-                testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
-                detailsTestObserver.awaitCount(2)
+                viewModel.onPageLoaded(regionCode = country.regionCode)
             }
 
             @Test
-            fun `then it has loaded`() {
-                stateTestObserver.values().shouldBeEqualTo(listOf(CountryDetailsViewModel.State.Initial, CountryDetailsViewModel.State.Loading, CountryDetailsViewModel.State.Initial))
+            fun `then it transitions to loading`() {
+                stateTestObserver.values().shouldBeEqualTo(
+                    listOf(
+                        CountryDetailsViewModel.State.Initial,
+                        CountryDetailsViewModel.State.Loading
+                    )
+                )
             }
 
-            @Test
-            fun `then it has loaded values`() {
-                detailsTestObserver.values().last().shouldBeEqualTo(CountryDetails(regionCode = "YE", countryName = "Yemen", detailsText = "Article 264"))
+            @Nested
+            @DisplayName("When I advance")
+            inner class Advance {
+                @BeforeEach
+                fun `setup`() {
+                    testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+                }
+
+                @Test
+                fun `then it has loaded`() {
+                    stateTestObserver.values().shouldBeEqualTo(
+                        listOf(
+                            CountryDetailsViewModel.State.Initial,
+                            CountryDetailsViewModel.State.Loading,
+                            CountryDetailsViewModel.State.Loaded(
+                                CountryDetails(
+                                    Country(regionCode = "YE"),
+                                    detailsText = "Article 264"
+                                )
+                            )
+                        )
+                    )
+                }
             }
         }
     }

@@ -3,7 +3,7 @@ package com.example.logic
 import com.example.domainmodels.Continent
 import com.example.domainmodels.Country
 import com.example.networklogic.TravelAdvisoryApiError
-import com.example.repositories.CountrySelectingRepository
+import com.example.repositories.CountrySelectingPushBasedRepository
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 
@@ -21,7 +21,7 @@ sealed class CountrySelectingLogicError: Throwable() {
     }
 }
 
-class CountrySelectingLogic(private val repository: CountrySelectingRepository) {
+class CountrySelectingLogic(private val repository: CountrySelectingPushBasedRepository) {
     val continents: Observable<List<Continent>>
         get() {
             return repository.continents.map {

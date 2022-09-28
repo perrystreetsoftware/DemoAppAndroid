@@ -2,10 +2,20 @@ package com.example.interfaces
 
 import com.example.domainmodels.CountryDetailsDTO
 import com.example.domainmodels.CountryListDTO
+import com.example.domainmodels.ServerStatusDTO
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class MockTravelApi: ITravelAdvisoriesApi {
+    override fun getForbiddenApi(): Completable {
+        return Completable.complete()
+    }
+
+    override fun getServerStatus(): Observable<ServerStatusDTO> {
+        return Observable.just(ServerStatusDTO.EMPTY)
+    }
+
     var getCountryListResult: Observable<CountryListDTO>? = null
     override fun getCountryList(): Observable<CountryListDTO> {
         getCountryListResult?.let {

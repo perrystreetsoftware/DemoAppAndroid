@@ -1,7 +1,7 @@
 package com.example.viewmodels
 
 import com.example.AutoCloseKoinAfterEachExtension
-import com.example.domainmodels.Continent
+import com.example.domainmodels.ServerStatus
 import com.example.interfaces.networkLogicApiMocks
 import com.example.logic.logicModule
 import com.example.repositories.repositoriesModule
@@ -9,6 +9,8 @@ import io.reactivex.rxjava3.observers.TestObserver
 import io.reactivex.rxjava3.plugins.RxJavaPlugins
 import io.reactivex.rxjava3.schedulers.TestScheduler
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldBeFalse
+import org.amshove.kluent.shouldBeTrue
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.koin.core.context.loadKoinModules
@@ -21,62 +23,52 @@ import java.util.concurrent.TimeUnit
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 class CountrySelectingViewModelTests: KoinTest {
     @BeforeEach
-    open fun setup() {
+    fun setup() {
         startKoin {
             loadKoinModules(viewModelModule + logicModule + repositoriesModule + networkLogicApiMocks)
         }
+
+        testScheduler = TestScheduler()
+        RxJavaPlugins.setComputationSchedulerHandler { testScheduler }
+        stateTestObserver = viewModel.state.test()
     }
-    val viewModel: CountrySelectingViewModel by inject()
+
+    @AfterEach
+    fun `cleanup`() {
+        RxJavaPlugins.setComputationSchedulerHandler(null)
+    }
+
+    private val viewModel: CountrySelectingViewModel by inject()
+    private lateinit var testScheduler: TestScheduler
+    lateinit var stateTestObserver: TestObserver<CountrySelectingViewModel.UiState>
+
+    @Test
+    fun `then it transitions to loading`() {
+        stateTestObserver.values().shouldBeEqualTo(listOf(
+            CountrySelectingViewModel.UiState(isLoading = true, serverStatus = ServerStatus.EMPTY)
+        ))
+    }
 
     @Nested
-    @DisplayName("#onPageLoaded")
-    inner class OnAppear {
-        lateinit var stateTestObserver: TestObserver<CountrySelectingViewModel.State>
-        lateinit var continentsTestObserver: TestObserver<List<Continent>>
-        private lateinit var testScheduler: TestScheduler
-
+    @DisplayName("When I advance")
+    inner class Advance {
         @BeforeEach
         fun `setup`() {
-            testScheduler = TestScheduler()
-            RxJavaPlugins.setComputationSchedulerHandler { testScheduler }
-
-            stateTestObserver = viewModel.state.test()
-            continentsTestObserver = viewModel.continents.test()
-            viewModel.onPageLoaded()
-        }
-
-        @AfterEach
-        fun cleanup() {
-            RxJavaPlugins.setComputationSchedulerHandler(null)
-        }
-
-
-        @Test
-        fun `then it transitions to loading`() {
-            stateTestObserver.values().shouldBeEqualTo(listOf(CountrySelectingViewModel.State.Initial, CountrySelectingViewModel.State.Loading))
+            testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         }
 
         @Test
-        fun `then it has not loaded`() {
-            continentsTestObserver.values().last().shouldBeEqualTo(emptyList())
-        }
-
-        @Nested
-        @DisplayName("When I advance")
-        inner class Advance {
-            @BeforeEach
-            fun `setup`() {
-                testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        fun `then it has loaded`() {
+            stateTestObserver.values()[1].apply {
+                isLoaded.shouldBeFalse()
+                isLoading.shouldBeTrue()
+                continents.isNotEmpty().shouldBeTrue()
             }
 
-            @Test
-            fun `then it has loaded`() {
-                stateTestObserver.values().shouldBeEqualTo(listOf(CountrySelectingViewModel.State.Initial, CountrySelectingViewModel.State.Loading, CountrySelectingViewModel.State.Initial))
-            }
-
-            @Test
-            fun `then it has loaded values`() {
-                continentsTestObserver.values().last().count().shouldBeEqualTo(5)
+            stateTestObserver.values()[2].apply {
+                isLoaded.shouldBeTrue()
+                isLoading.shouldBeFalse()
+                continents.isNotEmpty().shouldBeTrue()
             }
         }
     }

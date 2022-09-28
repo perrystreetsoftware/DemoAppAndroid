@@ -1,86 +1,97 @@
 package com.example.viewmodels
 
+import androidx.lifecycle.ViewModel
 import com.example.domainmodels.Continent
-import com.example.domainmodels.Country
-import com.example.logic.CountryDetailsLogicError
+import com.example.domainmodels.ServerStatus
 import com.example.logic.CountrySelectingLogic
 import com.example.logic.CountrySelectingLogicError
-import io.reactivex.rxjava3.core.Completable
+import com.example.logic.ServerStatusLogic
+import com.example.networklogic.TravelAdvisoryApiError
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
-import io.reactivex.rxjava3.subjects.PublishSubject
+
 
 sealed class CountrySelectingViewModelError(): Throwable() {
     object Forbidden: CountrySelectingViewModelError()
     object Unknown: CountrySelectingViewModelError()
+    object ConnectionError: CountrySelectingViewModelError()
 
     companion object {
         fun fromThrowable(throwable: Throwable): CountrySelectingViewModelError {
             return when(throwable) {
                 is CountrySelectingLogicError.Forbidden -> { Forbidden }
+                is TravelAdvisoryApiError -> { ConnectionError }
                 else -> Unknown
             }
         }
     }
 }
 
-class CountrySelectingViewModel(val logic: CountrySelectingLogic) {
-    enum class State {
-        Initial,
-        Loading;
-
-        val isLoading: Boolean
-            get() = this == Loading
+class CountrySelectingViewModel(val logic: CountrySelectingLogic, val serverStatusLogic: ServerStatusLogic) : ViewModel() {
+    data class UiState(val continents: List<Continent> = emptyList(),
+                       val isLoading: Boolean = false,
+                       val isLoaded: Boolean = false,
+                       val error: CountrySelectingViewModelError? = null,
+                       val serverStatus: ServerStatus? = null
+    ) {
     }
 
-    private var _state: BehaviorSubject<State> = BehaviorSubject.createDefault(State.Initial)
-    val state: Observable<State> = _state
+    private val _state: BehaviorSubject<UiState> = BehaviorSubject.createDefault(UiState())
+    val state: Observable<UiState> = _state
     private val disposables = CompositeDisposable()
-    val continents: Observable<List<Continent>> = logic.continents
 
-    sealed class Event {
-        data class Error(val error: CountrySelectingViewModelError): Event()
-        data class Navigate(val domainModel: Country): Event()
+    init {
+        // https://stackoverflow.com/questions/73305899/why-launchedeffect-call-second-time-when-i-navigate-back
+        onPageLoaded()
     }
 
-    private var _events: PublishSubject<Event> = PublishSubject.create()
-    val events: Observable<Event> = _events
+    private fun onPageLoaded() {
+        disposables.add(logic.continents.doOnNext {
+            _state.onNext(_state.value!!.copy(continents = it))
+        }.subscribe())
 
-    fun onCountrySelected(country: Country) {
-        _events.onNext(Event.Navigate(country))
-    }
+        disposables.add(serverStatusLogic.status.doOnNext {
+            _state.onNext(_state.value!!.copy(serverStatus = it))
+        }.subscribe())
 
-    fun onPageLoaded() {
         disposables.add(
-            continents
-                .flatMapCompletable {
-                    if (it.isEmpty()) {
-                        logic.reload().doOnSubscribe {
-                                _state.onNext(State.Loading)
-                            }
-                            .doOnComplete {
-                                _state.onNext(State.Initial)
-                            }
-                            .doOnError {
-                                _state.onNext(State.Initial)
-                            }
-                    } else {
-                        Completable.complete()
-                    }
-                }.subscribe({
+            logic.reload()
+                .doOnSubscribe {
+                    _state.onNext(_state.value!!.copy(isLoading = true))
+                }
+                .subscribe({
+                    _state.onNext(_state.value!!.copy(isLoading = false, isLoaded = true))
                 }, { error ->
-                    print("error: $error")
+                    _state.onNext(_state.value!!.copy(
+                        isLoading = false,
+                        isLoaded = true,
+                        error = CountrySelectingViewModelError.fromThrowable(error))
+                    )
                 })
+        )
+
+        disposables.add(
+            serverStatusLogic.reload().subscribe()
         )
     }
 
-    fun onButtonTapped() {
+    fun onRefreshTapped() {
         disposables.add(
             logic.getForbiddenApi().subscribe({
             }, { error ->
-                _events.onNext(Event.Error(CountrySelectingViewModelError.fromThrowable(error)))
+                _state.onNext(_state.value!!.copy(error = CountrySelectingViewModelError.fromThrowable(error)))
             })
         )
+    }
+
+    fun onErrorDismissed() {
+        _state.onNext(_state.value!!.copy(error = null))
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+
+        disposables.dispose()
     }
 }

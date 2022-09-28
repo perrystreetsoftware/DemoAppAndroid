@@ -1,16 +1,17 @@
 package com.example.viewmodels
 
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    factory<CountrySelectingViewModel> {
-        CountrySelectingViewModel(logic = get())
+    viewModel {
+        CountrySelectingViewModel(logic = get(), serverStatusLogic = get())
     }
 
-    factory<CountryDetailsViewModel> { country ->
+    viewModel { params ->
         CountryDetailsViewModel(
-            country = country.get(),
-            logic = get()
+            logic = get(),
+            regionCode = params.get()
         )
     }
 }

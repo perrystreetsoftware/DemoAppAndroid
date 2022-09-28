@@ -23,7 +23,7 @@ class CountrySelectingLogicTests: KoinTest {
             loadKoinModules(repositoriesModule + networkLogicApiMocks)
         }
     }
-    val countrySelectingRepository: CountrySelectingRepository by inject()
+    val countrySelectingRepository: CountrySelectingPushBasedRepository by inject()
     val api: ITravelAdvisoriesApi by inject()
 
     @Nested

@@ -1,7 +1,7 @@
 package com.example.viewmodels
 
+import androidx.lifecycle.ViewModel
 import com.example.domainmodels.CountryDetails
-import com.example.domainmodels.Country
 import com.example.logic.CountryDetailsLogic
 import com.example.logic.CountryDetailsLogicError
 import io.reactivex.rxjava3.core.Observable
@@ -23,40 +23,40 @@ sealed class CountryDetailsViewModelError: Throwable() {
     }
 }
 
-class CountryDetailsViewModel(private val country: Country, private val logic: CountryDetailsLogic) {
+class CountryDetailsViewModel(private val logic: CountryDetailsLogic, regionCode: String): ViewModel() {
     sealed class State() {
         object Initial: State()
         object Loading: State()
+        data class Loaded(val details: CountryDetails): State()
         data class Error(val error: CountryDetailsViewModelError): State()
-
-        val isLoading: Boolean
-            get() {
-                return this is Loading
-            }
     }
 
     private var _state: BehaviorSubject<State> = BehaviorSubject.createDefault(
         State.Initial)
     val state: Observable<State> = _state
 
-    private var _details: BehaviorSubject<CountryDetails> = BehaviorSubject.createDefault(CountryDetails.EMPTY)
-    val details: Observable<CountryDetails> = _details
     private var disposables = CompositeDisposable()
 
-    fun onPageLoaded() {
+    init {
+        onPageLoaded(regionCode)
+    }
+
+    private fun onPageLoaded(regionCode: String) {
         disposables.add(
-            logic.getDetails(country = country)
+            logic.getDetails(regionCode = regionCode)
                 .doOnSubscribe {
                     _state.onNext(State.Loading)
                 }
-                .doOnComplete {
-                    _state.onNext(State.Initial)
-                }
                 .subscribe({ it ->
-                    _details.onNext(it)
+                    _state.onNext(State.Loaded(it))
                 }, { error ->
                     _state.onNext(State.Error(CountryDetailsViewModelError.fromLogicError(error)))
                 })
         )
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposables.dispose()
     }
 }

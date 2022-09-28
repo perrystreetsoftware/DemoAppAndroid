@@ -1,0 +1,16 @@
+<resources>
+    <string name="forbidden_error_title">Error</string>
+    <string name="forbidden_error_message">This operation is forbidden.</string>
+    <string name="generic_error_title">Error</string>
+    <string name="generic_error_message">An error occurred.</string>
+    <string name="cancel_button_title">Cancel</string>
+    <string name="connection_error_title">A connection error occurred.</string>
+    <string name="connection_error_message1">Unable to connect to servers.</string>
+    <string name="connection_error_message2">Please try again later.</string>
+    <string name="refresh_button_title">Refresh (always will fail)</string>
+
+    <string name="country_not_found_error_title">Error</string>
+    <string name="country_not_found_error_message">Country not found</string>
+    <string name="server_status_ok">Server status is OK</string>
+    <string name="server_status_not_ok">Server status is not OK</string>
+</resources>

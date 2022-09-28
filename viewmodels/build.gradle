@@ -1,6 +1,18 @@
 plugins {
-    id 'java-library'
-    id 'org.jetbrains.kotlin.jvm'
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    compileSdk 33
+    namespace 'com.example.viewmodels'
+
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+            maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+        }
+    }
 }
 
 java {
@@ -8,18 +20,17 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-test {
-    useJUnitPlatform()
-}
-
 dependencies {
     implementation libs.koin.core
+    implementation libs.koin.android
+    implementation libs.androidx.lifecycle.viewmodel
     implementation libs.rxjava3
     implementation project(':domainmodels')
     implementation project(':interfaces')
     implementation project(':logic')
     implementation project(':repositories')
     implementation project(':utils')
+    implementation project(':networklogic')
     testImplementation libs.bundles.junit5
     testImplementation libs.kluent
     testImplementation libs.koin.test

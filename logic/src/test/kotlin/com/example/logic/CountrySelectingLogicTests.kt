@@ -59,7 +59,7 @@ class CountrySelectingLogicTests: KoinTest {
 
             @Test
             fun `then it should be valid`() {
-                value.count().shouldBeEqualTo(5)
+                value.count().shouldBeEqualTo(6)
             }
         }
     }
