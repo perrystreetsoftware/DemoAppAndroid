@@ -74,9 +74,6 @@ class CountrySelectingViewModel(val logic: CountrySelectingLogic) : ViewModel() 
                         logic.reload().doOnSubscribe {
                                 _state.onNext(State.Loading)
                             }
-                            .doOnComplete {
-                                _state.onNext(State.Initial)
-                            }
                             .doOnError {
                                 _state.onNext(State.Initial)
                             }
@@ -87,6 +84,12 @@ class CountrySelectingViewModel(val logic: CountrySelectingLogic) : ViewModel() 
                 }, { error ->
                     print("error: $error")
                 })
+        )
+
+        disposables.add(
+            logic.continents.doOnNext {
+                _state.onNext(State.Loaded(it))
+            }.subscribe()
         )
     }
 

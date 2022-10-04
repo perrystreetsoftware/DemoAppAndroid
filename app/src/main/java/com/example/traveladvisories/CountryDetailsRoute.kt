@@ -11,7 +11,7 @@ import com.example.viewmodels.CountryDetailsViewModel
 import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun CountryDetailsRoute(
+fun CountryDetailsAdapter(
     viewModel: CountryDetailsViewModel = getViewModel(),
     regionCode: String,
 ) {

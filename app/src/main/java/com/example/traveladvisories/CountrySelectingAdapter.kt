@@ -19,7 +19,6 @@ fun CountrySelectingAdapter(
     onCountrySelected: (String) -> Unit
 ) {
     val state by viewModel.state.subscribeAsState(CountrySelectingViewModel.State.Initial)
-    val continents by viewModel.continents.subscribeAsState(initial = emptyList())
     val errorState = remember { mutableStateOf<UIError?>(null) }
     val events by viewModel.events.subscribeAsState(Unit)
 

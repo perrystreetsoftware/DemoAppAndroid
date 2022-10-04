@@ -24,6 +24,7 @@ object Country : TravelAdvisoriesDestination {
 @Composable
 fun TravelAdvisoriesNavHost(navController: NavHostController = rememberNavController()) {
     val navigateToCountryDetails: (String) -> Unit = { navController.navigate("${Country.route}/$it") }
+
     NavHost(
         navController = navController,
         startDestination = Countries.route,
@@ -37,7 +38,7 @@ fun TravelAdvisoriesNavHost(navController: NavHostController = rememberNavContro
                 type = NavType.StringType
             })
         ) {
-            CountryDetailsRoute(
+            CountryDetailsAdapter(
                  regionCode = it.arguments?.getString(Country.regionCodeArg) ?: return@composable
             )
         }
