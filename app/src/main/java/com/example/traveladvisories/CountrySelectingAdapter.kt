@@ -14,7 +14,7 @@ import com.example.viewmodels.CountrySelectingViewModel
 import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun CountrySelectingRoute(
+fun CountrySelectingAdapter(
     viewModel: CountrySelectingViewModel = getViewModel(),
     onCountrySelected: (String) -> Unit
 ) {
@@ -24,10 +24,7 @@ fun CountrySelectingRoute(
     val events by viewModel.events.subscribeAsState(Unit)
 
     CountrySelectingPage(
-        state = CountrySelectingUIState(
-            continents = continents,
-            viewModelState = state
-        ),
+        state = state,
         onClick = { country -> viewModel.onCountrySelected(country) },
         onButtonClick = { viewModel.onButtonTapped() },
     )

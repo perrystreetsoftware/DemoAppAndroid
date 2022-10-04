@@ -26,12 +26,26 @@ sealed class CountrySelectingViewModelError(): Throwable() {
 }
 
 class CountrySelectingViewModel(val logic: CountrySelectingLogic) : ViewModel() {
-    enum class State {
-        Initial,
-        Loading;
+    sealed class State {
+        object Initial: State()
+        object Loading: State()
+        data class Loaded(val myContinents: List<Continent>): State()
 
         val isLoading: Boolean
-            get() = this == Loading
+            get() = this is Loading
+
+        val isLoaded: Boolean
+            get() = this is Loaded
+
+        val continents: List<Continent>
+            get() {
+                return when(this) {
+                    is Loaded -> {
+                        this.myContinents
+                    }
+                    else -> emptyList()
+                }
+            }
     }
 
     private var _state: BehaviorSubject<State> = BehaviorSubject.createDefault(State.Initial)

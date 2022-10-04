@@ -29,7 +29,7 @@ fun TravelAdvisoriesNavHost(navController: NavHostController = rememberNavContro
         startDestination = Countries.route,
     ) {
         composable(route = Countries.route) {
-            CountrySelectingRoute(onCountrySelected = navigateToCountryDetails)
+            CountrySelectingAdapter(onCountrySelected = navigateToCountryDetails)
         }
         composable(
             route = "${Country.route}/{${Country.regionCodeArg}}",

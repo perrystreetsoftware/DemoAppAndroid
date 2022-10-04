@@ -12,15 +12,16 @@ import com.example.uicomponents.countryselecting.componenets.CountrySelectingBut
 import com.example.uicomponents.countryselecting.componenets.CountrySelectingList
 import com.example.uicomponents.library.ProgressIndicator
 import com.example.viewmodels.CountrySelectingViewModel
+import com.example.viewmodels.CountrySelectingViewModelError
 
 @Composable
 fun CountrySelectingPage(
-    state: CountrySelectingUIState,
+    state: CountrySelectingViewModel.State,
     onClick: ((Country) -> Unit)? = null,
     onButtonClick: (() -> Unit)? = null
 ) {
     Box {
-        ProgressIndicator(isLoading = state.viewModelState.isLoading)
+        ProgressIndicator(isLoading = state.isLoading)
         Column(modifier = Modifier.fillMaxHeight()) {
             Column(modifier = Modifier.weight(1f)) {
                 CountrySelectingList(
@@ -29,20 +30,17 @@ fun CountrySelectingPage(
                 )
             }
             CountrySelectingButton(
-                isLoading = state.viewModelState.isLoading,
+                isLoading = state.isLoading,
                 onClick = onButtonClick
             )
         }
     }
 }
 
-@Preview(name = "Standard Preview", widthDp = 300, heightDp = 90)
+@Preview(name = "Standard Preview", widthDp = 300, heightDp = 300)
 @Composable
 fun CountrySelectingPagePreview() {
     CountrySelectingPage(
-        CountrySelectingUIState(
-            continents = listOf(Continent("North America", countries = listOf(Country("us")))),
-            viewModelState = CountrySelectingViewModel.State.Initial
-        )
+        state = CountrySelectingViewModel.State.Loaded(listOf(Continent("North America", countries = listOf(Country("ca")))))
     )
 }
