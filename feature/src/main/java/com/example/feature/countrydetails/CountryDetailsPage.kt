@@ -1,17 +1,14 @@
-package com.example.uicomponents.countrydetails
+package com.example.feature.countrydetails
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.domainmodels.Country
 import com.example.domainmodels.CountryDetails
-import com.example.uicomponents.countrydetails.component.CountryDetailsContent
-import com.example.uicomponents.countrydetails.component.CountryNotFoundErrorView
-import com.example.uicomponents.countryselecting.CountrySelectingPage
-import com.example.uicomponents.countryselecting.CountrySelectingUIState
+import com.example.feature.countrydetails.component.CountryDetailsContent
+import com.example.feature.countrydetails.component.CountryNotFoundErrorView
 import com.example.uicomponents.library.ProgressIndicator
 import com.example.viewmodels.CountryDetailsViewModel
 import com.example.viewmodels.CountryDetailsViewModelError
-import com.example.viewmodels.CountrySelectingViewModel
 
 @Composable
 fun CountryDetailsPage(

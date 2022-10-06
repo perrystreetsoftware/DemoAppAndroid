@@ -1,4 +1,4 @@
-package com.example.uicomponents.countrydetails.component
+package com.example.feature.countrydetails.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

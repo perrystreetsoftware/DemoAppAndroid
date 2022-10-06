@@ -1,4 +1,4 @@
-package com.example.traveladvisories
+package com.example.feature.countryselecting
 
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
@@ -6,10 +6,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.res.stringResource
-import com.example.extensions.asUIError
-import com.example.libs.UIError
-import com.example.uicomponents.countryselecting.CountrySelectingPage
-import com.example.uicomponents.countryselecting.CountrySelectingUIState
+import com.example.feature.extensions.asUIError
+import com.example.uicomponents.models.UIError
 import com.example.viewmodels.CountrySelectingViewModel
 import org.koin.androidx.compose.getViewModel
 

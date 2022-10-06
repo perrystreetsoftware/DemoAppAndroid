@@ -1,0 +1,7 @@
+<resources>
+    <string name="forbidden_error_title">Error</string>
+    <string name="forbidden_error_message">This operation is forbidden.</string>
+    <string name="generic_error_title">Error</string>
+    <string name="generic_error_message">An error occurred.</string>
+    <string name="cancel_button_title">Cancel</string>
+</resources>

@@ -1,4 +1,4 @@
-package com.example.uicomponents.countryselecting.componenets
+package com.example.feature.countryselecting.componenets
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

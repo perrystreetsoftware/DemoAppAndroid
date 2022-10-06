@@ -1,4 +1,4 @@
-package com.example.uicomponents.countryselecting
+package com.example.feature.countryselecting
 
 import com.example.domainmodels.Continent
 import com.example.viewmodels.CountrySelectingViewModel

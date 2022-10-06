@@ -1,4 +1,4 @@
-package com.example.uicomponents.countrydetails.component
+package com.example.feature.countrydetails.component
 
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
@@ -10,8 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.uicomponents.countryselecting.CountrySelectingPage
-import com.example.uicomponents.countryselecting.CountrySelectingUIState
+import com.example.feature.countryselecting.CountrySelectingPage
+import com.example.feature.countryselecting.CountrySelectingUIState
 import com.example.viewmodels.CountrySelectingViewModel
 
 @Composable

@@ -1,4 +1,4 @@
-package com.example.uicomponents.countryselecting
+package com.example.feature.countryselecting
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,11 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.domainmodels.Continent
 import com.example.domainmodels.Country
-import com.example.uicomponents.countryselecting.componenets.CountrySelectingButton
-import com.example.uicomponents.countryselecting.componenets.CountrySelectingList
+import com.example.feature.countryselecting.componenets.CountrySelectingButton
+import com.example.feature.countryselecting.componenets.CountrySelectingList
 import com.example.uicomponents.library.ProgressIndicator
 import com.example.viewmodels.CountrySelectingViewModel
-import com.example.viewmodels.CountrySelectingViewModelError
 
 @Composable
 fun CountrySelectingPage(

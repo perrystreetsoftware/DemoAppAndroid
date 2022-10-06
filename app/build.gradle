@@ -61,10 +61,10 @@ dependencies {
     implementation libs.androidx.startup.runtime
     implementation libs.koin.core
     implementation libs.koin.android
-    implementation libs.koin.android.compose
     implementation libs.rxjava3
     implementation libs.rxjava3.android
     implementation project(':domainmodels')
+    implementation project(':feature')
     implementation project(':logic')
     implementation project(':networklogic')
     implementation project(':repositories')

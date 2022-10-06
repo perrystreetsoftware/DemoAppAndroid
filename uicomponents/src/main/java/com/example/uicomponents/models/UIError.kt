@@ -1,4 +1,4 @@
-package com.example.libs
+package com.example.uicomponents.models
 
 import androidx.annotation.StringRes
 

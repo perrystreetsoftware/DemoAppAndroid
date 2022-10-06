@@ -7,6 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.feature.countrydetails.CountryDetailsAdapter
+import com.example.feature.countryselecting.CountrySelectingAdapter
 
 interface TravelAdvisoriesDestination {
     val route: String

@@ -1,7 +1,7 @@
-package com.example.extensions
+package com.example.feature.extensions
 
-import com.example.libs.UIError
-import com.example.traveladvisories.R
+import com.example.features.R
+import com.example.uicomponents.models.UIError
 import com.example.viewmodels.CountrySelectingViewModelError
 
 fun CountrySelectingViewModelError.asUIError(): UIError {

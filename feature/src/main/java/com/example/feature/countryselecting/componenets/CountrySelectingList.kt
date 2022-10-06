@@ -1,4 +1,4 @@
-package com.example.uicomponents.countryselecting.componenets
+package com.example.feature.countryselecting.componenets
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable

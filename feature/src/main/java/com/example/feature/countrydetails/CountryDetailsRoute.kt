@@ -1,12 +1,10 @@
-package com.example.traveladvisories
+package com.example.feature.countrydetails
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import com.example.domainmodels.CountryDetails
-import com.example.uicomponents.countrydetails.CountryDetailsPage
-import com.example.uicomponents.countrydetails.CountryDetailsUIState
 import com.example.viewmodels.CountryDetailsViewModel
 import org.koin.androidx.compose.getViewModel
 

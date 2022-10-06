@@ -36,15 +36,22 @@ android {
         kotlinCompilerExtensionVersion "1.3.1"
     }
 
-    namespace 'com.example.uicomponents'
+    namespace 'com.example.features'
 }
 
 dependencies {
     androidTestImplementation libs.bundles.junit5
     implementation libs.androidx.compose.material
     implementation libs.androidx.compose.ui.tooling
+    implementation libs.androidx.compose.runtime.rxjava3
+    implementation libs.koin.core
+    implementation libs.koin.android
+    implementation libs.koin.android.compose
+    implementation libs.rxjava3
+    implementation libs.rxjava3.android
     implementation project(':domainmodels')
     implementation project(':utils')
     implementation project(':viewmodels')
+    implementation project(':uicomponents')
     testImplementation libs.bundles.junit5
 }

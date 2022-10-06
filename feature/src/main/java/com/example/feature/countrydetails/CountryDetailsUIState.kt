@@ -1,4 +1,4 @@
-package com.example.uicomponents.countrydetails
+package com.example.feature.countrydetails
 
 import com.example.domainmodels.CountryDetails
 import com.example.viewmodels.CountryDetailsViewModel
