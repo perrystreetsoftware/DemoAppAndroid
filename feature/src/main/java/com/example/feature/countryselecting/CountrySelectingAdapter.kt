@@ -17,33 +17,22 @@ fun CountrySelectingAdapter(
     onCountrySelected: (String) -> Unit
 ) {
     val state by viewModel.state.subscribeAsState(CountrySelectingViewModel.State.Initial)
-    val errorState = remember { mutableStateOf<UIError?>(null) }
-    val events by viewModel.events.subscribeAsState(Unit)
-
     CountrySelectingPage(
         state = state,
         onClick = { country -> viewModel.onCountrySelected(country) },
         onButtonClick = { viewModel.onButtonTapped() },
     )
+    val errorDialogState = remember { mutableStateOf<UIError?>(null) }
     ErrorDialog(
-        state = errorState.value,
+        state = errorDialogState.value,
         onDismiss = { viewModel.onErrorDismissed() }
     )
 
-    when (val event = events) {
-        is CountrySelectingViewModel.Event.Navigate -> {
-            onCountrySelected.invoke(event.domainModel.regionCode)
-        }
-        is CountrySelectingViewModel.Event.Error -> {
-            errorState.value = event.error.asUIError()
-        }
-        is CountrySelectingViewModel.Event.ErrorDisappear -> {
-            errorState.value = null
-        }
-    }
-    LaunchedEffect(Unit) {
-        viewModel.onPageLoaded()
-    }
+    CountrySelectingEventsAdapter(
+        viewModel = viewModel,
+        onCountrySelected = onCountrySelected,
+        errorDialogState = errorDialogState
+    )
 }
 
 @Composable
@@ -65,5 +54,30 @@ fun ErrorDialog(state: UIError?, onDismiss: () -> Unit) {
                 }
             }
         )
+    }
+}
+
+@Composable
+private fun CountrySelectingEventsAdapter(
+    viewModel: CountrySelectingViewModel,
+    onCountrySelected: (String) -> Unit,
+    errorDialogState: MutableState<UIError?>
+) {
+    val events by viewModel.events.subscribeAsState(CountrySelectingViewModel.Event.Appear)
+    LaunchedEffect(events) { // will be called only if events value has changed
+        when (val event = events) {
+            is CountrySelectingViewModel.Event.Appear -> {
+                viewModel.onPageLoaded()
+            }
+            is CountrySelectingViewModel.Event.ErrorAppear -> {
+                errorDialogState.value = event.error.asUIError()
+            }
+            is CountrySelectingViewModel.Event.ErrorDisappear -> {
+                errorDialogState.value = null
+            }
+            is CountrySelectingViewModel.Event.CountrySelect -> {
+                onCountrySelected.invoke(event.domainModel.regionCode)
+            }
+        }
     }
 }

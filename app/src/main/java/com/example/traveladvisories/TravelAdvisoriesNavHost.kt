@@ -25,14 +25,15 @@ object Country : TravelAdvisoriesDestination {
 
 @Composable
 fun TravelAdvisoriesNavHost(navController: NavHostController = rememberNavController()) {
-    val navigateToCountryDetails: (String) -> Unit = { navController.navigate("${Country.route}/$it") }
-
     NavHost(
         navController = navController,
         startDestination = Countries.route,
     ) {
         composable(route = Countries.route) {
-            CountrySelectingAdapter(onCountrySelected = navigateToCountryDetails)
+            CountrySelectingAdapter(
+                onCountrySelected = {
+                    navController.navigate("${Country.route}/$it")
+                })
         }
         composable(
             route = "${Country.route}/{${Country.regionCodeArg}}",
@@ -41,7 +42,7 @@ fun TravelAdvisoriesNavHost(navController: NavHostController = rememberNavContro
             })
         ) {
             CountryDetailsAdapter(
-                 regionCode = it.arguments?.getString(Country.regionCodeArg) ?: return@composable
+                regionCode = it.arguments?.getString(Country.regionCodeArg) ?: return@composable
             )
         }
     }
