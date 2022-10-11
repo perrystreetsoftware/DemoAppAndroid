@@ -25,6 +25,11 @@ sealed class CountrySelectingViewModelError(): Throwable() {
 }
 
 class CountrySelectingViewModel(val logic: CountrySelectingLogic) : ViewModel() {
+    sealed class ErrorState {
+        object None: ErrorState()
+        data class Error(val throwable: CountrySelectingViewModelError): ErrorState()
+    }
+
     sealed class State {
         object Initial : State()
         object Loading : State()
@@ -50,19 +55,21 @@ class CountrySelectingViewModel(val logic: CountrySelectingLogic) : ViewModel() 
     private var _state: BehaviorSubject<State> = BehaviorSubject.createDefault(State.Initial)
     val state: Observable<State> = _state
     private val disposables = CompositeDisposable()
+    private val _errorState: BehaviorSubject<ErrorState> = BehaviorSubject.createDefault(ErrorState.None)
+    val errorState: Observable<ErrorState> = _errorState
 
-    sealed class Event {
-        object Appear : Event()
-        data class ErrorAppear(val error: CountrySelectingViewModelError) : Event()
-        object ErrorDisappear : Event()
-        data class CountrySelect(val domainModel: Country) : Event()
-    }
+//    sealed class Event {
+//        object Appear : Event()
+//        data class ErrorAppear(val error: CountrySelectingViewModelError) : Event()
+//        object ErrorDisappear : Event()
+//        data class CountrySelect(val domainModel: Country) : Event()
+//    }
 
-    private var _events: PublishSubject<Event> = PublishSubject.create()
-    val events: Observable<Event> = _events
+//    private var _events: PublishSubject<Event> = PublishSubject.create()
+//    val events: Observable<Event> = _events
 
     fun onCountrySelected(country: Country) {
-        _events.onNext(Event.CountrySelect(country))
+//        _events.onNext(Event.CountrySelect(country))
     }
 
     fun onPageLoaded() {
@@ -86,13 +93,13 @@ class CountrySelectingViewModel(val logic: CountrySelectingLogic) : ViewModel() 
         disposables.add(
             logic.getForbiddenApi().subscribe({
             }, { error ->
-                _events.onNext(Event.ErrorAppear(CountrySelectingViewModelError.fromThrowable(error)))
+                _errorState.onNext(ErrorState.Error(CountrySelectingViewModelError.fromThrowable(error)))
             })
         )
     }
 
     fun onErrorDismissed() {
-        _events.onNext(Event.ErrorDisappear)
+        _errorState.onNext(ErrorState.None)
     }
 
     override fun onCleared() {

@@ -22,62 +22,38 @@ fun CountrySelectingAdapter(
         onClick = { country -> viewModel.onCountrySelected(country) },
         onButtonClick = { viewModel.onButtonTapped() },
     )
-    val errorDialogState = remember { mutableStateOf<UIError?>(null) }
+
+    val errorState by viewModel.errorState.subscribeAsState(CountrySelectingViewModel.ErrorState.None)
     ErrorDialog(
-        state = errorDialogState.value,
+        state = errorState,
         onDismiss = { viewModel.onErrorDismissed() }
     )
 
-    CountrySelectingEventsAdapter(
-        viewModel = viewModel,
-        onCountrySelected = onCountrySelected,
-        errorDialogState = errorDialogState
-    )
-}
-
-@Composable
-fun ErrorDialog(state: UIError?, onDismiss: () -> Unit) {
-    if (state != null) {
-        AlertDialog(
-            onDismissRequest = onDismiss,
-            title = { Text(text = stringResource(id = state.titleKey)) },
-            text = {
-                Text(text = state.messageKeys
-                    .mapIndexed { _, it -> stringResource(id = it) }
-                    .joinToString()
-                )
-            },
-            confirmButton = { },
-            dismissButton = {
-                Button(onClick = onDismiss) {
-                    Text(text = stringResource(id = android.R.string.cancel))
-                }
-            }
-        )
+    LaunchedEffect(Unit) {
+        viewModel.onPageLoaded()
     }
 }
 
 @Composable
-private fun CountrySelectingEventsAdapter(
-    viewModel: CountrySelectingViewModel,
-    onCountrySelected: (String) -> Unit,
-    errorDialogState: MutableState<UIError?>
-) {
-    val events by viewModel.events.subscribeAsState(CountrySelectingViewModel.Event.Appear)
-    LaunchedEffect(events) { // will be called only if events value has changed
-        when (val event = events) {
-            is CountrySelectingViewModel.Event.Appear -> {
-                viewModel.onPageLoaded()
-            }
-            is CountrySelectingViewModel.Event.ErrorAppear -> {
-                errorDialogState.value = event.error.asUIError()
-            }
-            is CountrySelectingViewModel.Event.ErrorDisappear -> {
-                errorDialogState.value = null
-            }
-            is CountrySelectingViewModel.Event.CountrySelect -> {
-                onCountrySelected.invoke(event.domainModel.regionCode)
-            }
+fun ErrorDialog(state: CountrySelectingViewModel.ErrorState?, onDismiss: () -> Unit) {
+    if (state is CountrySelectingViewModel.ErrorState.Error) {
+        (state.throwable.asUIError()).let { uiError ->
+            AlertDialog(
+                onDismissRequest = onDismiss,
+                title = { Text(text = stringResource(id = uiError.titleKey)) },
+                text = {
+                    Text(text = uiError.messageKeys
+                        .mapIndexed { _, it -> stringResource(id = it) }
+                        .joinToString()
+                    )
+                },
+                confirmButton = { },
+                dismissButton = {
+                    Button(onClick = onDismiss) {
+                        Text(text = stringResource(id = android.R.string.cancel))
+                    }
+                }
+            )
         }
     }
 }
