@@ -1,6 +1,5 @@
 package com.example.viewmodels
 
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import com.example.domainmodels.Continent
 import com.example.domainmodels.ServerStatus
@@ -42,8 +41,12 @@ class CountrySelectingViewModel(val logic: CountrySelectingLogic, val serverStat
     val state: Observable<UiState> = _state
     private val disposables = CompositeDisposable()
 
-    @VisibleForTesting
-    fun onPageLoaded() {
+    init {
+        // https://stackoverflow.com/questions/73305899/why-launchedeffect-call-second-time-when-i-navigate-back
+        onPageLoaded()
+    }
+
+    private fun onPageLoaded() {
         disposables.add(logic.continents.doOnNext {
             _state.onNext(_state.value!!.copy(continents = it))
         }.subscribe())

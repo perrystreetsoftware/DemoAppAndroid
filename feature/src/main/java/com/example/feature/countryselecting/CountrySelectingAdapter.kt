@@ -28,10 +28,6 @@ fun CountrySelectingAdapter(
         state = state.error,
         onDismiss = { viewModel.onErrorDismissed() }
     )
-
-    LaunchedEffect(Unit) {
-        viewModel.onPageLoaded()
-    }
 }
 
 @Composable

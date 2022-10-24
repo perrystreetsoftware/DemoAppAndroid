@@ -9,6 +9,7 @@ import io.reactivex.rxjava3.observers.TestObserver
 import io.reactivex.rxjava3.plugins.RxJavaPlugins
 import io.reactivex.rxjava3.schedulers.TestScheduler
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeTrue
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
@@ -28,8 +29,8 @@ class CountrySelectingViewModelTests: KoinTest {
         }
 
         testScheduler = TestScheduler()
-        stateTestObserver = viewModel.state.test()
         RxJavaPlugins.setComputationSchedulerHandler { testScheduler }
+        stateTestObserver = viewModel.state.test()
     }
 
     @AfterEach
@@ -37,39 +38,37 @@ class CountrySelectingViewModelTests: KoinTest {
         RxJavaPlugins.setComputationSchedulerHandler(null)
     }
 
-    val viewModel: CountrySelectingViewModel by inject()
+    private val viewModel: CountrySelectingViewModel by inject()
     private lateinit var testScheduler: TestScheduler
     lateinit var stateTestObserver: TestObserver<CountrySelectingViewModel.UiState>
 
     @Test
     fun `then it transitions to loading`() {
-        stateTestObserver.values().shouldBeEqualTo(listOf(CountrySelectingViewModel.UiState()))
+        stateTestObserver.values().shouldBeEqualTo(listOf(
+            CountrySelectingViewModel.UiState(isLoading = true, serverStatus = ServerStatus.EMPTY)
+        ))
     }
 
     @Nested
-    @DisplayName("#onPageLoaded")
-    inner class OnPageAppear {
+    @DisplayName("When I advance")
+    inner class Advance {
         @BeforeEach
         fun `setup`() {
-            viewModel.onPageLoaded()
+            testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         }
 
         @Test
-        fun `then it transitions to loading`() {
-            stateTestObserver.values().last().shouldBeEqualTo(CountrySelectingViewModel.UiState(isLoading = true, serverStatus = ServerStatus.EMPTY))
-        }
-
-        @Nested
-        @DisplayName("When I advance")
-        inner class Advance {
-            @BeforeEach
-            fun `setup`() {
-                testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        fun `then it has loaded`() {
+            stateTestObserver.values()[1].apply {
+                isLoaded.shouldBeFalse()
+                isLoading.shouldBeTrue()
+                continents.isNotEmpty().shouldBeTrue()
             }
 
-            @Test
-            fun `then it has loaded`() {
-                stateTestObserver.values().last().continents.isNotEmpty().shouldBeTrue()
+            stateTestObserver.values()[2].apply {
+                isLoaded.shouldBeTrue()
+                isLoading.shouldBeFalse()
+                continents.isNotEmpty().shouldBeTrue()
             }
         }
     }
