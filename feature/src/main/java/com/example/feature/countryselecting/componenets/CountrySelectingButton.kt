@@ -6,22 +6,26 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.features.R
 
 @Composable
 fun CountrySelectingButton(
-    isLoading: Boolean,
+    isLoaded: Boolean,
     onClick: (() -> Unit)? = null
 ) {
-    if (!isLoading) {
+    if (isLoaded) {
         Button(
-            modifier = Modifier.fillMaxWidth().padding(10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
             onClick = {
             onClick?.let {
                 it()
             }
         }) {
-            Text(text = "Failing Api Call")
+            Text(text = stringResource(id = R.string.refresh_button_title))
         }
     }
 }

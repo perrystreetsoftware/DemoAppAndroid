@@ -27,20 +27,14 @@ class CountryDetailsViewModel(private val logic: CountryDetailsLogic): ViewModel
     sealed class State() {
         object Initial: State()
         object Loading: State()
+        data class Loaded(val details: CountryDetails): State()
         data class Error(val error: CountryDetailsViewModelError): State()
-
-        val isLoading: Boolean
-            get() {
-                return this is Loading
-            }
     }
 
     private var _state: BehaviorSubject<State> = BehaviorSubject.createDefault(
         State.Initial)
     val state: Observable<State> = _state
 
-    private var _details: BehaviorSubject<CountryDetails> = BehaviorSubject.createDefault(CountryDetails.EMPTY)
-    val details: Observable<CountryDetails> = _details
     private var disposables = CompositeDisposable()
 
     fun onPageLoaded(regionCode: String) {
@@ -49,11 +43,8 @@ class CountryDetailsViewModel(private val logic: CountryDetailsLogic): ViewModel
                 .doOnSubscribe {
                     _state.onNext(State.Loading)
                 }
-                .doOnComplete {
-                    _state.onNext(State.Initial)
-                }
                 .subscribe({ it ->
-                    _details.onNext(it)
+                    _state.onNext(State.Loaded(it))
                 }, { error ->
                     _state.onNext(State.Error(CountryDetailsViewModelError.fromLogicError(error)))
                 })

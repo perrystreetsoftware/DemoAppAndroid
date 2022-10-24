@@ -10,4 +10,8 @@ val repositoriesModule = module {
     single<CountrySelectingRepository> {
         CountrySelectingRepository(travelAdvisoriesApi = get())
     }
+
+    single<ServerStatusRepository> {
+        ServerStatusRepository(travelAdvisoriesApi = get())
+    }
 }

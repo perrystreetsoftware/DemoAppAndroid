@@ -31,7 +31,7 @@ class CountrySelectingViewModelTests: KoinTest {
     @Nested
     @DisplayName("#onPageLoaded")
     inner class OnAppear {
-        lateinit var stateTestObserver: TestObserver<CountrySelectingViewModel.State>
+        lateinit var stateTestObserver: TestObserver<CountrySelectingViewModel.UiState>
         lateinit var continentsTestObserver: TestObserver<List<Continent>>
         private lateinit var testScheduler: TestScheduler
 
@@ -53,7 +53,7 @@ class CountrySelectingViewModelTests: KoinTest {
 
         @Test
         fun `then it transitions to loading`() {
-            stateTestObserver.values().shouldBeEqualTo(listOf(CountrySelectingViewModel.State.Initial, CountrySelectingViewModel.State.Loading))
+            stateTestObserver.values().shouldBeEqualTo(listOf(CountrySelectingViewModel.UiState.Initial, CountrySelectingViewModel.UiState.Loading))
         }
 
         @Test
@@ -71,7 +71,7 @@ class CountrySelectingViewModelTests: KoinTest {
 
             @Test
             fun `then it has loaded`() {
-                stateTestObserver.values().shouldBeEqualTo(listOf(CountrySelectingViewModel.State.Initial, CountrySelectingViewModel.State.Loading, CountrySelectingViewModel.State.Initial))
+                stateTestObserver.values().shouldBeEqualTo(listOf(CountrySelectingViewModel.UiState.Initial, CountrySelectingViewModel.UiState.Loading, CountrySelectingViewModel.UiState.Initial))
             }
 
             @Test

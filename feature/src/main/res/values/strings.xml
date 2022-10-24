@@ -4,4 +4,8 @@
     <string name="generic_error_title">Error</string>
     <string name="generic_error_message">An error occurred.</string>
     <string name="cancel_button_title">Cancel</string>
+    <string name="connection_error_title">A connection error occurred.</string>
+    <string name="connection_error_message1">Unable to connect to servers.</string>
+    <string name="connection_error_message2">Please try again later.</string>
+    <string name="refresh_button_title">Refresh (always will fail)</string>
 </resources>

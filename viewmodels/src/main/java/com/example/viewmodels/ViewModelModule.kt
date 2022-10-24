@@ -5,7 +5,7 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModel {
-        CountrySelectingViewModel(logic = get())
+        CountrySelectingViewModel(logic = get(), serverStatusLogic = get())
     }
 
     viewModel {

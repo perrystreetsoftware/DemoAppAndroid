@@ -12,5 +12,8 @@ fun CountrySelectingViewModelError.asUIError(): UIError {
         is CountrySelectingViewModelError.Unknown -> {
             UIError(R.string.generic_error_title, listOf(R.string.generic_error_message))
         }
+        is CountrySelectingViewModelError.ConnectionError -> {
+            UIError(R.string.connection_error_title, listOf(R.string.connection_error_message1, R.string.connection_error_message2))
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.networklogic
 import com.example.domainmodels.CountryDetailsDTO
 import com.example.domainmodels.CountryListDTO
+import com.example.domainmodels.ServerStatusDTO
 import com.example.interfaces.ITravelAdvisoriesApi
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
@@ -15,6 +16,35 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 class TravelAdvisoriesApi(val moshi: Moshi): ITravelAdvisoriesApi {
+    override fun getServerStatus(): Observable<ServerStatusDTO> {
+        val client = OkHttpClient()
+        val url = "https://status.scruff.com/index.json"
+        val request: Request = Builder()
+            .url(url)
+            .build()
+
+        val jsonAdapter: JsonAdapter<ServerStatusDTO> = moshi.adapter(ServerStatusDTO::class.java)
+
+        return Observable.defer {
+            try {
+                val response: Response = client.newCall(request).execute()
+                if (response.isSuccessful) {
+                    Observable.just<Response>(response).map {
+                        jsonAdapter.fromJson(it.body!!.string()) ?: ServerStatusDTO.EMPTY
+                    }
+                } else {
+                    Observable.error(TravelAdvisoryApiError.fromStatusCode(response.code))
+                }
+            } catch (e: IOException) {
+                Observable.error(TravelAdvisoryApiError.Other(e))
+            } catch (e: java.lang.IllegalStateException) {
+                Observable.error(TravelAdvisoryApiError.Other(e))
+            }
+        }
+            .delay(500, TimeUnit.MILLISECONDS)
+            .subscribeOn(Schedulers.io())
+    }
+
     override fun getForbiddenApi(): Completable {
         val client = OkHttpClient()
         val url = "https://httpstat.us/403"
@@ -50,7 +80,7 @@ class TravelAdvisoriesApi(val moshi: Moshi): ITravelAdvisoriesApi {
                 val response: Response = client.newCall(request).execute()
                 if (response.isSuccessful) {
                     Observable.just<Response>(response).map {
-                        jsonAdapter.fromJson(it.body?.string()) ?: CountryListDTO.EMPTY
+                        jsonAdapter.fromJson(it.body!!.string()) ?: CountryListDTO.EMPTY
                     }
                 } else {
                     Observable.error(TravelAdvisoryApiError.fromStatusCode(response.code))
@@ -83,7 +113,7 @@ class TravelAdvisoriesApi(val moshi: Moshi): ITravelAdvisoriesApi {
                 val response: Response = client.newCall(request).execute()
                 if (response.isSuccessful) {
                     Observable.just<Response>(response).map {
-                        jsonAdapter.fromJson(it.body?.string()) ?: CountryDetailsDTO.EMPTY
+                        jsonAdapter.fromJson(it.body!!.string()) ?: CountryDetailsDTO.EMPTY
                     }
                 } else {
                     Observable.error(TravelAdvisoryApiError.fromStatusCode(response.code))

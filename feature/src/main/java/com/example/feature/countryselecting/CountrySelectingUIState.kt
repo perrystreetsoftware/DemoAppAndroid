@@ -5,5 +5,5 @@ import com.example.viewmodels.CountrySelectingViewModel
 
 data class CountrySelectingUIState(
     val continents: List<Continent>,
-    val viewModelState: CountrySelectingViewModel.State
+    val viewModelState: CountrySelectingViewModel.UiState
 )

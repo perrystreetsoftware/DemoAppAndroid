@@ -9,40 +9,44 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.feature.countrydetails.CountryDetailsAdapter
 import com.example.feature.countryselecting.CountrySelectingAdapter
+import com.example.domainmodels.Country
 
 interface TravelAdvisoriesDestination {
     val route: String
 }
 
-object Countries : TravelAdvisoriesDestination {
+object CountriesDestination : TravelAdvisoriesDestination {
     override val route = "countries"
 }
 
-object Country : TravelAdvisoriesDestination {
+object CountryDestination : TravelAdvisoriesDestination {
     override val route = "country"
     const val regionCodeArg = "region_code"
 }
 
 @Composable
 fun TravelAdvisoriesNavHost(navController: NavHostController = rememberNavController()) {
+    val onCountrySelected: (Country) -> Unit = {
+        navController.navigate("${CountryDestination.route}/${it.regionCode}")
+    }
+
     NavHost(
         navController = navController,
-        startDestination = Countries.route,
+        startDestination = CountriesDestination.route,
     ) {
-        composable(route = Countries.route) {
+        composable(route = CountriesDestination.route) {
             CountrySelectingAdapter(
-                onCountrySelected = {
-                    navController.navigate("${Country.route}/$it")
-                })
+                onCountrySelected = onCountrySelected
+            )
         }
         composable(
-            route = "${Country.route}/{${Country.regionCodeArg}}",
-            arguments = listOf(navArgument(Country.regionCodeArg) {
+             route = "${CountryDestination.route}/{${CountryDestination.regionCodeArg}}",
+            arguments = listOf(navArgument(CountryDestination.regionCodeArg) {
                 type = NavType.StringType
             })
         ) {
             CountryDetailsAdapter(
-                regionCode = it.arguments?.getString(Country.regionCodeArg) ?: return@composable
+                regionCode =  it.arguments?.getString(CountryDestination.regionCodeArg) ?: return@composable
             )
         }
     }

@@ -9,4 +9,8 @@ val logicModule = module {
     factory<CountrySelectingLogic> {
         CountrySelectingLogic(repository = get())
     }
+
+    factory<ServerStatusLogic> {
+        ServerStatusLogic(repository = get())
+    }
 }

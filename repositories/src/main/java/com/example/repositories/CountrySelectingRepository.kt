@@ -8,9 +8,14 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import java.util.*
 
+// This is a push-based repository example
 class CountrySelectingRepository(private val travelAdvisoriesApi: ITravelAdvisoriesApi) {
     private var _continents: BehaviorSubject<List<Continent>> = BehaviorSubject.createDefault(emptyList())
-    var continents: Observable<List<Continent>> = _continents
+    val continents: Observable<List<Continent>> = _continents
+
+    fun socketMessageReceivedWithNewValue(list: List<Continent>) {
+        _continents.onNext(list)
+    }
 
     fun reload(): Completable {
         return travelAdvisoriesApi.getCountryList()
