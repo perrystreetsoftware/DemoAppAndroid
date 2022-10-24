@@ -15,6 +15,7 @@ import org.koin.core.context.startKoin
 import org.koin.test.KoinTest
 import org.koin.test.inject
 import java.lang.RuntimeException
+import java.util.concurrent.TimeUnit
 
 @ExtendWith(AutoCloseKoinAfterEachExtension::class)
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
@@ -40,7 +41,7 @@ class CountryDetailsRepositoryTests: KoinTest {
 
             @BeforeEach
             fun setup() {
-                testObserver = countryDetailsRepository.getDetails("ug").test()
+                testObserver = countryDetailsRepository.getDetails("ug").test().awaitDone(5, TimeUnit.SECONDS)
                 value = testObserver.values().first()
             }
 

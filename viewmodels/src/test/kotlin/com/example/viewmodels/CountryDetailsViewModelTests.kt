@@ -23,12 +23,12 @@ import java.util.concurrent.TimeUnit
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 class CountryDetailsViewModelTests: KoinTest {
     @BeforeEach
-    open fun setup() {
+    fun setup() {
         startKoin {
             loadKoinModules(viewModelModule + logicModule + repositoriesModule + networkLogicApiMocks)
         }
     }
-    private val country = Country(countryName = "Uganda", regionCode = "ug")
+    private val country = Country(regionCode = "ug")
     val viewModel: CountryDetailsViewModel by inject() {
         parametersOf(country)
     }
@@ -46,8 +46,7 @@ class CountryDetailsViewModelTests: KoinTest {
             RxJavaPlugins.setComputationSchedulerHandler { testScheduler }
 
             stateTestObserver = viewModel.state.test()
-            detailsTestObserver = viewModel.details.test()
-            viewModel.onPageLoaded()
+            viewModel.onPageLoaded(regionCode = country.regionCode)
         }
 
         @AfterEach
@@ -82,7 +81,9 @@ class CountryDetailsViewModelTests: KoinTest {
 
             @Test
             fun `then it has loaded values`() {
-                detailsTestObserver.values().last().shouldBeEqualTo(CountryDetails(regionCode = "YE", countryName = "Yemen", detailsText = "Article 264"))
+                (stateTestObserver.values().last() as CountryDetailsViewModel.State.Loaded).let {
+                    it.details.shouldBeEqualTo(CountryDetails(Country(regionCode = "YE"), detailsText = "Article 264"))
+                }
             }
         }
     }
