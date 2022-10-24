@@ -6,6 +6,13 @@ plugins {
 android {
     compileSdk 33
     namespace 'com.example.viewmodels'
+
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+            maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+        }
+    }
 }
 
 java {

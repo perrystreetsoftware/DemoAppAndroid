@@ -9,11 +9,11 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 
 class MockTravelApi: ITravelAdvisoriesApi {
     override fun getForbiddenApi(): Completable {
-        TODO("Not yet implemented")
+        return Completable.complete()
     }
 
     override fun getServerStatus(): Observable<ServerStatusDTO> {
-        TODO("Not yet implemented")
+        return Observable.just(ServerStatusDTO.EMPTY)
     }
 
     var getCountryListResult: Observable<CountryListDTO>? = null

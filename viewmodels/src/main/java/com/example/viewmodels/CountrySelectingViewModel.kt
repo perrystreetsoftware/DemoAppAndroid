@@ -1,5 +1,6 @@
 package com.example.viewmodels
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import com.example.domainmodels.Continent
 import com.example.domainmodels.ServerStatus
@@ -41,11 +42,8 @@ class CountrySelectingViewModel(val logic: CountrySelectingLogic, val serverStat
     val state: Observable<UiState> = _state
     private val disposables = CompositeDisposable()
 
-    init {
-        onPullBasedRepositorySetup()
-    }
-
-    private fun onPullBasedRepositorySetup() {
+    @VisibleForTesting
+    fun onPageLoaded() {
         disposables.add(logic.continents.doOnNext {
             _state.onNext(_state.value!!.copy(continents = it))
         }.subscribe())
