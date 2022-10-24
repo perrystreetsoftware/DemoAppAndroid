@@ -11,42 +11,36 @@ import com.example.feature.countrydetails.CountryDetailsAdapter
 import com.example.feature.countryselecting.CountrySelectingAdapter
 import com.example.domainmodels.Country
 
-interface TravelAdvisoriesDestination {
-    val route: String
-}
-
-object CountriesDestination : TravelAdvisoriesDestination {
-    override val route = "countries"
-}
-
-object CountryDestination : TravelAdvisoriesDestination {
-    override val route = "country"
-    const val regionCodeArg = "region_code"
+sealed class TravelAdvisoriesDestination(val route: String) {
+    object CountriesDestination : TravelAdvisoriesDestination("countries")
+    object CountryDestination : TravelAdvisoriesDestination("country") {
+        const val regionCodeArg = "region_code"
+    }
 }
 
 @Composable
 fun TravelAdvisoriesNavHost(navController: NavHostController = rememberNavController()) {
     val onCountrySelected: (Country) -> Unit = {
-        navController.navigate("${CountryDestination.route}/${it.regionCode}")
+        navController.navigate("${TravelAdvisoriesDestination.CountryDestination.route}/${it.regionCode}")
     }
 
     NavHost(
         navController = navController,
-        startDestination = CountriesDestination.route,
+        startDestination = TravelAdvisoriesDestination.CountriesDestination.route,
     ) {
-        composable(route = CountriesDestination.route) {
+        composable(route = TravelAdvisoriesDestination.CountriesDestination.route) {
             CountrySelectingAdapter(
                 onCountrySelected = onCountrySelected
             )
         }
         composable(
-             route = "${CountryDestination.route}/{${CountryDestination.regionCodeArg}}",
-            arguments = listOf(navArgument(CountryDestination.regionCodeArg) {
+            route = "${TravelAdvisoriesDestination.CountryDestination.route}/{${TravelAdvisoriesDestination.CountryDestination.regionCodeArg}}",
+            arguments = listOf(navArgument(TravelAdvisoriesDestination.CountryDestination.regionCodeArg) {
                 type = NavType.StringType
             })
         ) {
             CountryDetailsAdapter(
-                regionCode =  it.arguments?.getString(CountryDestination.regionCodeArg) ?: return@composable
+                regionCode = it.arguments?.getString(TravelAdvisoriesDestination.CountryDestination.regionCodeArg) ?: return@composable
             )
         }
     }
