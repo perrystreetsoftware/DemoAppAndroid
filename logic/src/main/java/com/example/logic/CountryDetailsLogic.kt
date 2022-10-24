@@ -1,8 +1,7 @@
 package com.example.logic
 
 import com.example.domainmodels.CountryDetails
-import com.example.domainmodels.Country
-import com.example.repositories.CountryDetailsRepository
+import com.example.repositories.CountryDetailsPullBasedRepository
 import io.reactivex.rxjava3.core.Observable
 import com.example.networklogic.TravelAdvisoryApiError
 
@@ -22,7 +21,7 @@ sealed class CountryDetailsLogicError: Throwable() {
     }
 }
 
-class CountryDetailsLogic(private val repository: CountryDetailsRepository) {
+class CountryDetailsLogic(private val repository: CountryDetailsPullBasedRepository) {
     fun getDetails(regionCode: String): Observable<CountryDetails> {
         return repository.getDetails(regionCode).map {
             CountryDetails(it)

@@ -4,7 +4,8 @@ import com.example.domainmodels.CountryDetailsDTO
 import com.example.interfaces.ITravelAdvisoriesApi
 import io.reactivex.rxjava3.core.Observable
 
-class CountryDetailsRepository(private val travelAdvisoriesApi: ITravelAdvisoriesApi) {
+// This is a pull-based repository
+class CountryDetailsPullBasedRepository(private val travelAdvisoriesApi: ITravelAdvisoriesApi) {
     fun getDetails(regionCode: String): Observable<CountryDetailsDTO> {
         return travelAdvisoriesApi.getCountryDetails(regionCode = regionCode)
     }

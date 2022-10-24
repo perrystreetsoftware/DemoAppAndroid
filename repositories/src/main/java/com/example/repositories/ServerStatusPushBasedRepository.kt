@@ -6,7 +6,7 @@ import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
-class ServerStatusRepository(private val travelAdvisoriesApi: ITravelAdvisoriesApi) {
+class ServerStatusPushBasedRepository(private val travelAdvisoriesApi: ITravelAdvisoriesApi) {
     private var _status: BehaviorSubject<ServerStatus> = BehaviorSubject.createDefault(ServerStatus.EMPTY)
     val status: Observable<ServerStatus> = _status
 
