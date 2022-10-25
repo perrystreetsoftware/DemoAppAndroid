@@ -21,84 +21,64 @@ import java.util.concurrent.TimeUnit
 
 @ExtendWith(AutoCloseKoinAfterEachExtension::class)
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
-class CountryDetailsViewModelTests: KoinTest {
+class CountryDetailsViewModelTests : KoinTest {
     @BeforeEach
     fun setup() {
         startKoin {
             loadKoinModules(viewModelModule + logicModule + repositoriesModule + networkLogicApiMocks)
         }
+
+        testScheduler = TestScheduler()
+        RxJavaPlugins.setComputationSchedulerHandler { testScheduler }
+
+        stateTestObserver = viewModel.state.test()
     }
+
     private val country = Country(regionCode = "ug")
-    val viewModel: CountryDetailsViewModel by inject() {
-        parametersOf(country)
+    private val viewModel: CountryDetailsViewModel by inject() {
+        parametersOf(country.regionCode)
+    }
+
+    lateinit var stateTestObserver: TestObserver<CountryDetailsViewModel.State>
+    private lateinit var testScheduler: TestScheduler
+
+    @AfterEach
+    fun cleanup() {
+        RxJavaPlugins.setComputationSchedulerHandler(null)
+    }
+
+    @Test
+    fun `then it starts having transitioned to loading`() {
+        stateTestObserver.values().shouldBeEqualTo(listOf(CountryDetailsViewModel.State.Loading))
     }
 
     @Nested
-    @DisplayName("#onPageLoaded")
-    inner class OnAppear {
-        lateinit var stateTestObserver: TestObserver<CountryDetailsViewModel.State>
-        private lateinit var testScheduler: TestScheduler
+    @DisplayName("#state")
+    inner class Advance {
+        private lateinit var state: CountryDetailsViewModel.State
 
         @BeforeEach
         fun `setup`() {
-            testScheduler = TestScheduler()
-            RxJavaPlugins.setComputationSchedulerHandler { testScheduler }
-
-            stateTestObserver = viewModel.state.test()
-        }
-
-        @AfterEach
-        fun cleanup() {
-            RxJavaPlugins.setComputationSchedulerHandler(null)
+            testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+            stateTestObserver.awaitCount(2)
+            state = stateTestObserver.values().last()
         }
 
         @Test
-        fun `then it starts with init`() {
-            stateTestObserver.values().shouldBeEqualTo(listOf(CountryDetailsViewModel.State.Initial))
+        fun `then it transitions to loaded`() {
+            stateTestObserver.values().count().shouldBeEqualTo(2)
         }
 
-        @Nested
-        @DisplayName("onPageLoaded")
-        inner class OnPageLoaded {
-            @BeforeEach
-            fun `setup`() {
-                viewModel.onPageLoaded(regionCode = country.regionCode)
-            }
-
-            @Test
-            fun `then it transitions to loading`() {
-                stateTestObserver.values().shouldBeEqualTo(
-                    listOf(
-                        CountryDetailsViewModel.State.Initial,
-                        CountryDetailsViewModel.State.Loading
+        @Test
+        fun `then it has loaded content`() {
+            state.shouldBeEqualTo(
+                CountryDetailsViewModel.State.Loaded(
+                    CountryDetails(
+                        Country(regionCode = "YE"),
+                        detailsText = "Article 264"
                     )
                 )
-            }
-
-            @Nested
-            @DisplayName("When I advance")
-            inner class Advance {
-                @BeforeEach
-                fun `setup`() {
-                    testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
-                }
-
-                @Test
-                fun `then it has loaded`() {
-                    stateTestObserver.values().shouldBeEqualTo(
-                        listOf(
-                            CountryDetailsViewModel.State.Initial,
-                            CountryDetailsViewModel.State.Loading,
-                            CountryDetailsViewModel.State.Loaded(
-                                CountryDetails(
-                                    Country(regionCode = "YE"),
-                                    detailsText = "Article 264"
-                                )
-                            )
-                        )
-                    )
-                }
-            }
+            )
         }
     }
 }

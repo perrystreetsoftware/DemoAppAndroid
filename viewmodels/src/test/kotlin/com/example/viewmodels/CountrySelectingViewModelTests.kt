@@ -43,14 +43,14 @@ class CountrySelectingViewModelTests: KoinTest {
     lateinit var stateTestObserver: TestObserver<CountrySelectingViewModel.UiState>
 
     @Test
-    fun `then it transitions to loading`() {
+    fun `then it startings having transitioned to loading`() {
         stateTestObserver.values().shouldBeEqualTo(listOf(
             CountrySelectingViewModel.UiState(isLoading = true, serverStatus = ServerStatus.EMPTY)
         ))
     }
 
     @Nested
-    @DisplayName("When I advance")
+    @DisplayName("when I advance")
     inner class Advance {
         @BeforeEach
         fun `setup`() {
@@ -58,13 +58,16 @@ class CountrySelectingViewModelTests: KoinTest {
         }
 
         @Test
-        fun `then it has loaded`() {
+        fun `then the middle emission is still loading`() {
             stateTestObserver.values()[1].apply {
                 isLoaded.shouldBeFalse()
                 isLoading.shouldBeTrue()
                 continents.isNotEmpty().shouldBeTrue()
             }
+        }
 
+        @Test
+        fun `then the final emission has loaded`() {
             stateTestObserver.values()[2].apply {
                 isLoaded.shouldBeTrue()
                 isLoading.shouldBeFalse()
