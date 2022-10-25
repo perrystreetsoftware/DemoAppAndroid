@@ -1,6 +1,10 @@
 package com.example.feature.countrydetails
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.domainmodels.Country
 import com.example.domainmodels.CountryDetails
