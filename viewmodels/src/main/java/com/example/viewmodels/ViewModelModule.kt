@@ -8,9 +8,10 @@ val viewModelModule = module {
         CountrySelectingViewModel(logic = get(), serverStatusLogic = get())
     }
 
-    viewModel {
+    viewModel { params ->
         CountryDetailsViewModel(
-            logic = get()
+            logic = get(),
+            regionCode = params.get()
         )
     }
 }

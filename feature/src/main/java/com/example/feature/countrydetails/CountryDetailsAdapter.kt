@@ -6,10 +6,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import com.example.viewmodels.CountryDetailsViewModel
 import org.koin.androidx.compose.getViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun CountryDetailsAdapter(
-    viewModel: CountryDetailsViewModel = getViewModel(),
+    viewModel: CountryDetailsViewModel = getViewModel(parameters = { parametersOf(regionCode) }),
     regionCode: String,
 ) {
     val viewModelState by viewModel.state.subscribeAsState(initial = CountryDetailsViewModel.State.Initial)
@@ -17,8 +18,4 @@ fun CountryDetailsAdapter(
     CountryDetailsPage(
         viewModelState
     )
-
-    LaunchedEffect(regionCode) {
-        viewModel.onPageLoaded(regionCode)
-    }
 }

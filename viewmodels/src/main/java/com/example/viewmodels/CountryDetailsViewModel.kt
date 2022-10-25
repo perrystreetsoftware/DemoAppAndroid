@@ -23,7 +23,7 @@ sealed class CountryDetailsViewModelError: Throwable() {
     }
 }
 
-class CountryDetailsViewModel(private val logic: CountryDetailsLogic): ViewModel() {
+class CountryDetailsViewModel(private val logic: CountryDetailsLogic, regionCode: String): ViewModel() {
     sealed class State() {
         object Initial: State()
         object Loading: State()
@@ -37,7 +37,11 @@ class CountryDetailsViewModel(private val logic: CountryDetailsLogic): ViewModel
 
     private var disposables = CompositeDisposable()
 
-    fun onPageLoaded(regionCode: String) {
+    init {
+        onPageLoaded(regionCode)
+    }
+
+    private fun onPageLoaded(regionCode: String) {
         disposables.add(
             logic.getDetails(regionCode = regionCode)
                 .doOnSubscribe {

@@ -8,4 +8,7 @@
     <string name="connection_error_message1">Unable to connect to servers.</string>
     <string name="connection_error_message2">Please try again later.</string>
     <string name="refresh_button_title">Refresh (always will fail)</string>
+
+    <string name="server_status_ok">Server status is OK</string>
+    <string name="server_status_not_ok">Server status is not OK</string>
 </resources>

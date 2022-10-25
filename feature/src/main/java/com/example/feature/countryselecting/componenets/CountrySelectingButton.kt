@@ -15,17 +15,16 @@ fun CountrySelectingButton(
     isLoaded: Boolean,
     onClick: (() -> Unit)? = null
 ) {
-    if (isLoaded) {
-        Button(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            onClick = {
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
+        onClick = {
             onClick?.let {
                 it()
             }
-        }) {
-            Text(text = stringResource(id = R.string.refresh_button_title))
-        }
+        }, enabled = isLoaded
+    ) {
+        Text(text = stringResource(id = R.string.refresh_button_title))
     }
 }
