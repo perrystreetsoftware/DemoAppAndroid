@@ -1,4 +1,4 @@
-package com.example.feature.countryselecting.componenets
+package com.example.feature.countrylist.componenets
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.example.features.R
 
 @Composable
-fun CountrySelectingButton(
+fun CountryListButton(
     isLoaded: Boolean,
     onClick: (() -> Unit)? = null
 ) {

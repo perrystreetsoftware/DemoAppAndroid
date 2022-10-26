@@ -1,4 +1,4 @@
-package com.example.feature.countryselecting
+package com.example.feature.countrylist
 
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
@@ -8,17 +8,17 @@ import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.res.stringResource
 import com.example.domainmodels.Country
 import com.example.feature.extensions.asUIError
-import com.example.viewmodels.CountrySelectingViewModel
-import com.example.viewmodels.CountrySelectingViewModelError
+import com.example.viewmodels.CountryListViewModel
+import com.example.viewmodels.CountryListViewModelError
 import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun CountrySelectingAdapter(
-    viewModel: CountrySelectingViewModel = getViewModel(),
+fun CountryListAdapter(
+    viewModel: CountryListViewModel = getViewModel(),
     onCountrySelected: (Country) -> Unit
 ) {
-    val state by viewModel.state.subscribeAsState(CountrySelectingViewModel.UiState())
-    CountrySelectingPage(
+    val state by viewModel.state.subscribeAsState(CountryListViewModel.UiState())
+    CountryListPage(
         state = state,
         onCountrySelected = { country -> onCountrySelected(country) },
         onRefreshTapped = { viewModel.onRefreshTapped() },
@@ -31,7 +31,7 @@ fun CountrySelectingAdapter(
 }
 
 @Composable
-fun ErrorDialog(state: CountrySelectingViewModelError?, onDismiss: () -> Unit) {
+fun ErrorDialog(state: CountryListViewModelError?, onDismiss: () -> Unit) {
     if (state != null) {
         (state!!.asUIError()).let { uiError ->
             AlertDialog(

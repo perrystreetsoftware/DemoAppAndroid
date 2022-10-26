@@ -1,4 +1,4 @@
-package com.example.feature.countryselecting
+package com.example.feature.countrylist
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,15 +14,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.domainmodels.Continent
 import com.example.domainmodels.Country
-import com.example.feature.countryselecting.componenets.CountrySelectingButton
-import com.example.feature.countryselecting.componenets.CountrySelectingList
+import com.example.feature.countrylist.componenets.CountryListButton
+import com.example.feature.countrylist.componenets.CountryListList
 import com.example.uicomponents.library.ProgressIndicator
-import com.example.viewmodels.CountrySelectingViewModel
+import com.example.viewmodels.CountryListViewModel
 import com.example.features.R
 
 @Composable
-fun CountrySelectingPage(
-    state: CountrySelectingViewModel.UiState,
+fun CountryListPage(
+    state: CountryListViewModel.UiState,
     onCountrySelected: ((Country) -> Unit)? = null,
     onRefreshTapped: (() -> Unit)? = null
 ) {
@@ -30,7 +30,7 @@ fun CountrySelectingPage(
         ProgressIndicator(isLoading = state.isLoading)
         Column(modifier = Modifier.fillMaxHeight()) {
             Column(modifier = Modifier.weight(1f)) {
-                CountrySelectingList(
+                CountryListList(
                     list = state.continents,
                     onClick = onCountrySelected
                 )
@@ -53,7 +53,7 @@ fun CountrySelectingPage(
                     }
                 }
             }
-            CountrySelectingButton(
+            CountryListButton(
                 isLoaded = state.isLoaded,
                 onClick = onRefreshTapped
             )
@@ -74,8 +74,8 @@ fun CircleShape(color: Color) {
 
 @Preview(name = "Standard Preview", widthDp = 300, heightDp = 300)
 @Composable
-fun CountrySelectingPagePreview() {
-    CountrySelectingPage(
-        state = CountrySelectingViewModel.UiState(continents = listOf(Continent("North America", countries = listOf(Country("ca")))))
+fun CountryListPagePreview() {
+    CountryListPage(
+        state = CountryListViewModel.UiState(continents = listOf(Continent("North America", countries = listOf(Country("ca")))))
     )
 }

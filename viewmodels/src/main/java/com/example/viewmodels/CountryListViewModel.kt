@@ -3,8 +3,8 @@ package com.example.viewmodels
 import androidx.lifecycle.ViewModel
 import com.example.domainmodels.Continent
 import com.example.domainmodels.ServerStatus
-import com.example.logic.CountrySelectingLogic
-import com.example.logic.CountrySelectingLogicError
+import com.example.logic.CountryListLogic
+import com.example.logic.CountryListLogicError
 import com.example.logic.ServerStatusLogic
 import com.example.networklogic.TravelAdvisoryApiError
 import io.reactivex.rxjava3.core.Observable
@@ -12,15 +12,15 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
 
-sealed class CountrySelectingViewModelError(): Throwable() {
-    object Forbidden: CountrySelectingViewModelError()
-    object Unknown: CountrySelectingViewModelError()
-    object ConnectionError: CountrySelectingViewModelError()
+sealed class CountryListViewModelError(): Throwable() {
+    object Forbidden: CountryListViewModelError()
+    object Unknown: CountryListViewModelError()
+    object ConnectionError: CountryListViewModelError()
 
     companion object {
-        fun fromThrowable(throwable: Throwable): CountrySelectingViewModelError {
+        fun fromThrowable(throwable: Throwable): CountryListViewModelError {
             return when(throwable) {
-                is CountrySelectingLogicError.Forbidden -> { Forbidden }
+                is CountryListLogicError.Forbidden -> { Forbidden }
                 is TravelAdvisoryApiError -> { ConnectionError }
                 else -> Unknown
             }
@@ -28,11 +28,11 @@ sealed class CountrySelectingViewModelError(): Throwable() {
     }
 }
 
-class CountrySelectingViewModel(val logic: CountrySelectingLogic, val serverStatusLogic: ServerStatusLogic) : ViewModel() {
+class CountryListViewModel(val logic: CountryListLogic, val serverStatusLogic: ServerStatusLogic) : ViewModel() {
     data class UiState(val continents: List<Continent> = emptyList(),
                        val isLoading: Boolean = false,
                        val isLoaded: Boolean = false,
-                       val error: CountrySelectingViewModelError? = null,
+                       val error: CountryListViewModelError? = null,
                        val serverStatus: ServerStatus? = null
     ) {
     }
@@ -66,7 +66,7 @@ class CountrySelectingViewModel(val logic: CountrySelectingLogic, val serverStat
                     _state.onNext(_state.value!!.copy(
                         isLoading = false,
                         isLoaded = true,
-                        error = CountrySelectingViewModelError.fromThrowable(error))
+                        error = CountryListViewModelError.fromThrowable(error))
                     )
                 })
         )
@@ -80,7 +80,7 @@ class CountrySelectingViewModel(val logic: CountrySelectingLogic, val serverStat
         disposables.add(
             logic.getForbiddenApi().subscribe({
             }, { error ->
-                _state.onNext(_state.value!!.copy(error = CountrySelectingViewModelError.fromThrowable(error)))
+                _state.onNext(_state.value!!.copy(error = CountryListViewModelError.fromThrowable(error)))
             })
         )
     }

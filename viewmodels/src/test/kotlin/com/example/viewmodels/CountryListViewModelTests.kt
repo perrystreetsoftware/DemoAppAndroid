@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit
 
 @ExtendWith(AutoCloseKoinAfterEachExtension::class)
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
-class CountrySelectingViewModelTests: KoinTest {
+class CountryListViewModelTests: KoinTest {
     @BeforeEach
     fun setup() {
         startKoin {
@@ -38,14 +38,14 @@ class CountrySelectingViewModelTests: KoinTest {
         RxJavaPlugins.setComputationSchedulerHandler(null)
     }
 
-    private val viewModel: CountrySelectingViewModel by inject()
+    private val viewModel: CountryListViewModel by inject()
     private lateinit var testScheduler: TestScheduler
-    lateinit var stateTestObserver: TestObserver<CountrySelectingViewModel.UiState>
+    lateinit var stateTestObserver: TestObserver<CountryListViewModel.UiState>
 
     @Test
     fun `then it startings having transitioned to loading`() {
         stateTestObserver.values().shouldBeEqualTo(listOf(
-            CountrySelectingViewModel.UiState(isLoading = true, serverStatus = ServerStatus.EMPTY)
+            CountryListViewModel.UiState(isLoading = true, serverStatus = ServerStatus.EMPTY)
         ))
     }
 

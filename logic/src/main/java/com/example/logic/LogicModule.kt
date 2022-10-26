@@ -6,8 +6,8 @@ val logicModule = module {
         CountryDetailsLogic(repository = get())
     }
 
-    factory<CountrySelectingLogic> {
-        CountrySelectingLogic(repository = get())
+    factory<CountryListLogic> {
+        CountryListLogic(repository = get())
     }
 
     factory<ServerStatusLogic> {

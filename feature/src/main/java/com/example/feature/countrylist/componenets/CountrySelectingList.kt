@@ -1,4 +1,4 @@
-package com.example.feature.countryselecting.componenets
+package com.example.feature.countrylist.componenets
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -18,7 +18,7 @@ import com.example.domainmodels.Country
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CountrySelectingList(
+fun CountryListList(
     list: List<Continent>,
     onClick: ((Country) -> Unit)? = null
 ) {
@@ -45,8 +45,8 @@ fun CountrySelectingList(
 
 @Preview
 @Composable
-fun CountrySelectingListPreview() {
-    CountrySelectingList(list = listOf(
+fun CountryListListPreview() {
+    CountryListList(list = listOf(
             Continent(
                 name = "North America",
                 countries = listOf(Country(regionCode = "us"))

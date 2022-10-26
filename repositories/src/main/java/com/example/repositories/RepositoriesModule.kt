@@ -7,8 +7,8 @@ val repositoriesModule = module {
         CountryDetailsPullBasedRepository(travelAdvisoriesApi = get())
     }
 
-    single<CountrySelectingPushBasedRepository> {
-        CountrySelectingPushBasedRepository(travelAdvisoriesApi = get())
+    single<CountryListPushBasedRepository> {
+        CountryListPushBasedRepository(travelAdvisoriesApi = get())
     }
 
     single<ServerStatusPushBasedRepository> {
