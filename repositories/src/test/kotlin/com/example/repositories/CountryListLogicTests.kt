@@ -24,7 +24,6 @@ class CountryListLogicTests: KoinTest {
         }
     }
     val countryListRepository: CountryListPushBasedRepository by inject()
-    val api: ITravelAdvisoriesApi by inject()
 
     @Nested
     @DisplayName("#init")
