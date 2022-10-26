@@ -1,8 +1,9 @@
 package com.example.networklogic
-import com.example.domainmodels.CountryDetailsDTO
-import com.example.domainmodels.CountryListDTO
-import com.example.domainmodels.ServerStatusDTO
+import com.example.dtos.CountryDetailsDTO
+import com.example.dtos.CountryListDTO
+import com.example.dtos.ServerStatusDTO
 import com.example.interfaces.ITravelAdvisoriesApi
+import com.example.interfaces.TravelAdvisoryApiError
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import io.reactivex.rxjava3.core.Completable

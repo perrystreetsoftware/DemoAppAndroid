@@ -3,7 +3,7 @@ package com.example.logic
 import com.example.domainmodels.CountryDetails
 import com.example.repositories.CountryDetailsPullBasedRepository
 import io.reactivex.rxjava3.core.Observable
-import com.example.networklogic.TravelAdvisoryApiError
+import com.example.interfaces.TravelAdvisoryApiError
 
 sealed class CountryDetailsLogicError: Throwable() {
     object CountryNotFound: CountryDetailsLogicError()

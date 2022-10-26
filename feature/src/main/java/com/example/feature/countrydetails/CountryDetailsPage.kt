@@ -1,10 +1,6 @@
 package com.example.feature.countrydetails
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.domainmodels.Country
 import com.example.domainmodels.CountryDetails
@@ -15,13 +11,13 @@ import com.example.viewmodels.CountryDetailsViewModel
 
 @Composable
 fun CountryDetailsPage(
-    detailsUIState: CountryDetailsViewModel.State,
+    detailsUIState: CountryDetailsViewModel.UiState,
 ) {
-    ProgressIndicator(isLoading = detailsUIState is CountryDetailsViewModel.State.Loading)
+    ProgressIndicator(isLoading = detailsUIState is CountryDetailsViewModel.UiState.Loading)
     CountryNotFoundErrorView(state = detailsUIState)
     CountryDetailsContent(
-        countryName = (detailsUIState as? CountryDetailsViewModel.State.Loaded)?.details?.country?.countryName ?: "",
-        detailsText = (detailsUIState as? CountryDetailsViewModel.State.Loaded)?.details?.detailsText ?: ""
+        countryName = (detailsUIState as? CountryDetailsViewModel.UiState.Loaded)?.details?.country?.countryName ?: "",
+        detailsText = (detailsUIState as? CountryDetailsViewModel.UiState.Loaded)?.details?.detailsText ?: ""
     )
 }
 
@@ -30,7 +26,7 @@ fun CountryDetailsPage(
 @Composable
 fun CountryDetailsPagePreview() {
     CountryDetailsPage(
-        detailsUIState = CountryDetailsViewModel.State.Loaded(
+        detailsUIState = CountryDetailsViewModel.UiState.Loaded(
             CountryDetails(
                 country = Country(
                     regionCode = "us"

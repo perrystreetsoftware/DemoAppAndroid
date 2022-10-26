@@ -1,4 +1,4 @@
-package com.example.domainmodels
+package com.example.dtos
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 

@@ -1,7 +1,7 @@
 package com.example.interfaces
-import com.example.domainmodels.CountryDetailsDTO
-import com.example.domainmodels.CountryListDTO
-import com.example.domainmodels.ServerStatusDTO
+import com.example.dtos.CountryDetailsDTO
+import com.example.dtos.CountryListDTO
+import com.example.dtos.ServerStatusDTO
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 

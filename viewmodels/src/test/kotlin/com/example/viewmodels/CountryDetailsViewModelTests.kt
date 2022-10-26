@@ -39,7 +39,7 @@ class CountryDetailsViewModelTests : KoinTest {
         parametersOf(country.regionCode)
     }
 
-    lateinit var stateTestObserver: TestObserver<CountryDetailsViewModel.State>
+    lateinit var stateTestObserver: TestObserver<CountryDetailsViewModel.UiState>
     private lateinit var testScheduler: TestScheduler
 
     @AfterEach
@@ -49,13 +49,13 @@ class CountryDetailsViewModelTests : KoinTest {
 
     @Test
     fun `then it starts having transitioned to loading`() {
-        stateTestObserver.values().shouldBeEqualTo(listOf(CountryDetailsViewModel.State.Loading))
+        stateTestObserver.values().shouldBeEqualTo(listOf(CountryDetailsViewModel.UiState.Loading))
     }
 
     @Nested
     @DisplayName("#state")
     inner class Advance {
-        private lateinit var state: CountryDetailsViewModel.State
+        private lateinit var state: CountryDetailsViewModel.UiState
 
         @BeforeEach
         fun `setup`() {
@@ -72,7 +72,7 @@ class CountryDetailsViewModelTests : KoinTest {
         @Test
         fun `then it has loaded content`() {
             state.shouldBeEqualTo(
-                CountryDetailsViewModel.State.Loaded(
+                CountryDetailsViewModel.UiState.Loaded(
                     CountryDetails(
                         Country(regionCode = "YE"),
                         detailsText = "Article 264"

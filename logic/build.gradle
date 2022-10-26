@@ -17,7 +17,6 @@ dependencies {
     implementation libs.rxjava3
     implementation project(':domainmodels')
     implementation project(':interfaces')
-    implementation project(':networklogic')
     implementation project(':repositories')
     implementation project(':utils')
     testImplementation libs.bundles.junit5

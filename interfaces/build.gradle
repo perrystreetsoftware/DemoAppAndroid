@@ -2,6 +2,7 @@ plugins {
     id 'java-library'
     id 'org.jetbrains.kotlin.jvm'
     id "java-test-fixtures"
+    id 'com.google.devtools.ksp'
 }
 
 java {
@@ -10,8 +11,11 @@ java {
 }
 
 dependencies {
+    implementation libs.moshi
+    implementation libs.moshi.adapters
     implementation libs.rxjava3
     implementation project(':domainmodels')
+    ksp(libs.moshi.codegen)
     testFixturesImplementation libs.koin.core
     testFixturesImplementation libs.rxjava3
     testFixturesImplementation(project(':domainmodels'))

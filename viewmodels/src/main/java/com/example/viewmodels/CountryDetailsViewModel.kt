@@ -24,16 +24,16 @@ sealed class CountryDetailsViewModelError: Throwable() {
 }
 
 class CountryDetailsViewModel(private val logic: CountryDetailsLogic, regionCode: String): ViewModel() {
-    sealed class State() {
-        object Initial: State()
-        object Loading: State()
-        data class Loaded(val details: CountryDetails): State()
-        data class Error(val error: CountryDetailsViewModelError): State()
+    sealed class UiState() {
+        object Initial: UiState()
+        object Loading: UiState()
+        data class Loaded(val details: CountryDetails): UiState()
+        data class Error(val error: CountryDetailsViewModelError): UiState()
     }
 
-    private var _state: BehaviorSubject<State> = BehaviorSubject.createDefault(
-        State.Initial)
-    val state: Observable<State> = _state
+    private var _state: BehaviorSubject<UiState> = BehaviorSubject.createDefault(
+        UiState.Initial)
+    val state: Observable<UiState> = _state
 
     private var disposables = CompositeDisposable()
 
@@ -45,12 +45,12 @@ class CountryDetailsViewModel(private val logic: CountryDetailsLogic, regionCode
         disposables.add(
             logic.getDetails(regionCode = regionCode)
                 .doOnSubscribe {
-                    _state.onNext(State.Loading)
+                    _state.onNext(UiState.Loading)
                 }
                 .subscribe({ it ->
-                    _state.onNext(State.Loaded(it))
+                    _state.onNext(UiState.Loaded(it))
                 }, { error ->
-                    _state.onNext(State.Error(CountryDetailsViewModelError.fromLogicError(error)))
+                    _state.onNext(UiState.Error(CountryDetailsViewModelError.fromLogicError(error)))
                 })
         )
     }

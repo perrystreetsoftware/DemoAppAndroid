@@ -7,6 +7,7 @@ import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
+
 // This is a push-based repository example
 class CountryListPushBasedRepository(private val travelAdvisoriesApi: ITravelAdvisoriesApi) {
     private var _continents: BehaviorSubject<List<Continent>> = BehaviorSubject.createDefault(emptyList())

@@ -18,9 +18,9 @@ import com.example.features.R
 
 @Composable
 fun CountryNotFoundErrorView(
-    state: CountryDetailsViewModel.State,
+    state: CountryDetailsViewModel.UiState,
 ) {
-    if (state is CountryDetailsViewModel.State.Error) {
+    if (state is CountryDetailsViewModel.UiState.Error) {
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -43,6 +43,6 @@ fun CountryNotFoundErrorView(
 @Composable
 fun CountryNotFoundErrorViewPreview() {
     CountryNotFoundErrorView(
-        state = CountryDetailsViewModel.State.Error(error = CountryDetailsViewModelError.CountryNotFound)
+        state = CountryDetailsViewModel.UiState.Error(error = CountryDetailsViewModelError.CountryNotFound)
     )
 }

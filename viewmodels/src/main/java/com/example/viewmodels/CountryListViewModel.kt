@@ -6,7 +6,7 @@ import com.example.domainmodels.ServerStatus
 import com.example.logic.CountryListLogic
 import com.example.logic.CountryListLogicError
 import com.example.logic.ServerStatusLogic
-import com.example.networklogic.TravelAdvisoryApiError
+import com.example.interfaces.TravelAdvisoryApiError
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
