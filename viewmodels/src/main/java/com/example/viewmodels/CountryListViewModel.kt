@@ -4,13 +4,12 @@ import androidx.lifecycle.ViewModel
 import com.example.domainmodels.Continent
 import com.example.domainmodels.ServerStatus
 import com.example.logic.CountryListLogic
-import com.example.logic.CountryListLogicError
 import com.example.logic.ServerStatusLogic
 import com.example.interfaces.TravelAdvisoryApiError
+import com.example.repositories.CountryListError
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
-
 
 sealed class CountryListViewModelError(): Throwable() {
     object Forbidden: CountryListViewModelError()
@@ -20,7 +19,7 @@ sealed class CountryListViewModelError(): Throwable() {
     companion object {
         fun fromThrowable(throwable: Throwable): CountryListViewModelError {
             return when(throwable) {
-                is CountryListLogicError.Forbidden -> { Forbidden }
+                is CountryListError.Forbidden -> { Forbidden }
                 is TravelAdvisoryApiError -> { ConnectionError }
                 else -> Unknown
             }

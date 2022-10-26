@@ -65,6 +65,7 @@ dependencies {
     implementation libs.rxjava3.android
     implementation project(':domainmodels')
     implementation project(':feature')
+    implementation project(':interfaces')
     implementation project(':logic')
     implementation project(':networklogic')
     implementation project(':repositories')

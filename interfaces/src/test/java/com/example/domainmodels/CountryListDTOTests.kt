@@ -1,34 +1,35 @@
 package com.example.domainmodels
+import com.example.dtos.CountryListDTO
 import com.perrystreet.testutils.readJsonToString
 import com.squareup.moshi.Moshi
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeGreaterThan
 import org.amshove.kluent.shouldBeTrue
-import org.amshove.kluent.shouldNotBeNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
-class CountryDetailsDTOTests {
+class CountryListDTOTests {
     private val moshi: Moshi by lazy {
         Moshi.Builder()
             .build()
     }
 
-    lateinit var countryDetailsDto: CountryDetailsDTO
+    lateinit var countryListDto: CountryListDTO
 
     @BeforeEach
     fun setup() {
-        countryDetailsDto = moshi.adapter(CountryDetailsDTO::class.java)
-            .fromJson(readJsonToString("country_details_dto.json"))!!
+        countryListDto = moshi.adapter(CountryListDTO::class.java)
+            .fromJson(readJsonToString("country_list_dto.json"))!!
     }
 
     @Test
     fun `then it has parsed`() {
-        countryDetailsDto.area.shouldNotBeNull()
-        countryDetailsDto.regionCode.shouldNotBeNull()
-        countryDetailsDto.regionName.shouldNotBeNull()
-        countryDetailsDto.legalCodeBody.shouldNotBeNull()
+        countryListDto.asia.count().shouldBeGreaterThan(0)
+        countryListDto.africa.count().shouldBeGreaterThan(0)
+        countryListDto.oceania.count().shouldBeGreaterThan(0)
+        countryListDto.latam.count().shouldBeGreaterThan(0)
+        countryListDto.europe.count().shouldBeGreaterThan(0)
     }
 }

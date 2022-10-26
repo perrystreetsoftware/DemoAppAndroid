@@ -3,7 +3,7 @@ package com.example.viewmodels
 import androidx.lifecycle.ViewModel
 import com.example.domainmodels.CountryDetails
 import com.example.logic.CountryDetailsLogic
-import com.example.logic.CountryDetailsLogicError
+import com.example.repositories.CountryDetailsError
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
@@ -15,7 +15,7 @@ sealed class CountryDetailsViewModelError: Throwable() {
     companion object {
         fun fromLogicError(error: Throwable): CountryDetailsViewModelError {
             when (error) {
-                is CountryDetailsLogicError.CountryNotFound -> { CountryNotFound }
+                is CountryDetailsError.CountryNotFound -> { CountryNotFound }
                 else -> { Unknown }
             }
             return Unknown

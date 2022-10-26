@@ -8,15 +8,5 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-test {
-    useJUnitPlatform()
-}
-
 dependencies {
-    implementation libs.koin.core
-    implementation project(':utils')
-    testImplementation libs.bundles.junit5
-    testImplementation libs.kluent
-    testImplementation libs.mockk
-    testImplementation(testFixtures(project(":utils")))
 }

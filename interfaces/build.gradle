@@ -10,12 +10,22 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+test {
+    useJUnitPlatform()
+}
+
 dependencies {
+    implementation libs.koin.core
     implementation libs.moshi
     implementation libs.moshi.adapters
     implementation libs.rxjava3
+    implementation project(':utils')
     implementation project(':domainmodels')
     ksp(libs.moshi.codegen)
+    testImplementation libs.bundles.junit5
+    testImplementation libs.kluent
+    testImplementation libs.mockk
+    testImplementation(testFixtures(project(":utils")))
     testFixturesImplementation libs.koin.core
     testFixturesImplementation libs.rxjava3
     testFixturesImplementation(project(':domainmodels'))
