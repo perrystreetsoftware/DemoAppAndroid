@@ -22,6 +22,6 @@ dependencies {
     testImplementation libs.kluent
     testImplementation libs.koin.test
     testImplementation libs.mockk
-    testImplementation project(':interfaces')
+    testImplementation(testFixtures(project(':interfaces')))
     testImplementation(testFixtures(project(":utils")))
 }

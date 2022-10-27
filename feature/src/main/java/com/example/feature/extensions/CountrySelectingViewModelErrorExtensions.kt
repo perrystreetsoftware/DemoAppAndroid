@@ -1,19 +1,22 @@
 package com.example.feature.extensions
 
+import com.example.errors.CountryListError
 import com.example.features.R
 import com.example.uicomponents.models.UIError
-import com.example.viewmodels.CountryListViewModelError
 
-fun CountryListViewModelError.asUIError(): UIError {
+fun CountryListError.asUIError(): UIError {
     return when(this) {
-        is CountryListViewModelError.Forbidden -> {
+        is CountryListError.Forbidden -> {
             UIError(R.string.forbidden_error_title, listOf(R.string.forbidden_error_message))
         }
-        is CountryListViewModelError.Unknown -> {
+        is CountryListError.Other -> {
             UIError(R.string.generic_error_title, listOf(R.string.generic_error_message))
         }
-        is CountryListViewModelError.ConnectionError -> {
+        is CountryListError.ConnectionError -> {
             UIError(R.string.connection_error_title, listOf(R.string.connection_error_message1, R.string.connection_error_message2))
+        }
+        is CountryListError.UserNotLoggedIn -> {
+            UIError(R.string.generic_error_title, listOf(R.string.generic_error_message))
         }
     }
 }

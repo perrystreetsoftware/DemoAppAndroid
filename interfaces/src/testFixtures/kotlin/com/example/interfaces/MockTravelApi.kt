@@ -5,6 +5,7 @@ import com.example.dtos.CountryListDTO
 import com.example.dtos.ServerStatusDTO
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class MockTravelApi: ITravelAdvisoriesApi {
@@ -26,12 +27,12 @@ class MockTravelApi: ITravelAdvisoriesApi {
         }
     }
 
-    var getCountryDetailsResult: Observable<CountryDetailsDTO>? = null
-    override fun getCountryDetails(regionCode: String): Observable<CountryDetailsDTO> {
+    var getCountryDetailsResult: Single<CountryDetailsDTO>? = null
+    override fun getCountryDetails(regionCode: String): Single<CountryDetailsDTO> {
         getCountryDetailsResult?.let {
             return it
         } ?: run {
-            return Observable.just(CountryDetailsDTO(area = "Asia", regionName = "Yemen", regionCode = "YE", legalCodeBody = "Article 264"))
+            return Single.just(CountryDetailsDTO(area = "Asia", regionName = "Yemen", regionCode = "YE", legalCodeBody = "Article 264"))
                 .observeOn(Schedulers.computation())
         }
     }

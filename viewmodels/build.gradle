@@ -26,15 +26,13 @@ dependencies {
     implementation libs.androidx.lifecycle.viewmodel
     implementation libs.rxjava3
     implementation project(':domainmodels')
-    implementation project(':interfaces')
     implementation project(':logic')
-    implementation project(':repositories')
     implementation project(':utils')
-    implementation project(':networklogic')
     testImplementation libs.bundles.junit5
     testImplementation libs.kluent
     testImplementation libs.koin.test
     testImplementation libs.mockk
     testImplementation(testFixtures(project(":utils")))
-    testImplementation(testFixtures(project(':interfaces')))
+    testImplementation(project(":repositories"))
+    testImplementation(testFixtures(project(":interfaces")))
 }

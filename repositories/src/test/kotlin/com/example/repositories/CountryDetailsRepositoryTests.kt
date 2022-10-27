@@ -1,11 +1,14 @@
 package com.example.repositories
 
 import com.example.AutoCloseKoinAfterEachExtension
-import com.example.domainmodels.CountryDetailsDTO
+import com.example.domainmodels.Country
+import com.example.domainmodels.CountryDetails
+import com.example.errors.CountryDetailsError
 import com.example.interfaces.MockTravelApi
 import com.example.interfaces.ITravelAdvisoriesApi
 import com.example.interfaces.networkLogicApiMocks
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.observers.TestObserver
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.jupiter.api.*
@@ -32,8 +35,8 @@ class CountryDetailsRepositoryTests: KoinTest {
     @Nested
     @DisplayName("#getDetails")
     inner class GetDetails {
-        lateinit var testObserver: TestObserver<CountryDetailsDTO>
-        lateinit var value: CountryDetailsDTO
+        lateinit var testObserver: TestObserver<CountryDetails>
+        lateinit var value: CountryDetails
 
         @Nested
         @DisplayName("when success")
@@ -47,24 +50,26 @@ class CountryDetailsRepositoryTests: KoinTest {
 
             @Test
             fun `then it should be valid`() {
-                value.shouldBeEqualTo(CountryDetailsDTO(area = "Asia", regionName = "Yemen", regionCode = "YE", legalCodeBody = "Article 264"))
+                value.shouldBeEqualTo(
+                    CountryDetails(country = Country(regionCode = "YE"), detailsText = "Article 264")
+                )
             }
         }
 
         @Nested
         @DisplayName("when failure")
         inner class Failure {
-            val error = RuntimeException("test")
+            private val error = RuntimeException("test")
 
             @BeforeEach
             fun setup() {
-                (api as MockTravelApi).getCountryDetailsResult = Observable.error(error)
+                (api as MockTravelApi).getCountryDetailsResult = Single.error(error)
                 testObserver = countryDetailsRepository.getDetails("ug").test()
             }
 
             @Test
             fun `then it should not be valid`() {
-                testObserver.assertError(error)
+                testObserver.assertError(CountryDetailsError.Other(error))
             }
         }
     }

@@ -1,8 +1,8 @@
 package com.example.viewmodels
 
 import com.example.AutoCloseKoinAfterEachExtension
-import com.example.domainmodels.CountryDetails
 import com.example.domainmodels.Country
+import com.example.domainmodels.CountryDetails
 import com.example.interfaces.networkLogicApiMocks
 import com.example.logic.logicModule
 import com.example.repositories.repositoriesModule

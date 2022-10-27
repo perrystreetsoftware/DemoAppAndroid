@@ -2,23 +2,20 @@ package com.example.repositories
 
 import com.example.domainmodels.Continent
 import com.example.domainmodels.Country
+import com.example.errors.CountryListError
 import com.example.interfaces.ITravelAdvisoriesApi
 import com.example.interfaces.TravelAdvisoryApiError
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
-
-sealed class CountryListRepositoryError: Throwable() {
-    object Forbidden: CountryListRepositoryError()
-    object Other: CountryListRepositoryError()
-
-    companion object {
-        fun fromThrowable(throwable: Throwable): CountryListRepositoryError {
-            return when(throwable) {
-                is TravelAdvisoryApiError.Forbidden -> { Forbidden }
-                else -> { Other }
-            }
+fun Throwable.toCountryListError(): CountryListError {
+    return when(this) {
+        is TravelAdvisoryApiError.Forbidden -> {
+            CountryListError.Forbidden
+        }
+        else -> {
+            CountryListError.Other
         }
     }
 }
@@ -52,13 +49,15 @@ class CountryListPushBasedRepository(private val travelAdvisoriesApi: ITravelAdv
                     }
                 )
             }
-            .onErrorReturn {
-                throw CountryListRepositoryError.fromThrowable(it)
-            }
             .ignoreElements()
+            .onErrorResumeNext {
+                Completable.error(it.toCountryListError())
+            }
     }
 
     fun getForbiddenApi(): Completable {
-        return travelAdvisoriesApi.getForbiddenApi()
+        return travelAdvisoriesApi.getForbiddenApi().onErrorResumeNext {
+            Completable.error(it.toCountryListError())
+        }
     }
 }

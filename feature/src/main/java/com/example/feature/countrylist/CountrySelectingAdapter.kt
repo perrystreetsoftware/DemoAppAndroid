@@ -7,9 +7,9 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.res.stringResource
 import com.example.domainmodels.Country
+import com.example.errors.CountryListError
 import com.example.feature.extensions.asUIError
 import com.example.viewmodels.CountryListViewModel
-import com.example.viewmodels.CountryListViewModelError
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -31,7 +31,7 @@ fun CountryListAdapter(
 }
 
 @Composable
-fun ErrorDialog(state: CountryListViewModelError?, onDismiss: () -> Unit) {
+fun ErrorDialog(state: CountryListError?, onDismiss: () -> Unit) {
     if (state != null) {
         (state!!.asUIError()).let { uiError ->
             AlertDialog(
