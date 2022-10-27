@@ -22,16 +22,16 @@ import com.example.features.R
 
 @Composable
 fun CountryListPage(
-    state: CountryListViewModel.UiState,
+    listUiState: CountryListViewModel.UiState,
     onCountrySelected: ((Country) -> Unit)? = null,
     onRefreshTapped: (() -> Unit)? = null
 ) {
     Box {
-        ProgressIndicator(isLoading = state.isLoading)
+        ProgressIndicator(isLoading = listUiState.isLoading)
         Column(modifier = Modifier.fillMaxHeight()) {
             Column(modifier = Modifier.weight(1f)) {
                 CountryListList(
-                    list = state.continents,
+                    list = listUiState.continents,
                     onClick = onCountrySelected
                 )
             }
@@ -39,7 +39,7 @@ fun CountryListPage(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                if (state.serverStatus?.success == true) {
+                if (listUiState.serverStatus?.success == true) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(text = stringResource(R.string.server_status_ok))
                         Spacer(Modifier.size(10.dp))
@@ -54,7 +54,7 @@ fun CountryListPage(
                 }
             }
             CountryListButton(
-                isLoaded = state.isLoaded,
+                isLoaded = listUiState.isLoaded,
                 onClick = onRefreshTapped
             )
         }
@@ -76,6 +76,6 @@ fun CircleShape(color: Color) {
 @Composable
 fun CountryListPagePreview() {
     CountryListPage(
-        state = CountryListViewModel.UiState(continents = listOf(Continent("North America", countries = listOf(Country("ca")))))
+        listUiState = CountryListViewModel.UiState(continents = listOf(Continent("North America", countries = listOf(Country("ca")))))
     )
 }

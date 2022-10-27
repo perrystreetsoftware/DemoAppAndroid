@@ -8,6 +8,7 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -96,7 +97,7 @@ class TravelAdvisoriesApi(val moshi: Moshi): ITravelAdvisoriesApi {
             .subscribeOn(Schedulers.io())
     }
 
-    override fun getCountryDetails(regionCode: String): Observable<CountryDetailsDTO> {
+    override fun getCountryDetails(regionCode: String): Single<CountryDetailsDTO> {
         val client = OkHttpClient()
         var url: String = if (regionCode == "xx") {
             "https://httpstat.us/404"
@@ -109,18 +110,18 @@ class TravelAdvisoriesApi(val moshi: Moshi): ITravelAdvisoriesApi {
 
         val jsonAdapter: JsonAdapter<CountryDetailsDTO> = moshi.adapter(CountryDetailsDTO::class.java)
 
-        return Observable.defer {
+        return Single.defer {
             try {
                 val response: Response = client.newCall(request).execute()
                 if (response.isSuccessful) {
-                    Observable.just<Response>(response).map {
+                    Single.just<Response>(response).map {
                         jsonAdapter.fromJson(it.body!!.string()) ?: CountryDetailsDTO.EMPTY
                     }
                 } else {
-                    Observable.error(TravelAdvisoryApiError.fromStatusCode(response.code))
+                    Single.error(TravelAdvisoryApiError.fromStatusCode(response.code))
                 }
             } catch (e: IOException) {
-                Observable.error(TravelAdvisoryApiError.Other(e))
+                Single.error(TravelAdvisoryApiError.Other(e))
             }
         }
             .delay(1, TimeUnit.SECONDS)

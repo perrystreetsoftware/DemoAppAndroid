@@ -19,7 +19,7 @@ fun CountryListAdapter(
 ) {
     val state by viewModel.state.subscribeAsState(CountryListViewModel.UiState())
     CountryListPage(
-        state = state,
+        listUiState = state,
         onCountrySelected = { country -> onCountrySelected(country) },
         onRefreshTapped = { viewModel.onRefreshTapped() },
     )
