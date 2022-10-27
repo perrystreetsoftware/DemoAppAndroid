@@ -9,12 +9,12 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
 
-sealed class CountryListError: Throwable() {
-    object Forbidden: CountryListError()
-    object Other: CountryListError()
+sealed class CountryListRepositoryError: Throwable() {
+    object Forbidden: CountryListRepositoryError()
+    object Other: CountryListRepositoryError()
 
     companion object {
-        fun fromThrowable(throwable: Throwable): CountryListError {
+        fun fromThrowable(throwable: Throwable): CountryListRepositoryError {
             return when(throwable) {
                 is TravelAdvisoryApiError.Forbidden -> { Forbidden }
                 else -> { Other }
@@ -53,7 +53,7 @@ class CountryListPushBasedRepository(private val travelAdvisoriesApi: ITravelAdv
                 )
             }
             .onErrorReturn {
-                throw CountryListError.fromThrowable(it)
+                throw CountryListRepositoryError.fromThrowable(it)
             }
             .ignoreElements()
     }

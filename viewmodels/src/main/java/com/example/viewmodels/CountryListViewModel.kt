@@ -6,7 +6,7 @@ import com.example.domainmodels.ServerStatus
 import com.example.logic.CountryListLogic
 import com.example.logic.ServerStatusLogic
 import com.example.interfaces.TravelAdvisoryApiError
-import com.example.repositories.CountryListError
+import com.example.repositories.CountryListRepositoryError
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
@@ -19,7 +19,7 @@ sealed class CountryListViewModelError(): Throwable() {
     companion object {
         fun fromThrowable(throwable: Throwable): CountryListViewModelError {
             return when(throwable) {
-                is CountryListError.Forbidden -> { Forbidden }
+                is CountryListRepositoryError.Forbidden -> { Forbidden }
                 is TravelAdvisoryApiError -> { ConnectionError }
                 else -> Unknown
             }
