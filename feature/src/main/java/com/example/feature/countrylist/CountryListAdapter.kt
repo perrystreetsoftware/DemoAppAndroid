@@ -1,55 +1,51 @@
 package com.example.feature.countrylist
 
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import android.widget.Toast
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rxjava3.subscribeAsState
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalContext
 import com.example.domainmodels.Country
-import com.example.errors.CountryListError
-import com.example.feature.extensions.asUIError
+import com.example.feature.countrylist.error.*
+import com.example.uicomponents.dialog.PssDialog
 import com.example.viewmodels.CountryListViewModel
 import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun CountryListAdapter(
     viewModel: CountryListViewModel = getViewModel(),
-    onCountrySelected: (Country) -> Unit
+    onCountrySelected: (Country) -> Unit,
 ) {
     val state by viewModel.state.subscribeAsState(CountryListViewModel.UiState())
+
+    LaunchedEffect(state.navigationTarget) {
+        state.navigationTarget?.let { onCountrySelected(it) }
+        viewModel.resetNavigationTarget()
+    }
+
     CountryListPage(
         listUiState = state,
-        onCountrySelected = { country -> onCountrySelected(country) },
+        onCountrySelected = { country ->
+            viewModel.onCountryTapped(country)
+        },
         onRefreshTapped = { viewModel.onRefreshTapped() },
+        onDismissBannerError = { viewModel.onPersistentErrorDismissed() }
     )
 
-    ErrorDialog(
-        state = state.error,
-        onDismiss = { viewModel.onErrorDismissed() }
-    )
-}
-
-@Composable
-fun ErrorDialog(state: CountryListError?, onDismiss: () -> Unit) {
-    if (state != null) {
-        (state!!.asUIError()).let { uiError ->
-            AlertDialog(
-                onDismissRequest = onDismiss,
-                title = { Text(text = stringResource(id = uiError.titleKey)) },
-                text = {
-                    Text(text = uiError.messageKeys
-                        .mapIndexed { _, it -> stringResource(id = it) }
-                        .joinToString(" ")
-                    )
-                },
-                confirmButton = { },
-                dismissButton = {
-                    Button(onClick = onDismiss) {
-                        Text(text = stringResource(id = android.R.string.cancel))
-                    }
-                }
-            )
+    state.error?.toUiError()?.let { uiError ->
+        when (uiError) {
+            is CountryListToastError -> {
+                Toast.makeText(LocalContext.current, uiError.toastMessage(), Toast.LENGTH_SHORT).show()
+                viewModel.onErrorDismissed()
+            }
+            is CountryListDialogError -> {
+                PssDialog(config = uiError.dialogState(
+                    goToRandomAction = { viewModel.navigateToRandomCountry() }),
+                    onDismissRequest = { viewModel.onErrorDismissed() })
+            }
+            else -> {}
         }
     }
+
 }

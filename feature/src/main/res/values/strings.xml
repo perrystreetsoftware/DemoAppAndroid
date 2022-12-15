@@ -13,4 +13,13 @@
     <string name="country_not_found_error_message">Country not found</string>
     <string name="server_status_ok">Server status is OK</string>
     <string name="server_status_not_ok">Server status is not OK</string>
+
+    <string name="country_details_save_as_favorite">Save as favorite (will always fail)</string>
+
+    <string name="country_list_blocked_error_title">This country is blocked</string>
+    <string name="country_list_blocked_error_message">Would you like to go to a random country instead?</string>
+    <string name="country_list_blocked_error_positive_button">Go to random</string>
+    <string name="country_list_unavailable_error">This country is not available at the moment</string>
+    <string name="country_list_no_permissions_error_title">Not enough permissions</string>
+    <string name="country_list_no_permissions_error_message">You don\'t have enough permissions to access this country, you can try other countries on the main list</string>
 </resources>

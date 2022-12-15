@@ -2,6 +2,7 @@ package com.example.viewmodels
 
 import androidx.lifecycle.ViewModel
 import com.example.domainmodels.Continent
+import com.example.domainmodels.Country
 import com.example.domainmodels.ServerStatus
 import com.example.errors.CountryListError
 import com.example.logic.CountryListLogic
@@ -11,13 +12,15 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
 class CountryListViewModel(val logic: CountryListLogic, val serverStatusLogic: ServerStatusLogic) : ViewModel() {
-    data class UiState(val continents: List<Continent> = emptyList(),
-                       val isLoading: Boolean = false,
-                       val isLoaded: Boolean = false,
-                       val error: CountryListError? = null,
-                       val serverStatus: ServerStatus? = null
-    ) {
-    }
+    data class UiState(
+        val continents: List<Continent> = emptyList(),
+        val isLoading: Boolean = false,
+        val isLoaded: Boolean = false,
+        val error: CountryListError? = null,
+        val persistentError: CountryListError? = null,
+        val serverStatus: ServerStatus? = null,
+        val navigationTarget: Country? = null,
+    )
 
     private val _state: BehaviorSubject<UiState> = BehaviorSubject.createDefault(UiState())
     val state: Observable<UiState> = _state
@@ -48,8 +51,8 @@ class CountryListViewModel(val logic: CountryListLogic, val serverStatusLogic: S
                     _state.onNext(_state.value!!.copy(
                         isLoading = false,
                         isLoaded = true,
-                        error = error as CountryListError)
-                    )
+                        error = (error as CountryListError)
+                    ))
                 })
         )
 
@@ -60,15 +63,49 @@ class CountryListViewModel(val logic: CountryListLogic, val serverStatusLogic: S
 
     fun onRefreshTapped() {
         disposables.add(
-            logic.getForbiddenApi().subscribe({
-            }, { error ->
-                _state.onNext(_state.value!!.copy(error = error as CountryListError))
-            })
+            logic.getForbiddenApi().subscribe({}, { emitError(it) })
         )
     }
 
     fun onErrorDismissed() {
         _state.onNext(_state.value!!.copy(error = null))
+    }
+
+    fun onPersistentErrorDismissed() {
+        _state.onNext(_state.value!!.copy(persistentError = null))
+    }
+
+    fun onCountryTapped(country: Country) {
+        disposables.add(
+            logic.canAccessCountry(country).subscribe(
+                { _state.onNext(_state.value!!.copy(navigationTarget = country)) },
+                { emitError(it) }
+            )
+        )
+    }
+
+    fun resetNavigationTarget() {
+        _state.onNext(_state.value!!.copy(navigationTarget = null))
+    }
+
+    fun navigateToRandomCountry() {
+        disposables.add(
+            logic.getRandomCountry().subscribe(
+                { onCountryTapped(it) },
+                { emitError(it) }
+            )
+        )
+    }
+
+    private fun emitError(error: Throwable) {
+        when (val countryListError = error as CountryListError) {
+            is CountryListError.NotEnoughPermissionsError -> {
+                _state.onNext(_state.value!!.copy(persistentError = countryListError))
+            }
+            else -> {
+                _state.onNext(_state.value!!.copy(error = countryListError))
+            }
+        }
     }
 
     override fun onCleared() {

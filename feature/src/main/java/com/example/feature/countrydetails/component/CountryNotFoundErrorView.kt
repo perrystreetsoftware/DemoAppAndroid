@@ -12,29 +12,25 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.errors.CountryDetailsError
-import com.example.viewmodels.CountryDetailsViewModel
 import com.example.features.R
 
 @Composable
-fun CountryNotFoundErrorView(
-    state: CountryDetailsViewModel.UiState,
-) {
-    if (state is CountryDetailsViewModel.UiState.Error) {
+fun FullScreenErrorView(text: String) {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize()
+    ) {
         Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .background(Color.Red)
+                .padding(10.dp),
         ) {
-            Column(
-                modifier = Modifier
-                    .background(Color.Red)
-                    .padding(10.dp),
-            ) {
-                Text(text = stringResource(id = R.string.country_not_found_error_title), style = MaterialTheme.typography.h4, color = Color.White)
-                Spacer(modifier = Modifier.size(16.dp))
-                Text(text = stringResource(id = R.string.country_not_found_error_message), color = Color.White)
-            }
+            Text(text = stringResource(id = R.string.country_not_found_error_title),
+                style = MaterialTheme.typography.h4,
+                color = Color.White)
+            Spacer(modifier = Modifier.size(16.dp))
+            Text(text = text, color = Color.White)
         }
     }
 }
@@ -42,7 +38,5 @@ fun CountryNotFoundErrorView(
 @Preview(name = "Standard Preview", device = Devices.PIXEL, showSystemUi = true)
 @Composable
 fun CountryNotFoundErrorViewPreview() {
-    CountryNotFoundErrorView(
-        state = CountryDetailsViewModel.UiState.Error(error = CountryDetailsError.CountryNotFound)
-    )
+    FullScreenErrorView(stringResource(id = R.string.country_not_found_error_message))
 }

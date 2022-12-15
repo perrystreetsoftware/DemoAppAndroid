@@ -8,12 +8,12 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
-class CountryDetailsViewModel(private val logic: CountryDetailsLogic, regionCode: String): ViewModel() {
-    sealed class UiState() {
-        object Initial: UiState()
-        object Loading: UiState()
-        data class Loaded(val details: CountryDetails): UiState()
-        data class Error(val error: CountryDetailsError): UiState()
+class CountryDetailsViewModel(private val logic: CountryDetailsLogic, regionCode: String) : ViewModel() {
+    sealed class UiState {
+        object Initial : UiState()
+        object Loading : UiState()
+        data class Loaded(val details: CountryDetails) : UiState()
+        data class Error(val error: CountryDetailsError) : UiState()
     }
 
     private var _state: BehaviorSubject<UiState> = BehaviorSubject.createDefault(
