@@ -67,11 +67,11 @@ class CountryListViewModel(val logic: CountryListLogic, val serverStatusLogic: S
         )
     }
 
-    fun onErrorDismissed() {
+    fun dismissError() {
         _state.onNext(_state.value!!.copy(error = null))
     }
 
-    fun onPersistentErrorDismissed() {
+    fun dismissPersistentError() {
         _state.onNext(_state.value!!.copy(persistentError = null))
     }
 

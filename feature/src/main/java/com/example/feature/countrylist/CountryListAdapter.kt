@@ -30,19 +30,19 @@ fun CountryListAdapter(
             viewModel.onCountryTapped(country)
         },
         onRefreshTapped = { viewModel.onRefreshTapped() },
-        onDismissBannerError = { viewModel.onPersistentErrorDismissed() }
+        onDismissBannerError = { viewModel.dismissPersistentError() }
     )
 
     state.error?.toUiError()?.let { uiError ->
         when (uiError) {
             is CountryListToastError -> {
                 Toast.makeText(LocalContext.current, uiError.toastMessage(), Toast.LENGTH_SHORT).show()
-                viewModel.onErrorDismissed()
+                viewModel.dismissError()
             }
             is CountryListDialogError -> {
                 PssDialog(config = uiError.dialogState(
                     goToRandomAction = { viewModel.navigateToRandomCountry() }),
-                    onDismissRequest = { viewModel.onErrorDismissed() })
+                    onDismissRequest = { viewModel.dismissError() })
             }
             else -> {}
         }

@@ -4,7 +4,7 @@ import android.content.Context
 import com.example.features.R
 import com.example.uicomponents.error.ErrorBannerFactory
 
-class CountryListErrorBannerTextsFactory(private val context: Context) : ErrorBannerFactory<CountryListBannerError> {
+class CountryListErrorBannerFactory(private val context: Context) : ErrorBannerFactory<CountryListBannerError> {
 
     override fun getTitleAndMessage(error: CountryListBannerError): Pair<String, String> {
         return when (error) {
@@ -17,4 +17,4 @@ class CountryListErrorBannerTextsFactory(private val context: Context) : ErrorBa
 }
 
 fun CountryListBannerError.titleAndMessage(context: Context): Pair<String, String> =
-    CountryListErrorBannerTextsFactory(context).getTitleAndMessage(this)
+    CountryListErrorBannerFactory(context).getTitleAndMessage(this)

@@ -6,7 +6,7 @@ import com.example.uicomponents.models.DialogActions
 import com.example.uicomponents.models.DialogState
 import com.example.uicomponents.models.DialogTexts
 
-class CountryListErrorDialogStateFactory(private val goToRandomAction: () -> Unit) :
+class CountryListErrorDialogFactory(private val goToRandomAction: () -> Unit) :
     ErrorDialogFactory<CountryListDialogError> {
 
     override fun getDialogState(error: CountryListDialogError): DialogState {
@@ -37,5 +37,6 @@ class CountryListErrorDialogStateFactory(private val goToRandomAction: () -> Uni
     }
 }
 
+
 fun CountryListDialogError.dialogState(goToRandomAction: () -> Unit) =
-    CountryListErrorDialogStateFactory(goToRandomAction).getDialogState(this)
+    CountryListErrorDialogFactory(goToRandomAction).getDialogState(this)
