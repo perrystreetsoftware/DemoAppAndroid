@@ -1,5 +1,6 @@
 package com.example.feature.countrylist.error
 
+import com.example.viewmodels.error.countrylist.CountryListDialogError
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 

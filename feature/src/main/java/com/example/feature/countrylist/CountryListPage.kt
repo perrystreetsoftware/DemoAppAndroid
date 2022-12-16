@@ -17,12 +17,11 @@ import com.example.domainmodels.Continent
 import com.example.domainmodels.Country
 import com.example.feature.countrylist.componenets.CountryListButton
 import com.example.feature.countrylist.componenets.CountryListList
-import com.example.feature.countrylist.error.CountryListBannerError
 import com.example.feature.countrylist.error.titleAndMessage
-import com.example.feature.countrylist.error.toUiError
 import com.example.features.R
 import com.example.uicomponents.library.ProgressIndicator
 import com.example.uicomponents.library.SimpleBanner
+import com.example.viewmodels.error.countrylist.CountryListBannerError
 import com.example.viewmodels.CountryListViewModel
 
 @Composable
@@ -35,7 +34,7 @@ fun CountryListPage(
     Box {
         ProgressIndicator(isLoading = listUiState.isLoading)
         Column(modifier = Modifier.fillMaxHeight()) {
-            listUiState.persistentError?.toUiError()?.let { uiError ->
+            listUiState.persistentError?.let { uiError ->
                 if (uiError is CountryListBannerError) {
                     val (title, message) = uiError.titleAndMessage(LocalContext.current)
                     Box(modifier = Modifier.padding(8.dp)) {

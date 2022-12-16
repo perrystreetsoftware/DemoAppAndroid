@@ -3,6 +3,7 @@ package com.example.feature.countrylist.error
 import android.content.Context
 import com.example.features.R
 import com.example.uicomponents.error.ErrorBannerFactory
+import com.example.viewmodels.error.countrylist.CountryListBannerError
 
 class CountryListErrorBannerFactory(private val context: Context) : ErrorBannerFactory<CountryListBannerError> {
 

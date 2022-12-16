@@ -5,6 +5,7 @@ import com.example.uicomponents.error.ErrorDialogFactory
 import com.example.uicomponents.models.DialogActions
 import com.example.uicomponents.models.DialogState
 import com.example.uicomponents.models.DialogTexts
+import com.example.viewmodels.error.countrylist.CountryListDialogError
 
 class CountryListErrorDialogFactory(private val goToRandomAction: () -> Unit) :
     ErrorDialogFactory<CountryListDialogError> {

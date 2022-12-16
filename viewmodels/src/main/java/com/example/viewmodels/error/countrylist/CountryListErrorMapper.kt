@@ -1,7 +1,7 @@
-package com.example.feature.countrylist.error
+package com.example.viewmodels.error.countrylist
 
 import com.example.errors.CountryListError
-import com.example.uicomponents.error.UiErrorMapper
+import com.example.viewmodels.error.UiErrorMapper
 
 object CountryListErrorMapper : UiErrorMapper<CountryListError, CountryListUiError> {
 

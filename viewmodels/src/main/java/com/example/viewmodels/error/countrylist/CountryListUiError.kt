@@ -1,4 +1,4 @@
-package com.example.feature.countrylist.error
+package com.example.viewmodels.error.countrylist
 
 sealed class CountryListUiError
 

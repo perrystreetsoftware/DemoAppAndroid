@@ -1,4 +1,4 @@
-package com.example.feature.countrylist.error
+package com.example.viewmodels.error.countrylist
 
 import com.example.errors.CountryListError
 import org.junit.jupiter.api.Assertions

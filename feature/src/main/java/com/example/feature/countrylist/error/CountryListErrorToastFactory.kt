@@ -2,6 +2,7 @@ package com.example.feature.countrylist.error
 
 import com.example.features.R
 import com.example.uicomponents.error.ErrorToastFactory
+import com.example.viewmodels.error.countrylist.CountryListToastError
 
 
 object CountryListErrorToastFactory : ErrorToastFactory<CountryListToastError> {

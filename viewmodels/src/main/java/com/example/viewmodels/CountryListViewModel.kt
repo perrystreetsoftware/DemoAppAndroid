@@ -7,6 +7,8 @@ import com.example.domainmodels.ServerStatus
 import com.example.errors.CountryListError
 import com.example.logic.CountryListLogic
 import com.example.logic.ServerStatusLogic
+import com.example.viewmodels.error.countrylist.CountryListUiError
+import com.example.viewmodels.error.countrylist.toUiError
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
@@ -16,8 +18,8 @@ class CountryListViewModel(val logic: CountryListLogic, val serverStatusLogic: S
         val continents: List<Continent> = emptyList(),
         val isLoading: Boolean = false,
         val isLoaded: Boolean = false,
-        val error: CountryListError? = null,
-        val persistentError: CountryListError? = null,
+        val error: CountryListUiError? = null,
+        val persistentError: CountryListUiError? = null,
         val serverStatus: ServerStatus? = null,
         val navigationTarget: Country? = null,
     )
@@ -51,7 +53,7 @@ class CountryListViewModel(val logic: CountryListLogic, val serverStatusLogic: S
                     _state.onNext(_state.value!!.copy(
                         isLoading = false,
                         isLoaded = true,
-                        error = (error as CountryListError)
+                        error = (error as CountryListError).toUiError()
                     ))
                 })
         )
@@ -100,10 +102,10 @@ class CountryListViewModel(val logic: CountryListLogic, val serverStatusLogic: S
     private fun emitError(error: Throwable) {
         when (val countryListError = error as CountryListError) {
             is CountryListError.NotEnoughPermissionsError -> {
-                _state.onNext(_state.value!!.copy(persistentError = countryListError))
+                _state.onNext(_state.value!!.copy(persistentError = countryListError.toUiError()))
             }
             else -> {
-                _state.onNext(_state.value!!.copy(error = countryListError))
+                _state.onNext(_state.value!!.copy(error = countryListError.toUiError()))
             }
         }
     }

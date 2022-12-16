@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import com.example.domainmodels.CountryDetails
 import com.example.errors.CountryDetailsError
 import com.example.logic.CountryDetailsLogic
+import com.example.viewmodels.error.countrydetails.CountryDetailsUiError
+import com.example.viewmodels.error.countrydetails.toUiError
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
@@ -13,7 +15,7 @@ class CountryDetailsViewModel(private val logic: CountryDetailsLogic, regionCode
         object Initial : UiState()
         object Loading : UiState()
         data class Loaded(val details: CountryDetails) : UiState()
-        data class Error(val error: CountryDetailsError) : UiState()
+        data class Error(val error: CountryDetailsUiError) : UiState()
     }
 
     private var _state: BehaviorSubject<UiState> = BehaviorSubject.createDefault(
@@ -35,7 +37,7 @@ class CountryDetailsViewModel(private val logic: CountryDetailsLogic, regionCode
                 .subscribe({ it ->
                     _state.onNext(UiState.Loaded(it))
                 }, { error ->
-                    _state.onNext(UiState.Error(error as CountryDetailsError))
+                    _state.onNext(UiState.Error((error as CountryDetailsError).toUiError()))
                 })
         )
     }

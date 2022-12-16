@@ -2,10 +2,6 @@ package com.example.uicomponents.error
 
 import com.example.uicomponents.models.DialogState
 
-interface UiErrorMapper<LogicError, UiError> {
-    fun toUiError(error: LogicError): UiError?
-}
-
 interface ErrorDialogFactory<Error> {
     fun getDialogState(error: Error): DialogState
 }

@@ -7,8 +7,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.platform.LocalContext
 import com.example.domainmodels.Country
-import com.example.feature.countrylist.error.*
+import com.example.feature.countrylist.error.dialogState
+import com.example.feature.countrylist.error.toastMessage
 import com.example.uicomponents.dialog.PssDialog
+import com.example.viewmodels.error.countrylist.CountryListDialogError
+import com.example.viewmodels.error.countrylist.CountryListToastError
 import com.example.viewmodels.CountryListViewModel
 import org.koin.androidx.compose.getViewModel
 
@@ -33,7 +36,7 @@ fun CountryListAdapter(
         onDismissBannerError = { viewModel.dismissPersistentError() }
     )
 
-    state.error?.toUiError()?.let { uiError ->
+    state.error?.let { uiError ->
         when (uiError) {
             is CountryListToastError -> {
                 Toast.makeText(LocalContext.current, uiError.toastMessage(), Toast.LENGTH_SHORT).show()
