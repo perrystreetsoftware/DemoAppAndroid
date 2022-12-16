@@ -13,7 +13,7 @@ internal class CountryListErrorDialogFactoryTest {
 
     @Test
     fun `Blocked dialog has positive action`() {
-        val state = factory.getDialogState(CountryListDialogError.Blocked)
+        val state = factory.getDialogState(CountryListDialogError.Blocked("reason"))
 
         Assertions.assertEquals(state.dialogActions.onPositive, goToRandom)
         Assertions.assertNull(state.dialogActions.onNegative)

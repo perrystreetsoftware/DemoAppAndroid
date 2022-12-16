@@ -14,7 +14,7 @@ class CountryListErrorDialogFactory(private val goToRandomAction: () -> Unit) :
         val config = DialogState(DialogTexts(titleKey = titleKey, messageKeys = messageKeys))
 
         return when (error) {
-            CountryListDialogError.Blocked -> {
+            is CountryListDialogError.Blocked -> {
                 val actions = DialogActions(
                     positiveTextKey = R.string.country_list_blocked_error_positive_button,
                     negativeTextKey = R.string.cancel_button_title,
@@ -33,7 +33,7 @@ class CountryListErrorDialogFactory(private val goToRandomAction: () -> Unit) :
         }
         CountryListDialogError.Forbidden -> R.string.forbidden_error_title to listOf(R.string.forbidden_error_message)
         CountryListDialogError.Generic -> R.string.generic_error_title to listOf(R.string.generic_error_message)
-        CountryListDialogError.Blocked -> R.string.country_list_blocked_error_title to listOf(R.string.country_list_blocked_error_message)
+        is CountryListDialogError.Blocked -> R.string.country_list_blocked_error_title to listOf(R.string.country_list_blocked_error_message)
     }
 }
 

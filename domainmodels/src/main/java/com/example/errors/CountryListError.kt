@@ -8,7 +8,7 @@ sealed class CountryListError : Throwable() {
 
     object NotEnoughPermissionsError : CountryListError()
     object NotAvailableError : CountryListError()
-    object BlockedCountry : CountryListError()
+    data class BlockedCountry(val reason: String) : CountryListError()
 
     object InternalError : CountryListError()
 }

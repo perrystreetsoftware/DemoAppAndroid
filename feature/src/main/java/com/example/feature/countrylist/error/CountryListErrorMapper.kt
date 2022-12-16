@@ -12,7 +12,7 @@ object CountryListErrorMapper : UiErrorMapper<CountryListError, CountryListUiErr
         CountryListError.UserNotLoggedIn -> CountryListDialogError.Generic
         CountryListError.NotAvailableError -> CountryListToastError.NotAvailable
         CountryListError.NotEnoughPermissionsError -> CountryListBannerError.NoPermissions
-        CountryListError.BlockedCountry -> CountryListDialogError.Blocked
+        is CountryListError.BlockedCountry -> CountryListDialogError.Blocked(reason = error.reason)
         CountryListError.InternalError -> null // Not all logic errors might have a UI error equivalent
         // Avoid using else clause, this way the compiler will make sure you consider the mapper when adding new domain errors
     }

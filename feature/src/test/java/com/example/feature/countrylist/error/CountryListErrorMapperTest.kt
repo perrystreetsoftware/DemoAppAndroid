@@ -20,7 +20,8 @@ class CountryListErrorMapperTest {
 
     @Test
     fun `BlockedCountry maps to dialog error`() {
-        Assertions.assertEquals(CountryListDialogError.Blocked, mapper.toUiError(CountryListError.BlockedCountry))
+        Assertions.assertEquals(CountryListDialogError.Blocked("reason"),
+            mapper.toUiError(CountryListError.BlockedCountry("reason")))
     }
 
     @Test

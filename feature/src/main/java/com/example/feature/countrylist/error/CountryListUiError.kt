@@ -5,7 +5,7 @@ sealed class CountryListUiError
 sealed class CountryListDialogError : CountryListUiError() {
     object Forbidden : CountryListDialogError()
     object Connection : CountryListDialogError()
-    object Blocked : CountryListDialogError()
+    data class Blocked(val reason: String) : CountryListDialogError()
     object Generic : CountryListDialogError()
 }
 

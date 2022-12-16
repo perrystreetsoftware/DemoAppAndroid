@@ -31,7 +31,7 @@ class CountryListLogic(private val repository: CountryListPushBasedRepository) {
     fun canAccessCountry(country: Country): Completable = when (country) {
         NoPermissionsCountry -> Completable.error(CountryListError.NotEnoughPermissionsError)
         UnavailableCountry -> Completable.error(CountryListError.NotAvailableError)
-        BlockedCountry -> Completable.error(CountryListError.BlockedCountry)
+        BlockedCountry -> Completable.error(CountryListError.BlockedCountry("Blocked reason"))
         else -> Completable.complete()
     }
 
