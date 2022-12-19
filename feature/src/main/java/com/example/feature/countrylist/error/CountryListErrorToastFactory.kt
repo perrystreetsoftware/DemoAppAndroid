@@ -1,16 +1,21 @@
 package com.example.feature.countrylist.error
 
+import android.content.Context
+import com.example.errors.CountryListError
 import com.example.features.R
 import com.example.uicomponents.error.ErrorToastFactory
+import com.example.uicomponents.models.ToastState
 
 
-object CountryListErrorToastFactory : ErrorToastFactory<CountryListToastError> {
-    override fun getToastMessage(error: CountryListToastError): Int = when (error) {
-        CountryListToastError.NotAvailable -> R.string.country_list_unavailable_error
+class CountryListErrorToastFactory(private val context: Context) : ErrorToastFactory<CountryListError> {
+    override fun getToastState(error: CountryListError): ToastState? = when (error) {
+        CountryListError.NotAvailableError -> ToastState(context.getString(R.string.country_list_unavailable_error))
+        else -> null
     }
 }
 
-fun CountryListToastError.toastMessage(): Int = CountryListErrorToastFactory.getToastMessage(this)
+fun CountryListError.asToastState(context: Context): ToastState? =
+    CountryListErrorToastFactory(context).getToastState(this)
 
 
 

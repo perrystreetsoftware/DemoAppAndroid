@@ -7,7 +7,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.platform.LocalContext
 import com.example.domainmodels.Country
-import com.example.feature.countrylist.error.*
+import com.example.feature.countrylist.error.asDialogState
+import com.example.feature.countrylist.error.asToastState
 import com.example.uicomponents.dialog.PssDialog
 import com.example.viewmodels.CountryListViewModel
 import org.koin.androidx.compose.getViewModel
@@ -30,22 +31,17 @@ fun CountryListAdapter(
             viewModel.onCountryTapped(country)
         },
         onRefreshTapped = { viewModel.onRefreshTapped() },
-        onDismissBannerError = { viewModel.dismissPersistentError() }
+        onDismissBanner = { viewModel.dismissPersistentError() }
     )
 
-    state.error?.toUiError()?.let { uiError ->
-        when (uiError) {
-            is CountryListToastError -> {
-                Toast.makeText(LocalContext.current, uiError.toastMessage(), Toast.LENGTH_SHORT).show()
-                viewModel.dismissError()
-            }
-            is CountryListDialogError -> {
-                PssDialog(config = uiError.dialogState(
-                    goToRandomAction = { viewModel.navigateToRandomCountry() }),
-                    onDismissRequest = { viewModel.dismissError() })
-            }
-            else -> {}
-        }
+    state.error?.asDialogState(
+        goToRandomAction = { viewModel.navigateToRandomCountry() }
+    )?.let { dialogState ->
+        PssDialog(dialogState = dialogState, onDismissRequest = { viewModel.dismissError() })
     }
 
+    state.error?.asToastState(LocalContext.current)?.let { toastState ->
+        Toast.makeText(LocalContext.current, toastState.message, Toast.LENGTH_SHORT).show()
+        viewModel.dismissError()
+    }
 }

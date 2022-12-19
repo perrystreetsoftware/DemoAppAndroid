@@ -9,9 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.uicomponents.R
+import com.example.uicomponents.models.BannerState
 
 @Composable
-fun SimpleBanner(title: String, message: String, onDismissRequest: () -> Unit) {
+fun SimpleBanner(bannerState: BannerState, onDismissRequest: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         border = BorderStroke(1.dp, MaterialTheme.colors.primaryVariant),
@@ -22,9 +23,9 @@ fun SimpleBanner(title: String, message: String, onDismissRequest: () -> Unit) {
                 Icon(painter = painterResource(id = R.drawable.ic_baseline_close_24), contentDescription = "Close")
             }
             Column(modifier = Modifier.padding(12.dp)) {
-                Text(text = title, style = MaterialTheme.typography.h6)
+                Text(text = bannerState.title, style = MaterialTheme.typography.h6)
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(text = message, style = MaterialTheme.typography.body1)
+                Text(text = bannerState.message, style = MaterialTheme.typography.body1)
             }
         }
     }

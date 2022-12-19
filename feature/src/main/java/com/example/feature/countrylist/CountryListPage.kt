@@ -17,9 +17,7 @@ import com.example.domainmodels.Continent
 import com.example.domainmodels.Country
 import com.example.feature.countrylist.componenets.CountryListButton
 import com.example.feature.countrylist.componenets.CountryListList
-import com.example.feature.countrylist.error.CountryListBannerError
-import com.example.feature.countrylist.error.titleAndMessage
-import com.example.feature.countrylist.error.toUiError
+import com.example.feature.countrylist.error.asBannerState
 import com.example.features.R
 import com.example.uicomponents.library.ProgressIndicator
 import com.example.uicomponents.library.SimpleBanner
@@ -30,17 +28,14 @@ fun CountryListPage(
     listUiState: CountryListViewModel.UiState,
     onCountrySelected: ((Country) -> Unit)? = null,
     onRefreshTapped: (() -> Unit)? = null,
-    onDismissBannerError: () -> Unit,
+    onDismissBanner: () -> Unit,
 ) {
     Box {
         ProgressIndicator(isLoading = listUiState.isLoading)
         Column(modifier = Modifier.fillMaxHeight()) {
-            listUiState.persistentError?.toUiError()?.let { uiError ->
-                if (uiError is CountryListBannerError) {
-                    val (title, message) = uiError.titleAndMessage(LocalContext.current)
-                    Box(modifier = Modifier.padding(8.dp)) {
-                        SimpleBanner(title, message, onDismissBannerError)
-                    }
+            listUiState.persistentError?.asBannerState(LocalContext.current)?.let { bannerState ->
+                Box(modifier = Modifier.padding(8.dp)) {
+                    SimpleBanner(bannerState, onDismissBanner)
                 }
             }
             Column(modifier = Modifier.weight(1f)) {
@@ -98,6 +93,6 @@ fun CountryListPagePreview() {
                 )
             )
         ),
-        onDismissBannerError = {}
+        onDismissBanner = {}
     )
 }

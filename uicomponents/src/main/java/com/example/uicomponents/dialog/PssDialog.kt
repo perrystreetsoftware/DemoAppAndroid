@@ -13,14 +13,14 @@ import androidx.compose.ui.window.DialogProperties
 import com.example.uicomponents.models.DialogState
 
 @Composable
-fun PssDialog(config: DialogState, onDismissRequest: () -> Unit) {
+fun PssDialog(dialogState: DialogState, onDismissRequest: () -> Unit) {
     val context = LocalContext.current
-    val (title, message) = config.dialogTexts.getTitleAndText(context)
-    val positiveButtonText = config.dialogActions.getPositiveButtonText(context)
-    val negativeButtonText = config.dialogActions.getNegativeButtonText(context)
+    val (title, message) = dialogState.dialogTexts.getTitleAndText(context)
+    val positiveButtonText = dialogState.dialogActions.getPositiveButtonText(context)
+    val negativeButtonText = dialogState.dialogActions.getNegativeButtonText(context)
 
     fun handleDismissOnButtonPress() {
-        if (config.dismissOnButtonPress) {
+        if (dialogState.dismissOnButtonPress) {
             onDismissRequest()
         }
     }
@@ -36,13 +36,13 @@ fun PssDialog(config: DialogState, onDismissRequest: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically) {
                     negativeButtonText?.let {
                         DialogButton(text = negativeButtonText) {
-                            config.dialogActions.onNegative?.invoke()
+                            dialogState.dialogActions.onNegative?.invoke()
                             handleDismissOnButtonPress()
                         }
                         Spacer(modifier = Modifier.width(12.dp))
                     }
                     DialogButton(text = positiveButtonText) {
-                        config.dialogActions.onPositive?.invoke()
+                        dialogState.dialogActions.onPositive?.invoke()
                         handleDismissOnButtonPress()
                     }
                 }
@@ -53,8 +53,8 @@ fun PssDialog(config: DialogState, onDismissRequest: () -> Unit) {
             Text(text = message)
         },
         properties = DialogProperties(
-            dismissOnBackPress = config.dismissOnBackPress,
-            dismissOnClickOutside = config.dismissOnClickOutside
+            dismissOnBackPress = dialogState.dismissOnBackPress,
+            dismissOnClickOutside = dialogState.dismissOnClickOutside
         )
     )
 }

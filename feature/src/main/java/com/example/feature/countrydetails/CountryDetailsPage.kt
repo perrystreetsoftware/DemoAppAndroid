@@ -14,9 +14,7 @@ import com.example.viewmodels.CountryDetailsViewModel
 fun CountryDetailsPage(detailsUIState: CountryDetailsViewModel.UiState) {
     ProgressIndicator(isLoading = detailsUIState is CountryDetailsViewModel.UiState.Loading)
     if (detailsUIState is CountryDetailsViewModel.UiState.Error) {
-        when (val uiError = detailsUIState.error.toUiError()) {
-            is CountryDetailsFullScreenError -> FullScreenErrorView(uiError.message(LocalContext.current))
-        }
+        FullScreenErrorView(detailsUIState.error.asFullscreenErrorState((LocalContext.current)))
     }
     CountryDetailsContent(
         countryName = (detailsUIState as? CountryDetailsViewModel.UiState.Loaded)?.details?.country?.countryName ?: "",

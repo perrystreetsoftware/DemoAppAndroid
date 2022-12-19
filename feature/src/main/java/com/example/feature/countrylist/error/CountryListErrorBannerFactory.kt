@@ -1,20 +1,23 @@
 package com.example.feature.countrylist.error
 
 import android.content.Context
+import com.example.errors.CountryListError
 import com.example.features.R
 import com.example.uicomponents.error.ErrorBannerFactory
+import com.example.uicomponents.models.BannerState
 
-class CountryListErrorBannerFactory(private val context: Context) : ErrorBannerFactory<CountryListBannerError> {
+class CountryListErrorBannerFactory(private val context: Context) : ErrorBannerFactory<CountryListError> {
 
-    override fun getTitleAndMessage(error: CountryListBannerError): Pair<String, String> {
+    override fun getBannerState(error: CountryListError): BannerState? {
         return when (error) {
-            CountryListBannerError.NoPermissions -> {
-                context.getString(R.string.country_list_no_permissions_error_title) to
-                    context.getString(R.string.country_list_no_permissions_error_message)
+            CountryListError.NotEnoughPermissionsError -> {
+                BannerState(title = context.getString(R.string.country_list_no_permissions_error_title),
+                    message = context.getString(R.string.country_list_no_permissions_error_message))
             }
+            else -> null
         }
     }
 }
 
-fun CountryListBannerError.titleAndMessage(context: Context): Pair<String, String> =
-    CountryListErrorBannerFactory(context).getTitleAndMessage(this)
+fun CountryListError.asBannerState(context: Context): BannerState? =
+    CountryListErrorBannerFactory(context).getBannerState(this)
