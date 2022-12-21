@@ -3,13 +3,13 @@ package com.example.feature.countrylist
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -17,10 +17,8 @@ import com.example.domainmodels.Continent
 import com.example.domainmodels.Country
 import com.example.feature.countrylist.componenets.CountryListButton
 import com.example.feature.countrylist.componenets.CountryListList
-import com.example.feature.countrylist.error.asBannerState
 import com.example.features.R
 import com.example.uicomponents.library.ProgressIndicator
-import com.example.uicomponents.library.SimpleBanner
 import com.example.viewmodels.CountryListViewModel
 
 @Composable
@@ -28,16 +26,11 @@ fun CountryListPage(
     listUiState: CountryListViewModel.UiState,
     onCountrySelected: ((Country) -> Unit)? = null,
     onRefreshTapped: (() -> Unit)? = null,
-    onDismissBanner: () -> Unit,
+    onFailOtherTapped: (() -> Unit)? = null
 ) {
     Box {
         ProgressIndicator(isLoading = listUiState.isLoading)
         Column(modifier = Modifier.fillMaxHeight()) {
-            listUiState.persistentError?.asBannerState(LocalContext.current)?.let { bannerState ->
-                Box(modifier = Modifier.padding(8.dp)) {
-                    SimpleBanner(bannerState, onDismissBanner)
-                }
-            }
             Column(modifier = Modifier.weight(1f)) {
                 CountryListList(
                     list = listUiState.continents,
@@ -66,6 +59,16 @@ fun CountryListPage(
                 isLoaded = listUiState.isLoaded,
                 onClick = onRefreshTapped
             )
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp),
+                onClick = {
+                    onFailOtherTapped?.invoke()
+                }
+            ) {
+                Text(text = stringResource(id = R.string.fail_about_page_title))
+            }
         }
     }
 }
@@ -93,6 +96,5 @@ fun CountryListPagePreview() {
                 )
             )
         ),
-        onDismissBanner = {}
     )
 }

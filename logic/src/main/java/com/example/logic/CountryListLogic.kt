@@ -40,10 +40,10 @@ class CountryListLogic(private val repository: CountryListPushBasedRepository) {
     }
 
     companion object {
-        private val NoPermissionsCountry = Country(regionCode = "No_Permissions")
-        private val UnavailableCountry = Country(regionCode = "Unavailable")
-        private val BlockedCountry = Country(regionCode = "Blocked")
-        private val XXCountry = Country(regionCode = "xx")
+        private val NoPermissionsCountry = Country(regionCode = "XX Toast")
+        private val UnavailableCountry = Country(regionCode = "XX Dialog")
+        private val BlockedCountry = Country(regionCode = "XX Random")
+        private val XXCountry = Country(regionCode = "XX")
 
         private val InvalidCountries = listOf(XXCountry, NoPermissionsCountry, UnavailableCountry, BlockedCountry)
         val InvalidContinent = Continent(name = "Invalid", countries = InvalidCountries)

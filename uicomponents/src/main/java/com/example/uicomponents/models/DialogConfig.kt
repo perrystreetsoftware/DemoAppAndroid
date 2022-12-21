@@ -1,9 +1,10 @@
 package com.example.uicomponents.models
 
 import android.content.Context
+import androidx.annotation.StringRes
 import com.example.uicomponents.R
 
-data class DialogState(
+data class DialogConfig(
     val dialogTexts: DialogTexts,
     val dialogActions: DialogActions = DialogActions(),
     val dismissOnButtonPress: Boolean = true,
@@ -32,9 +33,9 @@ data class DialogState(
 
 data class DialogActions(
     val positiveText: String? = null,
-    val positiveTextKey: Int? = R.string.ok,
+    @StringRes val positiveTextKey: Int? = R.string.ok,
     val negativeText: String? = null,
-    val negativeTextKey: Int? = null,
+    @StringRes val negativeTextKey: Int? = null,
     val onPositive: (() -> Unit)? = null,
     val onNegative: (() -> Unit)? = null,
     val onDismiss: (() -> Unit)? = null,
@@ -56,9 +57,9 @@ data class DialogActions(
 
 data class DialogTexts(
     val title: String? = null,
-    val titleKey: Int? = null,
+    @StringRes val titleKey: Int? = null,
     val message: String? = null,
-    val messageKeys: List<Int>? = null,
+    @StringRes val messageKeys: List<Int>? = null,
 ) {
 
     private val hasTitle = title != null || titleKey != null

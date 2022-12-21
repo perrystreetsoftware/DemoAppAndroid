@@ -1,46 +1,75 @@
 package com.example.feature.countrylist.error
 
+import com.example.AutoCloseKoinAfterEachExtension
 import com.example.errors.CountryListError
-import org.junit.jupiter.api.Assertions
+import com.example.interfaces.networkLogicApiMocks
+import com.example.logic.logicModule
+import com.example.repositories.repositoriesModule
+import com.example.uicomponents.models.FloatingAlert
+import com.example.viewmodels.CountryListViewModel
+import com.example.viewmodels.viewModelModule
+import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldBeNull
+import org.amshove.kluent.shouldNotBeNull
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.extension.ExtendWith
+import org.koin.core.context.loadKoinModules
+import org.koin.core.context.startKoin
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-internal class CountryListErrorDialogFactoryTest {
-
-    private val goToRandom: () -> Unit = {}
-
-    private val dialogErrors = listOf(CountryListError.Forbidden,
+@ExtendWith(AutoCloseKoinAfterEachExtension::class)
+@TestInstance(TestInstance.Lifecycle.PER_METHOD)
+internal class CountryListErrorDialogFactoryTest: KoinTest {
+    private val dialogErrors = listOf(
+        CountryListError.Forbidden,
         CountryListError.ConnectionError,
         CountryListError.Other,
         CountryListError.BlockedCountry("reason"))
 
+    @BeforeEach
+    open fun setup() {
+        startKoin {
+            loadKoinModules(viewModelModule + logicModule + repositoriesModule + networkLogicApiMocks)
+        }
+    }
 
-    private val factory = CountryListErrorDialogFactory(goToRandom)
+    private val viewModel: CountryListViewModel by inject()
 
     @Test
     fun `Blocked dialog has positive action`() {
-        val state = factory.getDialogState(CountryListError.BlockedCountry("reason"))
+        val state = CountryListError.BlockedCountry("reason").asFloatingAlert(viewModel)
 
-        Assertions.assertEquals(state?.dialogActions?.onPositive, goToRandom)
-        Assertions.assertNull(state?.dialogActions?.onNegative)
+        (state as FloatingAlert.Dialog).let {
+            it.state.dialogActions.onPositive.shouldNotBeNull()
+            it.state.dialogActions.onNegative.shouldBeNull()
+        }
     }
 
     @Test
     fun `Forbidden, Connection and Generic do not have custom actions`() {
-        val forbidden = factory.getDialogState(CountryListError.Forbidden)
-        val connection = factory.getDialogState(CountryListError.ConnectionError)
-        val generic = factory.getDialogState(CountryListError.Other)
+        val forbidden = CountryListError.Forbidden.asFloatingAlert(viewModel)
+        val connection = CountryListError.ConnectionError.asFloatingAlert(viewModel)
+        val generic = CountryListError.Other.asFloatingAlert(viewModel)
 
         listOf(forbidden, connection, generic).forEach { state ->
-            Assertions.assertNull(state?.dialogActions?.onPositive)
-            Assertions.assertNull(state?.dialogActions?.onNegative)
+            (state as FloatingAlert.Dialog).apply {
+                this.state.dialogActions.onPositive.shouldBeNull()
+                this.state.dialogActions.onNegative.shouldBeNull()
+            }
         }
     }
 
     @Test
     fun `Return dialog state for supported errors`() {
         dialogErrors.forEach { error ->
-            Assertions.assertNotNull(factory.getDialogState(error))
+            val alert = error.asFloatingAlert(viewModel)
+
+            (alert as FloatingAlert.Dialog).apply {
+                this.shouldNotBeNull()
+            }
         }
     }
-
 }

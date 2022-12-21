@@ -18,7 +18,7 @@ fun CountryListButton(
     Button(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp),
+            .padding(horizontal = 10.dp),
         onClick = {
             onClick?.let {
                 it()

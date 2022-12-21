@@ -11,13 +11,12 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
-class CountryListViewModel(val logic: CountryListLogic, val serverStatusLogic: ServerStatusLogic) : ViewModel() {
+class CountryListViewModel(val logic: CountryListLogic, val serverStatusLogic: ServerStatusLogic) : ViewModel(), ErrorDismissing {
     data class UiState(
         val continents: List<Continent> = emptyList(),
         val isLoading: Boolean = false,
         val isLoaded: Boolean = false,
         val error: CountryListError? = null,
-        val persistentError: CountryListError? = null,
         val serverStatus: ServerStatus? = null,
         val navigationTarget: Country? = null,
     )
@@ -67,19 +66,23 @@ class CountryListViewModel(val logic: CountryListLogic, val serverStatusLogic: S
         )
     }
 
-    fun dismissError() {
+    fun onFailOtherTapped() {
+        emitError(CountryListError.Other)
+    }
+
+    override fun dismissError() {
         _state.onNext(_state.value!!.copy(error = null))
     }
 
-    fun dismissPersistentError() {
-        _state.onNext(_state.value!!.copy(persistentError = null))
-    }
-
-    fun onCountryTapped(country: Country) {
+    fun onCountrySelected(country: Country) {
         disposables.add(
             logic.canAccessCountry(country).subscribe(
-                { _state.onNext(_state.value!!.copy(navigationTarget = country)) },
-                { emitError(it) }
+                {
+                    _state.onNext(_state.value!!.copy(navigationTarget = country))
+                },
+                {
+                    emitError(it)
+                }
             )
         )
     }
@@ -91,7 +94,7 @@ class CountryListViewModel(val logic: CountryListLogic, val serverStatusLogic: S
     fun navigateToRandomCountry() {
         disposables.add(
             logic.getRandomCountry().subscribe(
-                { onCountryTapped(it) },
+                { onCountrySelected(it) },
                 { emitError(it) }
             )
         )
@@ -100,7 +103,7 @@ class CountryListViewModel(val logic: CountryListLogic, val serverStatusLogic: S
     private fun emitError(error: Throwable) {
         when (val countryListError = error as CountryListError) {
             is CountryListError.NotEnoughPermissionsError -> {
-                _state.onNext(_state.value!!.copy(persistentError = countryListError))
+                _state.onNext(_state.value!!.copy(error = countryListError))
             }
             else -> {
                 _state.onNext(_state.value!!.copy(error = countryListError))
