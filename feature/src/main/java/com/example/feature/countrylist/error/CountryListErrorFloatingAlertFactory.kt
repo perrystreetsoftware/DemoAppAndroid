@@ -11,34 +11,37 @@ class CountryListErrorFloatingAlertFactory(
     ) {
     fun asFloatingAlert(error: CountryListError): FloatingAlert {
         return when(error){
-            is CountryListError.NotEnoughPermissionsError -> FloatingAlert.Toast(ToastConfig(R.string.country_list_unavailable_error))
-            else -> getDialogState(error)
+            is CountryListError.NotEnoughPermissionsError -> FloatingAlert.Toast(ToastUiState(R.string.country_list_unavailable_error))
+            else -> buildDialog(error)
         }
     }
 
-    private fun getDialogState(error: CountryListError): FloatingAlert.Dialog {
+    private fun buildDialog(error: CountryListError): FloatingAlert.Dialog {
         val (titleKey, messageKeys) = error.titleAndMessage()
-        val config = DialogConfig(DialogTexts(titleKey = titleKey, messageKeys = messageKeys))
+        val state = DialogUiState(DialogTexts(titleKey = titleKey, messageKeys = messageKeys))
 
         return FloatingAlert.Dialog(when (error) {
             is CountryListError.BlockedCountry -> {
-                val actions = DialogActions(
-                    positiveTextKey = R.string.country_list_blocked_error_positive_button,
-                    onPositive = { viewModel.navigateToRandomCountry() },
-                    negativeTextKey = R.string.cancel_button_title,
+                state.copy(
+                    positiveAction = DialogAction(
+                        textKey = R.string.country_list_blocked_error_positive_button,
+                        onClick = { viewModel.navigateToRandomCountry() }),
+                    negativeAction = DialogAction(
+                        textKey = R.string.cancel_button_title
+                    )
                 )
-                config.copy(dialogActions = actions)
             }
             is CountryListError.Other -> {
-                val actions = DialogActions(
-                    positiveTextKey = R.string.ok,
-                    onPositive = { onAboutSelected.invoke() },
-                    negativeTextKey = R.string.cancel_button_title,
+                state.copy(
+                    positiveAction = DialogAction(
+                        textKey = R.string.ok,
+                        onClick = { onAboutSelected.invoke() }),
+                    negativeAction = DialogAction(
+                        textKey = R.string.cancel_button_title
+                    )
                 )
-
-                config.copy(dialogActions = actions)
             }
-            else -> config
+            else -> state
         })
     }
 

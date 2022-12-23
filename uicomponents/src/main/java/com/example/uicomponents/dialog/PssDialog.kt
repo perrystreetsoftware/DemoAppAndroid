@@ -10,17 +10,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import com.example.uicomponents.models.DialogConfig
+import com.example.uicomponents.models.DialogUiState
 
 @Composable
-fun PssDialog(dialogConfig: DialogConfig, onDismissRequest: (() -> Unit)?) {
+fun PssDialog(dialogUiState: DialogUiState, onDismissRequest: (() -> Unit)?) {
     val context = LocalContext.current
-    val (title, message) = dialogConfig.dialogTexts.getTitleAndText(context)
-    val positiveButtonText = dialogConfig.dialogActions.getPositiveButtonText(context)
-    val negativeButtonText = dialogConfig.dialogActions.getNegativeButtonText(context)
+    val (title, message) = dialogUiState.dialogTexts.getTitleAndText(context)
+    val positiveAction = dialogUiState.positiveAction
+    val negativeAction = dialogUiState.negativeAction
 
     fun handleDismissOnButtonPress() {
-        if (dialogConfig.dismissOnButtonPress) {
+        if (dialogUiState.dismissOnButtonPress) {
             if (onDismissRequest != null) {
                 onDismissRequest()
             }
@@ -40,15 +40,15 @@ fun PssDialog(dialogConfig: DialogConfig, onDismissRequest: (() -> Unit)?) {
                 Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically) {
-                    negativeButtonText?.let {
-                        DialogButton(text = negativeButtonText) {
-                            dialogConfig.dialogActions.onNegative?.invoke()
+                    negativeAction?.let {
+                        DialogButton(text = it.getButtonText(context)) {
+                            it.onClick?.invoke()
                             handleDismissOnButtonPress()
                         }
                         Spacer(modifier = Modifier.width(12.dp))
                     }
-                    DialogButton(text = positiveButtonText) {
-                        dialogConfig.dialogActions.onPositive?.invoke()
+                    DialogButton(text = positiveAction.getButtonText(context)) {
+                        positiveAction.onClick?.invoke()
                         handleDismissOnButtonPress()
                     }
                 }
@@ -59,8 +59,8 @@ fun PssDialog(dialogConfig: DialogConfig, onDismissRequest: (() -> Unit)?) {
             Text(text = message)
         },
         properties = DialogProperties(
-            dismissOnBackPress = dialogConfig.dismissOnBackPress,
-            dismissOnClickOutside = dialogConfig.dismissOnClickOutside
+            dismissOnBackPress = dialogUiState.dismissOnBackPress,
+            dismissOnClickOutside = dialogUiState.dismissOnClickOutside
         )
     )
 }

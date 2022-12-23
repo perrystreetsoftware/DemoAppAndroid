@@ -5,8 +5,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import com.example.domainmodels.Country
-import com.example.feature.countrylist.componenets.AlertNotifier
 import com.example.feature.countrylist.error.asFloatingAlert
+import com.example.uicomponents.library.FloatingAlertNotifier
 import com.example.viewmodels.CountryListViewModel
 import org.koin.androidx.compose.getViewModel
 
@@ -32,8 +32,8 @@ fun CountryListAdapter(
         onFailOtherTapped = { viewModel.onFailOtherTapped() }
     )
 
-    AlertNotifier(
+    FloatingAlertNotifier(
         floatingAlert = state.error?.asFloatingAlert(viewModel, onAboutSelected),
-        errorDismissing = viewModel
+        errorDismissing = { viewModel.dismissError() }
     )
 }

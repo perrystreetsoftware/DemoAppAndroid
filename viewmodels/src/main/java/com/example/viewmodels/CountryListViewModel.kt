@@ -11,7 +11,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
-class CountryListViewModel(val logic: CountryListLogic, val serverStatusLogic: ServerStatusLogic) : ViewModel(), ErrorDismissing {
+class CountryListViewModel(val logic: CountryListLogic, val serverStatusLogic: ServerStatusLogic) : ViewModel() {
     data class UiState(
         val continents: List<Continent> = emptyList(),
         val isLoading: Boolean = false,
@@ -70,7 +70,7 @@ class CountryListViewModel(val logic: CountryListLogic, val serverStatusLogic: S
         emitError(CountryListError.Other)
     }
 
-    override fun dismissError() {
+    fun dismissError() {
         _state.onNext(_state.value!!.copy(error = null))
     }
 
