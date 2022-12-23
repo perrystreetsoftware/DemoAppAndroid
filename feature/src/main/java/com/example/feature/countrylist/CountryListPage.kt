@@ -3,6 +3,7 @@ package com.example.feature.countrylist
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,15 +17,16 @@ import com.example.domainmodels.Continent
 import com.example.domainmodels.Country
 import com.example.feature.countrylist.componenets.CountryListButton
 import com.example.feature.countrylist.componenets.CountryListList
+import com.example.features.R
 import com.example.uicomponents.library.ProgressIndicator
 import com.example.viewmodels.CountryListViewModel
-import com.example.features.R
 
 @Composable
 fun CountryListPage(
     listUiState: CountryListViewModel.UiState,
     onCountrySelected: ((Country) -> Unit)? = null,
-    onRefreshTapped: (() -> Unit)? = null
+    onRefreshTapped: (() -> Unit)? = null,
+    onFailOtherTapped: (() -> Unit)? = null
 ) {
     Box {
         ProgressIndicator(isLoading = listUiState.isLoading)
@@ -57,6 +59,16 @@ fun CountryListPage(
                 isLoaded = listUiState.isLoaded,
                 onClick = onRefreshTapped
             )
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp),
+                onClick = {
+                    onFailOtherTapped?.invoke()
+                }
+            ) {
+                Text(text = stringResource(id = R.string.fail_about_page_title))
+            }
         }
     }
 }
@@ -76,6 +88,13 @@ fun CircleShape(color: Color) {
 @Composable
 fun CountryListPagePreview() {
     CountryListPage(
-        listUiState = CountryListViewModel.UiState(continents = listOf(Continent("North America", countries = listOf(Country("ca")))))
+        listUiState = CountryListViewModel.UiState(
+            continents = listOf(
+                Continent(
+                    name = "North America",
+                    countries = listOf(Country("ca"))
+                )
+            )
+        ),
     )
 }

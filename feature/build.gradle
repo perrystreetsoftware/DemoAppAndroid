@@ -12,6 +12,13 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+
+        testOptions {
+            unitTests.all {
+                useJUnitPlatform()
+                maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+            }
+        }
     }
 
     buildTypes {
@@ -40,6 +47,7 @@ android {
 }
 
 dependencies {
+    testImplementation project(path: ':utils')
     androidTestImplementation libs.bundles.junit5
     implementation libs.androidx.compose.material
     implementation libs.androidx.compose.ui.tooling
@@ -52,6 +60,12 @@ dependencies {
     implementation project(':domainmodels')
     implementation project(':utils')
     implementation project(':viewmodels')
+    implementation project(':logic')
+    implementation project(':repositories')
     implementation project(':uicomponents')
     testImplementation libs.bundles.junit5
+    testImplementation libs.koin.test
+    testImplementation libs.kluent
+    testImplementation(testFixtures(project(':interfaces')))
+    testImplementation(testFixtures(project(":utils")))
 }

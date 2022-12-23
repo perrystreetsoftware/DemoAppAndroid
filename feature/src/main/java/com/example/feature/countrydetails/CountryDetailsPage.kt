@@ -1,23 +1,23 @@
 package com.example.feature.countrydetails
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.domainmodels.Country
 import com.example.domainmodels.CountryDetails
 import com.example.feature.countrydetails.component.CountryDetailsContent
 import com.example.feature.countrydetails.component.CountryNotFoundErrorView
+import com.example.feature.countrydetails.component.FullScreenErrorView
 import com.example.uicomponents.library.ProgressIndicator
 import com.example.viewmodels.CountryDetailsViewModel
 
 @Composable
-fun CountryDetailsPage(
-    detailsUIState: CountryDetailsViewModel.UiState,
-) {
+fun CountryDetailsPage(detailsUIState: CountryDetailsViewModel.UiState) {
     ProgressIndicator(isLoading = detailsUIState is CountryDetailsViewModel.UiState.Loading)
-    CountryNotFoundErrorView(state = detailsUIState)
+    CountryNotFoundErrorView(detailsUIState = detailsUIState)
     CountryDetailsContent(
         countryName = (detailsUIState as? CountryDetailsViewModel.UiState.Loaded)?.details?.country?.countryName ?: "",
-        detailsText = (detailsUIState as? CountryDetailsViewModel.UiState.Loaded)?.details?.detailsText ?: ""
+        detailsText = (detailsUIState as? CountryDetailsViewModel.UiState.Loaded)?.details?.detailsText ?: "",
     )
 }
 

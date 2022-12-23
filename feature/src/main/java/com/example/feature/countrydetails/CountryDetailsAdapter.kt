@@ -14,7 +14,5 @@ fun CountryDetailsAdapter(
 ) {
     val viewModelState by viewModel.state.subscribeAsState(initial = CountryDetailsViewModel.UiState.Initial)
 
-    CountryDetailsPage(
-        viewModelState
-    )
+    CountryDetailsPage(viewModelState)
 }

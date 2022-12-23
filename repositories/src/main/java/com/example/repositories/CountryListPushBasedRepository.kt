@@ -7,10 +7,11 @@ import com.example.interfaces.ITravelAdvisoriesApi
 import com.example.interfaces.TravelAdvisoryApiError
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
 fun Throwable.toCountryListError(): CountryListError {
-    return when(this) {
+    return when (this) {
         is TravelAdvisoryApiError.Forbidden -> {
             CountryListError.Forbidden
         }
@@ -24,6 +25,12 @@ fun Throwable.toCountryListError(): CountryListError {
 class CountryListPushBasedRepository(private val travelAdvisoriesApi: ITravelAdvisoriesApi) {
     private var _continents: BehaviorSubject<List<Continent>> = BehaviorSubject.createDefault(emptyList())
     val continents: Observable<List<Continent>> = _continents
+
+
+    fun getRandomCountry(): Single<Country> {
+        return Single.just(_continents.value?.flatMap { it.countries }?.randomOrNull()
+            ?: Country(regionCode = "NotInitialized"))
+    }
 
     fun reload(): Completable {
         return travelAdvisoriesApi.getCountryList()
