@@ -18,6 +18,7 @@ import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
 import org.koin.test.KoinTest
 import org.koin.test.inject
+import kotlin.test.assertTrue
 
 @ExtendWith(AutoCloseKoinAfterEachExtension::class)
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
@@ -39,8 +40,10 @@ internal class CountryListErrorDialogFactoryTest : KoinTest {
     private val viewModel: CountryListViewModel by inject()
 
     @Test
-    fun `Blocked dialog has positive action`() {
+    fun `Blocked error shows a dialog with a positive action`() {
         val state = CountryListError.BlockedCountry("reason").asFloatingAlert(viewModel) {}
+
+        assertTrue { state is FloatingAlert.Dialog }
 
         (state as FloatingAlert.Dialog).let {
             it.state.positiveAction.onClick.shouldNotBeNull()
