@@ -8,7 +8,6 @@ import com.example.repositories.repositoriesModule
 import com.example.uicomponents.models.FloatingAlert
 import com.example.viewmodels.CountryListViewModel
 import com.example.viewmodels.viewModelModule
-import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldNotBeNull
 import org.junit.jupiter.api.BeforeEach
@@ -22,12 +21,13 @@ import org.koin.test.inject
 
 @ExtendWith(AutoCloseKoinAfterEachExtension::class)
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
-internal class CountryListErrorDialogFactoryTest: KoinTest {
+internal class CountryListErrorDialogFactoryTest : KoinTest {
     private val dialogErrors = listOf(
         CountryListError.Forbidden,
         CountryListError.ConnectionError,
         CountryListError.Other,
-        CountryListError.BlockedCountry("reason"))
+        CountryListError.BlockedCountry("reason")
+    )
 
     @BeforeEach
     open fun setup() {
@@ -40,24 +40,23 @@ internal class CountryListErrorDialogFactoryTest: KoinTest {
 
     @Test
     fun `Blocked dialog has positive action`() {
-        val state = CountryListError.BlockedCountry("reason").asFloatingAlert(viewModel)
+        val state = CountryListError.BlockedCountry("reason").asFloatingAlert(viewModel) {}
 
         (state as FloatingAlert.Dialog).let {
-            it.state.dialogActions.onPositive.shouldNotBeNull()
-            it.state.dialogActions.onNegative.shouldBeNull()
+            it.state.positiveAction.onClick.shouldNotBeNull()
+            it.state.negativeAction?.onClick.shouldBeNull()
         }
     }
 
     @Test
-    fun `Forbidden, Connection and Generic do not have custom actions`() {
-        val forbidden = CountryListError.Forbidden.asFloatingAlert(viewModel)
-        val connection = CountryListError.ConnectionError.asFloatingAlert(viewModel)
-        val generic = CountryListError.Other.asFloatingAlert(viewModel)
+    fun `Forbidden, Connection do not have custom actions`() {
+        val forbidden = CountryListError.Forbidden.asFloatingAlert(viewModel) {}
+        val connection = CountryListError.ConnectionError.asFloatingAlert(viewModel) {}
 
-        listOf(forbidden, connection, generic).forEach { state ->
+        listOf(forbidden, connection).forEach { state ->
             (state as FloatingAlert.Dialog).apply {
-                this.state.dialogActions.onPositive.shouldBeNull()
-                this.state.dialogActions.onNegative.shouldBeNull()
+                this.state.positiveAction.onClick.shouldBeNull()
+                this.state.negativeAction?.onClick.shouldBeNull()
             }
         }
     }
@@ -65,7 +64,7 @@ internal class CountryListErrorDialogFactoryTest: KoinTest {
     @Test
     fun `Return dialog state for supported errors`() {
         dialogErrors.forEach { error ->
-            val alert = error.asFloatingAlert(viewModel)
+            val alert = error.asFloatingAlert(viewModel) {}
 
             (alert as FloatingAlert.Dialog).apply {
                 this.shouldNotBeNull()
