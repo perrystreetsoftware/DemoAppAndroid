@@ -1,11 +1,10 @@
+package com.example.networklogic
+
 import com.example.interfaces.ITravelAdvisoriesApi
-import com.example.networklogic.TravelAdvisoriesApi
+import org.koin.core.module.dsl.factoryOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val networkLogicApi = module {
-    factory<ITravelAdvisoriesApi> {
-        TravelAdvisoriesApi(
-            moshi = get()
-        )
-    }
+    factoryOf(::TravelAdvisoriesApi) bind ITravelAdvisoriesApi::class
 }
