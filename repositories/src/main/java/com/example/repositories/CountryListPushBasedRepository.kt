@@ -38,7 +38,7 @@ class CountryListPushBasedRepository(private val travelAdvisoriesApi: ITravelAdv
                 val continents = listOf(
                     Pair("Africa", it.africa),
                     Pair("Asia", it.asia),
-                    Pair("Latin America", it.latam),
+                    Pair("Latin America and Caribbean", it.latam),
                     Pair("Oceania", it.oceania),
                     Pair("Europe", it.europe)
                 )
