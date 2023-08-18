@@ -9,7 +9,7 @@ import com.example.logic.ServerStatusLogic
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
-class CountryListViewModel(private val logic: CountryListLogic, private val serverStatusLogic: ServerStatusLogic) : DisposerViewModel() {
+class CountryListViewModel(private val logic: CountryListLogic, private val serverStatusLogic: ServerStatusLogic) : DisposableViewModel() {
     data class UiState(
         val continents: List<Continent> = emptyList(),
         val isLoading: Boolean = false,

@@ -6,7 +6,7 @@ import com.example.logic.CountryDetailsLogic
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
-class CountryDetailsViewModel(private val logic: CountryDetailsLogic, regionCode: String) : DisposerViewModel() {
+class CountryDetailsViewModel(private val logic: CountryDetailsLogic, regionCode: String) : DisposableViewModel() {
     sealed class UiState {
         object Initial : UiState()
         object Loading : UiState()
