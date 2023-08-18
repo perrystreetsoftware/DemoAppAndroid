@@ -1,6 +1,7 @@
 package com.example.feature.countrylist.componenets
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,20 +23,31 @@ fun CountryListList(
     list: List<Continent>,
     onClick: ((Country) -> Unit)? = null
 ) {
-    LazyColumn(modifier = Modifier.padding(10.dp)
+    LazyColumn(
+        modifier = Modifier.padding(10.dp)
     ) {
         list.forEach { continent ->
             stickyHeader {
-                Text(text = continent.name, style = MaterialTheme.typography.h5,)
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(color = MaterialTheme.colors.surface),
+                    text = continent.name,
+                    style = MaterialTheme.typography.h5
+                )
             }
 
             items(continent.countries) { item ->
-                Row(modifier = Modifier.clickable {
-                    onClick?.let { method ->
-                        method(item)
-                    }
-                }.fillMaxWidth()
-                    .padding(bottom = 10.dp)) {
+                Row(
+                    modifier = Modifier
+                        .clickable {
+                            onClick?.let { method ->
+                                method(item)
+                            }
+                        }
+                        .fillMaxWidth()
+                        .padding(bottom = 10.dp)
+                ) {
                     Text(item.countryName)
                 }
             }
@@ -46,7 +58,8 @@ fun CountryListList(
 @Preview
 @Composable
 fun CountryListListPreview() {
-    CountryListList(list = listOf(
+    CountryListList(
+        list = listOf(
             Continent(
                 name = "North America",
                 countries = listOf(Country(regionCode = "us"))
