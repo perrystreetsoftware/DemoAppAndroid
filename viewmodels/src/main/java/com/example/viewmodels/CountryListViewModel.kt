@@ -1,6 +1,5 @@
 package com.example.viewmodels
 
-import androidx.lifecycle.ViewModel
 import com.example.domainmodels.Continent
 import com.example.domainmodels.Country
 import com.example.domainmodels.ServerStatus
@@ -8,10 +7,9 @@ import com.example.errors.CountryListError
 import com.example.logic.CountryListLogic
 import com.example.logic.ServerStatusLogic
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
-class CountryListViewModel(val logic: CountryListLogic, val serverStatusLogic: ServerStatusLogic) : ViewModel() {
+class CountryListViewModel(private val logic: CountryListLogic, private val serverStatusLogic: ServerStatusLogic) : DisposableViewModel() {
     data class UiState(
         val continents: List<Continent> = emptyList(),
         val isLoading: Boolean = false,
@@ -23,7 +21,6 @@ class CountryListViewModel(val logic: CountryListLogic, val serverStatusLogic: S
 
     private val _state: BehaviorSubject<UiState> = BehaviorSubject.createDefault(UiState())
     val state: Observable<UiState> = _state
-    private val disposables = CompositeDisposable()
 
     init {
         // https://stackoverflow.com/questions/73305899/why-launchedeffect-call-second-time-when-i-navigate-back
