@@ -32,6 +32,8 @@ dependencies {
     testImplementation libs.kluent
     testImplementation libs.koin.test
     testImplementation libs.mockk
+    testImplementation(platform(libs.kotest.bom))
+    testImplementation libs.kotest
     testImplementation(testFixtures(project(":utils")))
     testImplementation(project(":repositories"))
     testImplementation(testFixtures(project(":interfaces")))
