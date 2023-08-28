@@ -11,7 +11,12 @@ import io.reactivex.rxjava3.schedulers.TestScheduler
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeTrue
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
@@ -34,7 +39,7 @@ class CountryListViewModelTests: KoinTest {
     }
 
     @AfterEach
-    fun `cleanup`() {
+    fun cleanup() {
         RxJavaPlugins.setComputationSchedulerHandler(null)
     }
 
@@ -53,7 +58,7 @@ class CountryListViewModelTests: KoinTest {
     @DisplayName("when I advance")
     inner class Advance {
         @BeforeEach
-        fun `setup`() {
+        fun setup() {
             testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         }
 

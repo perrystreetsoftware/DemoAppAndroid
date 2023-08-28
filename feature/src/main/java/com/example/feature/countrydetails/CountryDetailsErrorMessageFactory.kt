@@ -5,7 +5,6 @@ import com.example.errors.CountryDetailsError
 import com.example.features.R
 import com.example.uicomponents.error.CustomErrorStateFactory
 
-
 class CountryDetailsErrorMessageFactory(private val context: Context) :
     CustomErrorStateFactory<CountryDetailsError, String> {
 

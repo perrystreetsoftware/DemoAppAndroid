@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.example.initializer
 
 import android.content.Context
@@ -8,7 +10,6 @@ import org.koin.core.context.startKoin
 class KoinInitializer : Initializer<KoinApplication> {
     override fun create(context: Context): KoinApplication {
         return startKoin {
-//            androidContext(this@)
             modules(appModules)
         }
     }

@@ -2,7 +2,11 @@ package com.example.feature.countrydetails.component
 
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -21,7 +25,11 @@ fun CountryDetailsContent(
             .fillMaxSize()
             .scrollable(state = rememberScrollState(), orientation = Orientation.Vertical)
     ) {
-        Text(text = countryName, style = MaterialTheme.typography.h3, modifier = Modifier.padding(10.dp))
+        Text(
+            text = countryName,
+            style = MaterialTheme.typography.h3,
+            modifier = Modifier.padding(10.dp)
+        )
         Spacer(modifier = Modifier.size(16.dp))
         Text(modifier = Modifier.padding(10.dp), text = detailsText ?: "")
     }
@@ -31,5 +39,8 @@ fun CountryDetailsContent(
 @Preview
 @Composable
 fun CountryDetailsContentPreview() {
-    CountryDetailsContent(countryName = "Test", detailsText = "Now is the time for all good men to come to the aid of their country.")
+    CountryDetailsContent(
+        countryName = "Test",
+        detailsText = "Now is the time for all good men to come to the aid of their country."
+    )
 }

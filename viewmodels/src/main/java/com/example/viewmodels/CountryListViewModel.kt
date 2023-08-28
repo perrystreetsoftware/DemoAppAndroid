@@ -9,7 +9,10 @@ import com.example.logic.ServerStatusLogic
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
-class CountryListViewModel(private val logic: CountryListLogic, private val serverStatusLogic: ServerStatusLogic) : DisposableViewModel() {
+class CountryListViewModel(
+    private val logic: CountryListLogic,
+    private val serverStatusLogic: ServerStatusLogic
+) : DisposableViewModel() {
     data class UiState(
         val continents: List<Continent> = emptyList(),
         val isLoading: Boolean = false,
@@ -44,11 +47,13 @@ class CountryListViewModel(private val logic: CountryListLogic, private val serv
                 .subscribe({
                     _state.onNext(_state.value!!.copy(isLoading = false, isLoaded = true))
                 }, { error ->
-                    _state.onNext(_state.value!!.copy(
-                        isLoading = false,
-                        isLoaded = true,
-                        error = (error as CountryListError)
-                    ))
+                    _state.onNext(
+                        _state.value!!.copy(
+                            isLoading = false,
+                            isLoaded = true,
+                            error = (error as CountryListError)
+                        )
+                    )
                 })
         )
 
@@ -102,6 +107,7 @@ class CountryListViewModel(private val logic: CountryListLogic, private val serv
             is CountryListError.NotEnoughPermissionsError -> {
                 _state.onNext(_state.value!!.copy(error = countryListError))
             }
+
             else -> {
                 _state.onNext(_state.value!!.copy(error = countryListError))
             }

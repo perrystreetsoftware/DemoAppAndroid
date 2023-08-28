@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.example.interfaces
 
 import java.net.HttpURLConnection

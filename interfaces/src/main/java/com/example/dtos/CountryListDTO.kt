@@ -1,18 +1,19 @@
 package com.example.dtos
+
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class CountryListDTO(
-    @Json(name="africa")
+    @Json(name = "africa")
     val africa: List<String> = emptyList(),
-    @Json(name="asia")
+    @Json(name = "asia")
     val asia: List<String> = emptyList(),
-    @Json(name="latin-america-caribbean")
+    @Json(name = "latin-america-caribbean")
     val latam: List<String> = emptyList(),
-    @Json(name="oceania")
+    @Json(name = "oceania")
     val oceania: List<String> = emptyList(),
-    @Json(name="europe")
+    @Json(name = "europe")
     val europe: List<String> = emptyList()
 ) {
     companion object {

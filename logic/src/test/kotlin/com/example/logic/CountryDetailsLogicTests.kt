@@ -7,7 +7,11 @@ import com.example.interfaces.networkLogicApiMocks
 import com.example.repositories.repositoriesModule
 import io.reactivex.rxjava3.observers.TestObserver
 import org.amshove.kluent.shouldBeEqualTo
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
@@ -16,13 +20,14 @@ import org.koin.test.inject
 
 @ExtendWith(AutoCloseKoinAfterEachExtension::class)
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
-class CountryDetailsLogicTests: KoinTest {
+class CountryDetailsLogicTests : KoinTest {
     @BeforeEach
-    open fun setup() {
+    fun setup() {
         startKoin {
             loadKoinModules(logicModule + repositoriesModule + networkLogicApiMocks)
         }
     }
+
     val logic: CountryDetailsLogic by inject()
 
     @Nested
@@ -44,9 +49,11 @@ class CountryDetailsLogicTests: KoinTest {
 
             @Test
             fun `then it should be valid`() {
-                value.shouldBeEqualTo(CountryDetails(
-                    country = Country(regionCode = "YE"),
-                    detailsText = "Article 264")
+                value.shouldBeEqualTo(
+                    CountryDetails(
+                        country = Country(regionCode = "YE"),
+                        detailsText = "Article 264"
+                    )
                 )
             }
         }

@@ -1,4 +1,5 @@
 package com.example.networklogic
+
 import com.example.dtos.CountryDetailsDTO
 import com.example.dtos.CountryListDTO
 import com.example.dtos.ServerStatusDTO
@@ -17,7 +18,7 @@ import okhttp3.Response
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
-class TravelAdvisoriesApi(val moshi: Moshi): ITravelAdvisoriesApi {
+class TravelAdvisoriesApi(private val moshi: Moshi) : ITravelAdvisoriesApi {
     override fun getServerStatus(): Observable<ServerStatusDTO> {
         val client = OkHttpClient()
         val url = "https://status.scruff.com/index.json"
@@ -99,7 +100,7 @@ class TravelAdvisoriesApi(val moshi: Moshi): ITravelAdvisoriesApi {
 
     override fun getCountryDetails(regionCode: String): Single<CountryDetailsDTO> {
         val client = OkHttpClient()
-        var url: String = if (regionCode == "xx") {
+        val url: String = if (regionCode == "xx") {
             "https://httpstat.us/404"
         } else {
             "https://www.scruff.com/advisories/${regionCode}/index.json"
@@ -108,13 +109,14 @@ class TravelAdvisoriesApi(val moshi: Moshi): ITravelAdvisoriesApi {
             .url(url)
             .build()
 
-        val jsonAdapter: JsonAdapter<CountryDetailsDTO> = moshi.adapter(CountryDetailsDTO::class.java)
+        val jsonAdapter: JsonAdapter<CountryDetailsDTO> =
+            moshi.adapter(CountryDetailsDTO::class.java)
 
         return Single.defer {
             try {
                 val response: Response = client.newCall(request).execute()
                 if (response.isSuccessful) {
-                    Single.just<Response>(response).map {
+                    Single.just(response).map {
                         jsonAdapter.fromJson(it.body!!.string()) ?: CountryDetailsDTO.EMPTY
                     }
                 } else {

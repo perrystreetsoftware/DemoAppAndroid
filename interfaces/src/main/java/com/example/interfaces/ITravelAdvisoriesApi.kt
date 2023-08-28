@@ -1,4 +1,5 @@
 package com.example.interfaces
+
 import com.example.dtos.CountryDetailsDTO
 import com.example.dtos.CountryListDTO
 import com.example.dtos.ServerStatusDTO

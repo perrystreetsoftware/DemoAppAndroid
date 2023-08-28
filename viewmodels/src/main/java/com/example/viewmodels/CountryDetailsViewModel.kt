@@ -28,7 +28,7 @@ class CountryDetailsViewModel(private val logic: CountryDetailsLogic, regionCode
                 .doOnSubscribe {
                     _state.onNext(UiState.Loading)
                 }
-                .subscribe({ it ->
+                .subscribe({
                     _state.onNext(UiState.Loaded(it))
                 }, { error ->
                     _state.onNext(UiState.Error(error as CountryDetailsError))

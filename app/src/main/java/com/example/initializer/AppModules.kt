@@ -7,4 +7,5 @@ import com.example.viewmodels.viewModelModule
 import com.example.networklogic.networkLogicApi
 import org.koin.core.module.Module
 
-val appModules: List<Module> = viewModelModule + logicModule + repositoriesModule + networkLogicApi + dtoModelsModule
+val appModules: List<Module> =
+    viewModelModule + logicModule + repositoriesModule + networkLogicApi + dtoModelsModule
