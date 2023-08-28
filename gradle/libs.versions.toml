@@ -13,8 +13,7 @@ kluent = "1.68"
 koin = "3.3.2"
 koin-android = "3.3.2"
 koin-android-compose = "3.4.1"
-kotest = "5.4.0"
-kotest-koin = "1.1.0"
+kotest-bom = "5.6.2"
 kotlin = "1.7.10"
 mockito = "3.4.6"
 mockk = "1.10.2"
@@ -50,8 +49,8 @@ koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin-and
 koin-android-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin-android-compose" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
-kotest = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
-kotest-koin = { module = "io.kotest.extensions:kotest-extensions-koin", version.ref = "kotest-koin" }
+kotest-bom = { group = "io.kotest", name = "kotest-bom", version.ref = "kotest-bom" }
+kotest = { module = "io.kotest:kotest-runner-junit5" }
 mockito = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
