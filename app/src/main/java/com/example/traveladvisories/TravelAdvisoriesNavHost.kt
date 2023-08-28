@@ -26,7 +26,7 @@ fun TravelAdvisoriesNavHost(navController: NavHostController = rememberNavContro
         navController.navigate("${TravelAdvisoriesDestination.CountryDetailsDestination.route}/${it.regionCode}")
     }
     val onAboutSelected = {
-        navController.navigate("${TravelAdvisoriesDestination.AboutDestination.route}")
+        navController.navigate(TravelAdvisoriesDestination.AboutDestination.route)
     }
 
     NavHost(

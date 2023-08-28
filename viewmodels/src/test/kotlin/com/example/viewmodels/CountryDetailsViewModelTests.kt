@@ -10,7 +10,12 @@ import io.reactivex.rxjava3.observers.TestObserver
 import io.reactivex.rxjava3.plugins.RxJavaPlugins
 import io.reactivex.rxjava3.schedulers.TestScheduler
 import org.amshove.kluent.shouldBeEqualTo
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
@@ -58,7 +63,7 @@ class CountryDetailsViewModelTests : KoinTest {
         private lateinit var state: CountryDetailsViewModel.UiState
 
         @BeforeEach
-        fun `setup`() {
+        fun setup() {
             testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
             stateTestObserver.awaitCount(2)
             state = stateTestObserver.values().last()

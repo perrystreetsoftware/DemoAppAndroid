@@ -7,11 +7,14 @@ import com.example.errors.CountryDetailsError
 import com.example.interfaces.MockTravelApi
 import com.example.interfaces.ITravelAdvisoriesApi
 import com.example.interfaces.networkLogicApiMocks
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.observers.TestObserver
 import org.amshove.kluent.shouldBeEqualTo
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
@@ -24,7 +27,7 @@ import java.util.concurrent.TimeUnit
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 class CountryDetailsRepositoryTests: KoinTest {
     @BeforeEach
-    open fun setup() {
+    fun setup() {
         startKoin {
             loadKoinModules(repositoriesModule + networkLogicApiMocks)
         }

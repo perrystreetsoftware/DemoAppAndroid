@@ -31,7 +31,7 @@ internal class CountryListErrorDialogFactoryTest : KoinTest {
     )
 
     @BeforeEach
-    open fun setup() {
+    fun setup() {
         startKoin {
             loadKoinModules(viewModelModule + logicModule + repositoriesModule + networkLogicApiMocks)
         }

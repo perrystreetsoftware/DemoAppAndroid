@@ -10,7 +10,6 @@ android {
         minSdk 28
         targetSdk 34
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
 
@@ -40,11 +39,9 @@ android {
 }
 
 dependencies {
-    androidTestImplementation libs.bundles.junit5
     implementation libs.androidx.compose.material
     implementation libs.androidx.compose.ui.tooling
     implementation project(':domainmodels')
     implementation project(':utils')
     implementation project(':viewmodels')
-    testImplementation libs.bundles.junit5
 }

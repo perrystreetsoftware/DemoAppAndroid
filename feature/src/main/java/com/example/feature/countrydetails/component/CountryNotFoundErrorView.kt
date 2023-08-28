@@ -1,7 +1,12 @@
 package com.example.feature.countrydetails.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -36,9 +41,11 @@ fun FullScreenErrorView(text: String) {
                 .background(Color.Red)
                 .padding(10.dp),
         ) {
-            Text(text = stringResource(id = R.string.country_not_found_error_title),
+            Text(
+                text = stringResource(id = R.string.country_not_found_error_title),
                 style = MaterialTheme.typography.h4,
-                color = Color.White)
+                color = Color.White
+            )
             Spacer(modifier = Modifier.size(16.dp))
             Text(text = text, color = Color.White)
         }
