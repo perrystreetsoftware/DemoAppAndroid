@@ -8,7 +8,7 @@ data class ServerStatusDTO(
     @Json(name = "ok")
     val ok: Boolean,
     @Json(name = "uptime")
-    val uptime: Float,
+    val uptime: Float?,
 ) {
     companion object {
         val EMPTY = ServerStatusDTO(ok = false, uptime = 0f)
