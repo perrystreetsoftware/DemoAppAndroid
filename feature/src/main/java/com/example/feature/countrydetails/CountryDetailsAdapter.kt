@@ -9,8 +9,8 @@ import org.koin.core.parameter.parametersOf
 
 @Composable
 fun CountryDetailsAdapter(
-    viewModel: CountryDetailsViewModel = getViewModel(parameters = { parametersOf(regionCode) }),
     regionCode: String,
+    viewModel: CountryDetailsViewModel = getViewModel(parameters = { parametersOf(regionCode) }),
 ) {
     val viewModelState by viewModel.state.subscribeAsState(initial = CountryDetailsViewModel.UiState.Initial)
 
