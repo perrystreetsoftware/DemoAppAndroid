@@ -1,6 +1,6 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+    alias libs.plugins.android.application
+    alias libs.plugins.kotlin.android
 }
 
 android {
@@ -22,19 +22,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
+    kotlin {
+        jvmToolchain(libs.versions.java.get().toInteger())
     }
     buildFeatures {
         compose true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion "1.3.1"
+        kotlinCompilerExtensionVersion libs.versions.androidx.compose.compiler.get()
     }
     namespace 'com.example.traveladvisories'
 
@@ -53,6 +49,7 @@ android {
 dependencies {
     androidTestImplementation libs.bundles.junit5
     implementation libs.androidx.activity.compose
+    implementation(platform(libs.androidx.compose.bom))
     implementation libs.androidx.compose.material
     implementation libs.androidx.compose.runtime.rxjava3
     implementation libs.androidx.compose.ui
