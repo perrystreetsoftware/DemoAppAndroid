@@ -1,0 +1,19 @@
+plugins {
+    id 'kotlin'
+}
+
+java {
+    sourceCompatibility = libs.versions.java.get()
+    targetCompatibility = libs.versions.java.get()
+}
+
+test {
+    useJUnitPlatform()
+    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+}
+
+dependencies {
+    testImplementation(platform(libs.kotest.bom))
+    testImplementation libs.kotest
+    testImplementation libs.konsist
+}

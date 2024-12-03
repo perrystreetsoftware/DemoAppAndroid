@@ -6,7 +6,7 @@ import com.example.logic.CountryDetailsLogic
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
-class CountryDetailsViewModel(private val logic: CountryDetailsLogic, regionCode: String) : DisposableViewModel() {
+class CountryDetailsViewModel(private val logic: CountryDetailsLogic, regionCode: String) : LifecycleViewModel() {
     sealed class UiState {
         object Initial : UiState()
         object Loading : UiState()
@@ -19,10 +19,10 @@ class CountryDetailsViewModel(private val logic: CountryDetailsLogic, regionCode
     val state: Observable<UiState> = _state
 
     init {
-        onPageLoaded(regionCode)
+        onPageLoad(regionCode)
     }
 
-    private fun onPageLoaded(regionCode: String) {
+    private fun onPageLoad(regionCode: String) {
         disposables.add(
             logic.getDetails(regionCode = regionCode)
                 .doOnSubscribe {

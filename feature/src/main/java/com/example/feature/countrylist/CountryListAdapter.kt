@@ -25,11 +25,11 @@ fun CountryListAdapter(
 
     CountryListPage(
         listUiState = state,
-        onCountrySelected = { country ->
-            viewModel.onCountrySelected(country)
+        onCountrySelect = { country ->
+            viewModel.onCountrySelect(country)
         },
-        onRefreshTapped = { viewModel.onRefreshTapped() },
-        onFailOtherTapped = { viewModel.onFailOtherTapped() }
+        onRefreshTap = { viewModel.onRefreshTap() },
+        onFailOtherTap = { viewModel.onFailOtherTap() }
     )
 
     FloatingAlertNotifier(

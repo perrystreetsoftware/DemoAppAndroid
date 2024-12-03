@@ -24,9 +24,9 @@ import com.example.viewmodels.CountryListViewModel
 @Composable
 fun CountryListPage(
     listUiState: CountryListViewModel.UiState,
-    onCountrySelected: ((Country) -> Unit)? = null,
-    onRefreshTapped: (() -> Unit)? = null,
-    onFailOtherTapped: (() -> Unit)? = null
+    onCountrySelect: ((Country) -> Unit)? = null,
+    onRefreshTap: (() -> Unit)? = null,
+    onFailOtherTap: (() -> Unit)? = null
 ) {
     Box {
         ProgressIndicator(isLoading = listUiState.isLoading)
@@ -34,7 +34,7 @@ fun CountryListPage(
             Column(modifier = Modifier.weight(1f)) {
                 CountryListList(
                     list = listUiState.continents,
-                    onClick = onCountrySelected
+                    onClick = onCountrySelect
                 )
             }
             Column(
@@ -57,14 +57,14 @@ fun CountryListPage(
             }
             CountryListButton(
                 isLoaded = listUiState.isLoaded,
-                onClick = onRefreshTapped
+                onClick = onRefreshTap
             )
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 10.dp),
                 onClick = {
-                    onFailOtherTapped?.invoke()
+                    onFailOtherTap?.invoke()
                 }
             ) {
                 Text(text = stringResource(id = R.string.fail_about_page_title))
