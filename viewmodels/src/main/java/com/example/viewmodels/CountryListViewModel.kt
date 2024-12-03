@@ -12,7 +12,7 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject
 class CountryListViewModel(
     private val logic: CountryListLogic,
     private val serverStatusLogic: ServerStatusLogic
-) : DisposableViewModel() {
+) : LifecycleViewModel() {
     data class UiState(
         val continents: List<Continent> = emptyList(),
         val isLoading: Boolean = false,
@@ -27,10 +27,10 @@ class CountryListViewModel(
 
     init {
         // https://stackoverflow.com/questions/73305899/why-launchedeffect-call-second-time-when-i-navigate-back
-        onPageLoaded()
+        onPageLoad()
     }
 
-    private fun onPageLoaded() {
+    private fun onPageLoad() {
         disposables.add(logic.continents.doOnNext {
             _state.onNext(_state.value!!.copy(continents = it))
         }.subscribe())
@@ -62,13 +62,13 @@ class CountryListViewModel(
         )
     }
 
-    fun onRefreshTapped() {
+    fun onRefreshTap() {
         disposables.add(
             logic.getForbiddenApi().subscribe({}, { emitError(it) })
         )
     }
 
-    fun onFailOtherTapped() {
+    fun onFailOtherTap() {
         emitError(CountryListError.Other)
     }
 
@@ -76,7 +76,7 @@ class CountryListViewModel(
         _state.onNext(_state.value!!.copy(error = null))
     }
 
-    fun onCountrySelected(country: Country) {
+    fun onCountrySelect(country: Country) {
         disposables.add(
             logic.canAccessCountry(country).subscribe(
                 {
@@ -96,7 +96,7 @@ class CountryListViewModel(
     fun navigateToRandomCountry() {
         disposables.add(
             logic.getRandomCountry().subscribe(
-                { onCountrySelected(it) },
+                { onCountrySelect(it) },
                 { emitError(it) }
             )
         )

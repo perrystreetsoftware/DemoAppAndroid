@@ -13,7 +13,7 @@ koin = "3.3.2"
 koin-android = "3.3.2"
 koin-android-compose = "3.4.1"
 kotest-bom = "5.6.2"
-java = "17"
+java = "21"
 kotlin = "1.9.20"
 mockito = "3.4.6"
 mockk = "1.10.2"
@@ -24,6 +24,7 @@ rxjava3-android = "3.0.0"
 square-okhttp = "4.9.0"
 google-ksp = "1.9.20-1.0.14"
 rebugger = "1.0.0-rc02"
+konsist = "0.17.1"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
@@ -66,6 +67,7 @@ rxjava3-android = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rx
 square-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "square-okhttp" }
 androidx-startup-runtime = { module = "androidx.startup:startup-runtime", version.ref = "androidx-startup" }
 rebugger = { module = "io.github.theapache64:rebugger", version.ref = "rebugger" }
+konsist = { module = "com.lemonappdev:konsist", version.ref = "konsist" }
 
 [bundles]
 junit5 = [
