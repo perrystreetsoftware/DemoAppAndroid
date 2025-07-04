@@ -20,7 +20,27 @@ class CountryListViewModel(
         val error: CountryListError? = null,
         val serverStatus: ServerStatus? = null,
         val navigationTarget: Country? = null,
+        var searchQuery: String = "",
     )
+
+    val filteredContinents: List<Continent>
+        get() {
+            val query = _state.value?.searchQuery.orEmpty()
+            return _state.value?.continents
+                ?.map { continent ->
+                    val filteredCountries = continent.countries.filter {
+                        it.countryName.contains(query, ignoreCase = true) ||
+                                it.regionCode.contains(query, ignoreCase = true)
+                    }
+                    continent.copy(countries = filteredCountries)
+                }
+                ?.filter { it.countries.isNotEmpty() }
+                ?: emptyList()
+        }
+
+    fun updateSearchQuery(query: String) {
+        _state.onNext(_state.value!!.copy(searchQuery = query))
+    }
 
     private val _state: BehaviorSubject<UiState> = BehaviorSubject.createDefault(UiState())
     val state: Observable<UiState> = _state

@@ -1,4 +1,4 @@
-package com.example.feature.countrylist.componenets
+package com.example.feature.countrylist.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background

@@ -29,7 +29,11 @@ fun CountryListAdapter(
             viewModel.onCountrySelect(country)
         },
         onRefreshTap = { viewModel.onRefreshTap() },
-        onFailOtherTap = { viewModel.onFailOtherTap() }
+        onFailOtherTap = { viewModel.onFailOtherTap() },
+        onSearchQueryChange = { query ->
+            viewModel.updateSearchQuery(query)
+        },
+        filteredContinents = viewModel.filteredContinents
     )
 
     FloatingAlertNotifier(

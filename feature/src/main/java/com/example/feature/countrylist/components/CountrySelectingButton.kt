@@ -1,4 +1,4 @@
-package com.example.feature.countrylist.componenets
+package com.example.feature.countrylist.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

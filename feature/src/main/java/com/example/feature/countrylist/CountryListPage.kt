@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,8 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.domainmodels.Continent
 import com.example.domainmodels.Country
-import com.example.feature.countrylist.componenets.CountryListButton
-import com.example.feature.countrylist.componenets.CountryListList
+import com.example.feature.countrylist.components.CountryListButton
+import com.example.feature.countrylist.components.CountryListList
 import com.example.features.R
 import com.example.uicomponents.library.ProgressIndicator
 import com.example.viewmodels.CountryListViewModel
@@ -26,14 +27,30 @@ fun CountryListPage(
     listUiState: CountryListViewModel.UiState,
     onCountrySelect: ((Country) -> Unit)? = null,
     onRefreshTap: (() -> Unit)? = null,
-    onFailOtherTap: (() -> Unit)? = null
+    onFailOtherTap: (() -> Unit)? = null,
+    onSearchQueryChange: ((String) -> Unit)? = null,
+    filteredContinents: List<Continent> = emptyList()
 ) {
     Box {
         ProgressIndicator(isLoading = listUiState.isLoading)
         Column(modifier = Modifier.fillMaxHeight()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TextField(
+                    value = listUiState.searchQuery,
+                    onValueChange = { onSearchQueryChange?.invoke(it) },
+                    label = { Text("Search countries") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+            }
             Column(modifier = Modifier.weight(1f)) {
                 CountryListList(
-                    list = listUiState.continents,
+                    list = filteredContinents,
                     onClick = onCountrySelect
                 )
             }

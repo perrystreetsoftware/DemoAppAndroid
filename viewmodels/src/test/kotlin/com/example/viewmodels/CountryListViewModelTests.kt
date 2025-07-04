@@ -80,4 +80,44 @@ class CountryListViewModelTests: KoinTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("filteredContinents")
+    inner class FilteredContinents {
+        @Test
+        fun `returns only continents with matching countries`() {
+            // Arrange: set up continents with countries
+            val continents = listOf(
+                com.example.domainmodels.Continent(
+                    name = "Europe",
+                    countries = listOf(
+                        com.example.domainmodels.Country(regionCode = "FR"),
+                        com.example.domainmodels.Country(regionCode = "DE")
+                    )
+                ),
+                com.example.domainmodels.Continent(
+                    name = "Asia",
+                    countries = listOf(
+                        com.example.domainmodels.Country(regionCode = "JP"),
+                        com.example.domainmodels.Country(regionCode = "CN")
+                    )
+                )
+            )
+            // Set continents in state
+            val stateField = CountryListViewModel::class.java.getDeclaredField("_state")
+            stateField.isAccessible = true
+            val subject = stateField.get(viewModel) as io.reactivex.rxjava3.subjects.BehaviorSubject<CountryListViewModel.UiState>
+            subject.onNext(CountryListViewModel.UiState(continents = continents))
+
+            // Act: update search query
+            viewModel.updateSearchQuery("fr")
+
+            // Assert: only Europe with France should match
+            val filtered = viewModel.filteredContinents
+            filtered.size.shouldBeEqualTo(1)
+            filtered[0].name.shouldBeEqualTo("Europe")
+            filtered[0].countries.size.shouldBeEqualTo(1)
+            filtered[0].countries[0].regionCode.shouldBeEqualTo("FR")
+        }
+    }
 }
