@@ -1,5 +1,6 @@
 package com.example.viewmodels
 
+import androidx.annotation.VisibleForTesting
 import com.example.domainmodels.Continent
 import com.example.domainmodels.Country
 import com.example.domainmodels.ServerStatus
@@ -20,7 +21,7 @@ class CountryListViewModel(
         val error: CountryListError? = null,
         val serverStatus: ServerStatus? = null,
         val navigationTarget: Country? = null,
-        var searchQuery: String = "",
+        val searchQuery: String = "",
     )
 
     val filteredContinents: List<Continent>
@@ -39,7 +40,14 @@ class CountryListViewModel(
         }
 
     fun updateSearchQuery(query: String) {
-        _state.onNext(_state.value!!.copy(searchQuery = query))
+        _state.value?.let { currentState ->
+            _state.onNext(currentState.copy(searchQuery = query))
+        }
+    }
+
+    @VisibleForTesting
+    fun setStateForTest(state: UiState) {
+        _state.onNext(state)
     }
 
     private val _state: BehaviorSubject<UiState> = BehaviorSubject.createDefault(UiState())

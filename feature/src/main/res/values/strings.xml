@@ -20,6 +20,7 @@
 
     <string name="country_details_save_as_favorite">Save as favorite (will always fail)</string>
 
+    <string name="country_list_search_hint">Search for a country</string>
     <string name="country_list_blocked_error_title">This country is blocked</string>
     <string name="country_list_blocked_error_message">Would you like to go to a random country instead?</string>
     <string name="country_list_blocked_error_positive_button">Go to random</string>

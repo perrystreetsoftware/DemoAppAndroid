@@ -1,6 +1,8 @@
 package com.example.viewmodels
 
 import com.example.AutoCloseKoinAfterEachExtension
+import com.example.domainmodels.Continent
+import com.example.domainmodels.Country
 import com.example.domainmodels.ServerStatus
 import com.example.interfaces.networkLogicApiMocks
 import com.example.logic.logicModule
@@ -86,33 +88,12 @@ class CountryListViewModelTests: KoinTest {
     inner class FilteredContinents {
         @Test
         fun `returns only continents with matching countries`() {
-            // Arrange: set up continents with countries
             val continents = listOf(
-                com.example.domainmodels.Continent(
-                    name = "Europe",
-                    countries = listOf(
-                        com.example.domainmodels.Country(regionCode = "FR"),
-                        com.example.domainmodels.Country(regionCode = "DE")
-                    )
-                ),
-                com.example.domainmodels.Continent(
-                    name = "Asia",
-                    countries = listOf(
-                        com.example.domainmodels.Country(regionCode = "JP"),
-                        com.example.domainmodels.Country(regionCode = "CN")
-                    )
-                )
+                Continent("Europe", listOf(Country("FR"), Country("DE"))),
+                Continent("Asia", listOf(Country("JP"), Country("CN")))
             )
-            // Set continents in state
-            val stateField = CountryListViewModel::class.java.getDeclaredField("_state")
-            stateField.isAccessible = true
-            val subject = stateField.get(viewModel) as io.reactivex.rxjava3.subjects.BehaviorSubject<CountryListViewModel.UiState>
-            subject.onNext(CountryListViewModel.UiState(continents = continents))
-
-            // Act: update search query
-            viewModel.updateSearchQuery("fr")
-
-            // Assert: only Europe with France should match
+            viewModel.setStateForTest(CountryListViewModel.UiState(continents = continents))
+            viewModel.updateSearchQuery("france")
             val filtered = viewModel.filteredContinents
             filtered.size.shouldBeEqualTo(1)
             filtered[0].name.shouldBeEqualTo("Europe")

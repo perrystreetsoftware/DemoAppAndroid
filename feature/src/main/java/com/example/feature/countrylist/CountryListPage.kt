@@ -43,7 +43,7 @@ fun CountryListPage(
                 TextField(
                     value = listUiState.searchQuery,
                     onValueChange = { onSearchQueryChange?.invoke(it) },
-                    label = { Text("Search countries") },
+                    label = { Text(text = stringResource(R.string.country_list_search_hint)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
