@@ -27,4 +27,8 @@
     <string name="country_list_no_permissions_error_title">Not enough permissions</string>
     <string name="country_list_no_permissions_error_message">You don\'t have enough permissions to access this country, you can try other countries on the main list</string>
     <string name="ok">OK</string>
+
+    <string name="profile_load_error_title">Oops! We couldn't load your profile</string>
+    <string name="profile_load_error_message">We're having trouble fetching your data. Hang tight and we'll sort it out!</string>
+    <string name="profile_load_error_button">try again</string>
 </resources>

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Skill(keybindings-help)"
+    ]
+  }
+}
