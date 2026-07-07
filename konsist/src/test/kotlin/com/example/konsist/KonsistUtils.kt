@@ -38,6 +38,9 @@ object KonsistUtils {
     val productionCode
         get() = Konsist.scopeFromProduction()
 
+    val viewModelsModule
+        get() = productionCode.slice { it.path.contains("/viewmodels/src/") }
+
     val testCode
         get() = Konsist.scopeFromTest().excludeKonsistTests()
 
@@ -48,4 +51,6 @@ object KonsistUtils {
         get() = productionCode.functions().withAnnotationNamed("Composable")
 
     private fun KoScope.excludeKonsistTests() = this.slice { !(it.path.contains("/konsist/")) }
+
+    fun String.containsAny(needles: List<String>) = needles.any { this.contains(it) }
 }
