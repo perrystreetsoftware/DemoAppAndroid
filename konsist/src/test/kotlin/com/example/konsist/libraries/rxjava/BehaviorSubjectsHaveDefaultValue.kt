@@ -1,8 +1,9 @@
 package com.example.konsist.libraries.rxjava
 
+import com.example.konsist.Assertions.assertFalse
 import com.example.konsist.KonsistUtils.classesProduction
-import com.lemonappdev.konsist.api.ext.list.withText
-import com.lemonappdev.konsist.api.verify.assertFalse
+import com.example.konsist.LintRuleMessage
+import com.lemonappdev.konsist.api.ext.list.withTextContaining
 import io.kotest.core.spec.style.BehaviorSpec
 
 class BehaviorSubjectsHaveDefaultValue : BehaviorSpec() {
@@ -12,10 +13,12 @@ class BehaviorSubjectsHaveDefaultValue : BehaviorSpec() {
             val classes = classesProduction
 
             When("It has a BehaviorSubject") {
-                val classesWithBehaviorSubject = classes.withText("BehaviorSubject")
+                // withTextContaining, not withText: withText(String) is a whole-text equality
+                // match in Konsist, which silently matches nothing.
+                val classesWithBehaviorSubject = classes.withTextContaining("BehaviorSubject")
 
                 Then("It has a default value") {
-                    classesWithBehaviorSubject.assertFalse(additionalMessage = MESSAGE) {
+                    classesWithBehaviorSubject.assertFalse(message = Message) {
                         it.text.contains("BehaviorSubject.create()")
                     }
                 }
@@ -24,7 +27,20 @@ class BehaviorSubjectsHaveDefaultValue : BehaviorSpec() {
     }
 
     private companion object {
-        private const val MESSAGE =
-            "All BehaviorSubjects should have a default value. Consider adding an initial state, or empty list, or an Optional<value>."
+        private val Message = LintRuleMessage(
+            rule = "BehaviorSubjects must be created with a default value.",
+            why = """
+                A BehaviorSubject without an initial value emits nothing until someone calls
+                onNext, so late subscribers (like a recomposing screen) see no state at all.
+                An explicit initial value guarantees the UI always has something to render.
+            """.trimIndent(),
+            howToFix = "Use BehaviorSubject.createDefault(initialValue). For absent values use an empty list or Optional.empty().",
+            badExample = """
+                private val _state = BehaviorSubject.create<UiState>()
+            """.trimIndent(),
+            goodExample = """
+                private val _state = BehaviorSubject.createDefault(UiState.Initial)
+            """.trimIndent(),
+        )
     }
 }

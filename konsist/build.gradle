@@ -2,9 +2,14 @@ plugins {
     id 'kotlin'
 }
 
-java {
-    sourceCompatibility = libs.versions.java.get()
-    targetCompatibility = libs.versions.java.get()
+kotlin {
+    jvmToolchain(libs.versions.java.get().toInteger())
+}
+
+// Konsist tests scan the entire codebase, so Gradle's input tracking can't detect all changes.
+// Always re-run to avoid false cache hits.
+tasks.withType(Test).configureEach {
+    outputs.upToDateWhen { false }
 }
 
 test {
