@@ -1,9 +1,10 @@
 package com.example.konsist.viewmodel
 
+import com.example.konsist.Assertions.assertFalse
 import com.example.konsist.KonsistUtils.viewModelsProduction
+import com.example.konsist.LintRuleMessage
 import com.lemonappdev.konsist.api.ext.list.properties
 import com.lemonappdev.konsist.api.ext.list.withType
-import com.lemonappdev.konsist.api.verify.assertFalse
 import io.kotest.core.spec.style.BehaviorSpec
 
 class DoesNotExposeObservablesViaGetter : BehaviorSpec() {
@@ -18,7 +19,7 @@ class DoesNotExposeObservablesViaGetter : BehaviorSpec() {
                 }
 
                 Then("The Observable does not have a custom getter") {
-                    observables.assertFalse(additionalMessage = MESSAGE) {
+                    observables.assertFalse(message = Message) {
                         it.hasGetter
                     }
                 }
@@ -27,7 +28,21 @@ class DoesNotExposeObservablesViaGetter : BehaviorSpec() {
     }
 
     private companion object {
-        private const val MESSAGE =
-            "Avoid exposing Observables via a custom getter since that can cause an infinite recomposition in Compose."
+        private val Message = LintRuleMessage(
+            rule = "ViewModels must not expose Observables via a custom getter.",
+            why = """
+                A custom getter builds a brand new Observable on every access. In Compose that means
+                every recomposition subscribes to a fresh stream, which can trigger an infinite
+                recomposition loop and duplicated side effects.
+            """.trimIndent(),
+            howToFix = "Assign the Observable once to a val instead of computing it in a getter.",
+            badExample = """
+                val state: Observable<UiState>
+                    get() = _state.map { it }
+            """.trimIndent(),
+            goodExample = """
+                val state: Observable<UiState> = _state
+            """.trimIndent(),
+        )
     }
 }

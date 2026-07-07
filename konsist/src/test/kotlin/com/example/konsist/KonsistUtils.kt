@@ -41,6 +41,9 @@ object KonsistUtils {
     val testCode
         get() = Konsist.scopeFromTest().excludeKonsistTests()
 
+    val konsistRulesFiles
+        get() = Konsist.scopeFromTest().slice { it.path.contains("/konsist/") }.files
+
     val composableFunctions
         get() = productionCode.functions().withAnnotationNamed("Composable")
 
