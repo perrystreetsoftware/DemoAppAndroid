@@ -1,18 +1,5 @@
 package com.example.konsist
 
-/**
- * Take this snippet, below, when converting from legacy messages to the new style
- *
- *     private val message = LintRuleMessage(
- *         rule = "",
- *         why = "",
- *         howToFix = "",
- *         badExample = "",
- *         goodExample = "",
- *     )
- *
- **/
-
 data class LintRuleMessage(
     val rule: String,
     val why: String,
